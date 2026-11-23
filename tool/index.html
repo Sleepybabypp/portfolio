@@ -620,7 +620,7 @@ function pruneDay(d) {
 function setNum(el, val, f) {
   if (val == null || isNaN(val)) { el.textContent = '–'; el.dataset.v = ''; return; }
   const from = el.dataset.v === '' || el.dataset.v == null ? val * 0.6 : +el.dataset.v; el.dataset.v = val;
-  if (reduce || Math.abs(from - val) < 1e-9) { el.textContent = f(val); return; }
+  if (reduce || window.self !== window.top || document.hidden || Math.abs(from - val) < 1e-9) { el.textContent = f(val); return; }
   const t0 = performance.now(), dur = 550;
   cancelAnimationFrame(el._raf);
   const step = t => { const k = Math.max(0, Math.min(1, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 3); el.textContent = f(from + (val - from) * e); if (k < 1) el._raf = requestAnimationFrame(step); };
