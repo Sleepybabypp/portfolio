@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สรุปแอดรายวัน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: control-room for one live day — hero scoreboard, shift strip, ROI chart vs break-even, then inputs; LINE bubble preview on its own tab */
+:root{
+  --bg:#f4f3f7; --surface:#ffffff; --sunk:#eeecf3; --ink:#1c1722; --ink-2:#5a5365; --ink-3:#8a8395; --line:#e2dee9;
+  --accent:#c2185b; --accent-ink:#ffffff; --accent-soft:#fbe6ef;
+  --hero:#1e1626; --hero-2:#2c2136; --hero-ink:#f7eff6; --hero-mute:#bfaec4; --hero-accent:#ff86b0;
+  --good:#18794e; --good-soft:#e2f4ea; --thin:#9a6700; --thin-soft:#fcf1d6; --loss:#c0362c; --loss-soft:#fde7e4; --few:#6f6879; --few-soft:#eeecf1;
+  --line-green:#06c755; --bubble:#e6f9ec; --bubble-ink:#14361f;
+  --display:"Bai Jamjuree","IBM Plex Sans Thai","Leelawadee UI",sans-serif;
+  --body:"IBM Plex Sans Thai","Leelawadee UI","Noto Sans Thai",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131218; --surface:#1d1b23; --sunk:#25232c; --ink:#f0edf4; --ink-2:#b6afc0; --ink-3:#857e90; --line:#322f3a;
+  --accent:#ec5c92; --accent-ink:#1a0f15; --accent-soft:#3b1f2c;
+  --hero:#0c0a10; --hero-2:#1c1622;
+  --good:#5ccb94; --good-soft:#163126; --thin:#e7b44b; --thin-soft:#352a14; --loss:#f2786c; --loss-soft:#3c1d1a; --few:#a59fb0; --few-soft:#29262f;
+  --bubble:#183a25; --bubble-ink:#dff5e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131218; --surface:#1d1b23; --sunk:#25232c; --ink:#f0edf4; --ink-2:#b6afc0; --ink-3:#857e90; --line:#322f3a;
+  --accent:#ec5c92; --accent-ink:#1a0f15; --accent-soft:#3b1f2c;
+  --hero:#0c0a10; --hero-2:#1c1622;
+  --good:#5ccb94; --good-soft:#163126; --thin:#e7b44b; --thin-soft:#352a14; --loss:#f2786c; --loss-soft:#3c1d1a; --few:#a59fb0; --few-soft:#29262f;
+  --bubble:#183a25; --bubble-ink:#dff5e6; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* app bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hero);z-index:10}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--hero);color:var(--hero-ink);
+  padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.bar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:17px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .dot{width:26px;height:26px;border-radius:8px;background:var(--hero-accent);display:grid;place-items:center;color:#2a0f1c}
+.brand .dot .ico{width:15px;height:15px;stroke-width:2.4}
+.datechip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:4px 8px}
+.datechip input{background:none;border:0;color:var(--hero-ink);font-size:13.5px;width:118px;color-scheme:dark}
+.badge{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--hero-accent);color:#2a0f1c;white-space:nowrap}
+
+main{max-width:720px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.tab{display:none;flex-direction:column;gap:14px}.tab.on{display:flex}
+
+/* hero scoreboard */
+.hero{background:linear-gradient(180deg,var(--hero) 0%,var(--hero-2) 100%);color:var(--hero-ink);
+  margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:6px max(16px,env(safe-area-inset-left,0px)) 22px;border-radius:0 0 24px 24px}
+.hero .in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.seg{display:flex;background:rgba(255,255,255,.07);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:9px;color:var(--hero-mute);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500}
+.seg button.on{background:var(--hero-ink);color:var(--hero);font-weight:600}
+.score{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:end}
+.big .lab{font-size:13px;color:var(--hero-mute)}
+.big .v{font-family:var(--mono);font-size:clamp(44px,13vw,64px);font-weight:600;line-height:1;letter-spacing:-.02em}
+.big .st{margin-top:8px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill .ico{width:13px;height:13px;stroke-width:2.6}
+.pill.good{background:var(--good-soft);color:var(--good)} .pill.thin{background:var(--thin-soft);color:var(--thin)}
+.pill.loss{background:var(--loss-soft);color:var(--loss)} .pill.few,.pill.noad{background:var(--few-soft);color:var(--few)}
+.kpis{display:grid;grid-template-columns:1fr;gap:8px}
+.kpi{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:6px}
+.kpi span{font-size:13px;color:var(--hero-mute)}
+.kpi b{font-family:var(--mono);font-weight:500;font-size:17px}
+.kpi b.pos{color:#7ee2ad} .kpi b.neg{color:#ff9b90}
+.hero .note{font-size:12.5px;color:var(--hero-mute)}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card h2{font-family:var(--display);font-size:16.5px;font-weight:600;margin:0;display:flex;align-items:center;gap:8px}
+.card h2 .ico{color:var(--accent)}
+.head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.muted{color:var(--ink-2);font-size:13.5px}
+.tiny{color:var(--ink-3);font-size:12px}
+
+/* shift strip */
+.shifts{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
+.shift{border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;position:relative;min-width:0;border:1px solid transparent}
+.shift.good{background:var(--good-soft);color:var(--good)} .shift.thin{background:var(--thin-soft);color:var(--thin)}
+.shift.loss{background:var(--loss-soft);color:var(--loss)} .shift.few,.shift.noad{background:var(--few-soft);color:var(--few)}
+.shift.best{border-color:currentColor}
+.shift .t{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink)}
+.shift .r{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1.15}
+.shift .p{font-size:12.5px}
+.shift .crown{position:absolute;top:8px;right:8px}
+.shift .crown .ico{width:16px;height:16px}
+
+/* chart */
+.chart svg{display:block;width:100%;height:auto}
+.chart text{font-family:var(--body);font-size:11.5px;fill:var(--ink-3)}
+.chart .lbl{fill:var(--ink);font-family:var(--mono);font-size:12px;font-weight:600}
+.legendrow{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink-2)}
+.legendrow i{display:inline-block;width:16px;border-top:2px dashed currentColor;vertical-align:middle;margin-right:5px}
+
+/* advice */
+.advice{display:flex;flex-direction:column;gap:8px}
+.adv{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.adv .ico{color:var(--accent);margin-top:2px}
+.warn{display:flex;gap:10px;align-items:flex-start;background:var(--loss-soft);color:var(--loss);border-radius:12px;padding:10px 12px;font-size:14px}
+.info{display:flex;gap:10px;align-items:flex-start;background:var(--thin-soft);color:var(--thin);border-radius:12px;padding:10px 12px;font-size:14px}
+
+/* channel & product cards */
+.chan .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chan .stat{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.chan .stat b{font-family:var(--mono);color:var(--ink);font-weight:500}
+details.inputs{border-top:1px solid var(--line);padding-top:10px}
+details.inputs summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;color:var(--accent);font-weight:600;font-size:14px}
+details.inputs summary::-webkit-details-marker{display:none}
+details.inputs[open] summary .chev{transform:rotate(180deg)}
+.chev{transition:transform .2s}
+.cps{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.cp .t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin-bottom:6px}
+.cp .t .tm{font-family:var(--mono);background:var(--sunk);border-radius:6px;padding:1px 7px;font-size:13px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+label{display:block;font-size:12px;color:var(--ink-3);margin-bottom:3px}
+input.f,select.f,textarea.f{width:100%;background:var(--sunk);border:1px solid transparent;border-radius:10px;padding:9px 10px;font-size:15px}
+input.f{font-family:var(--mono)}
+input.f:focus,select.f:focus,textarea.f:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+textarea.f{min-height:76px;resize:vertical;font-family:var(--body)}
+.res{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:13px;color:var(--ink-2)}
+.res b{font-family:var(--mono);color:var(--ink);font-weight:500}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:9px 14px;cursor:pointer;font-weight:500}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.line{background:var(--line-green);border-color:var(--line-green);color:#fff;font-weight:600}
+.btn.danger{color:var(--loss)}
+.btn.small{padding:6px 10px;font-size:13px}
+.btn:active{transform:scale(.98)}
+
+/* LINE preview */
+.chat{background:var(--sunk);border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;gap:6px}
+.chat .who{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3)}
+.chat .av{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:13px}
+.bubble{align-self:flex-end;max-width:94%;background:var(--bubble);color:var(--bubble-ink);border-radius:18px 4px 18px 18px;padding:12px 14px;white-space:pre-wrap;font-size:14.5px;line-height:1.6;overflow-wrap:anywhere}
+.chat .time{align-self:flex-end;font-size:11px;color:var(--ink-3)}
+.toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;font-size:13px;cursor:pointer}
+.toggle button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* history */
+.spark svg{display:block;width:100%;height:auto}
+.spark text{font-family:var(--body);font-size:11px;fill:var(--ink-3)}
+.hist{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.hist:last-child{border-bottom:0}
+.hist .d{font-weight:600}
+.hist .s{font-size:13px;color:var(--ink-2)}
+
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--ink-3);font-weight:600;font-size:12px}
+.tw{overflow-x:auto}
+
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
+  padding:4px max(8px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:720px;margin:0 auto;display:flex}
+nav.tabs button{flex:1;border:0;background:none;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--ink-3);cursor:pointer}
+nav.tabs button .ico{width:21px;height:21px}
+nav.tabs button.on{color:var(--accent);font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.fade{animation:fade .35s ease both}
+@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (max-width:520px){.badge{display:none}.score{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr 1fr}.shift .r{font-size:19px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-live" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-crown" viewBox="0 0 24 24"><path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+</svg>
+
+<header class="bar"><div class="in">
+  <div class="brand"><span class="dot"><svg class="ico"><use href="#i-bolt"/></svg></span>สรุปแอดรายวัน</div>
+  <span class="badge" id="sampleBadge" hidden>ข้อมูลตัวอย่าง</span>
+  <label class="datechip" style="margin:0"><svg class="ico" style="width:15px;height:15px"><use href="#i-cal"/></svg><input type="date" id="date" aria-label="วันที่"></label>
+</div></header>
+
+<main>
+  <!-- ================= วันนี้ ================= -->
+  <section class="tab on" id="tab-today">
+    <div class="hero"><div class="in">
+      <div class="seg" id="modeSeg" role="tablist">
+        <button data-v="live" class="on"><svg class="ico"><use href="#i-live"/></svg>ไลฟ์</button>
+        <button data-v="product"><svg class="ico"><use href="#i-bag"/></svg>สินค้า</button>
+      </div>
+      <div class="score">
+        <div class="big"><div class="lab" id="heroLab">ROI รวม</div><div class="v" id="heroRoi">–</div><div class="st" id="heroSt"></div></div>
+        <div class="kpis">
+          <div class="kpi"><span>กำไรหลังหักแอด</span><b id="kProfit">–</b></div>
+          <div class="kpi"><span>ค่าแอด</span><b id="kSpend">–</b></div>
+          <div class="kpi"><span>ยอดขาย</span><b id="kGmv">–</b></div>
+        </div>
+      </div>
+      <div class="note" id="heroNote"></div>
+    </div></div>
+
+    <div id="liveView" class="tab on" style="gap:14px"></div>
+    <div id="productView" class="tab" style="gap:14px"></div>
+
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-edit"/></svg>หมายเหตุต่อท้ายข้อความ</h2>
+      <textarea class="f" id="note" placeholder="เช่น พรุ่งนี้มีแคมเปญ 12.12 หนูเช็กสต็อกแล้วค่ะ"></textarea>
+    </div>
+  </section>
+
+  <!-- ================= ข้อความ ================= -->
+  <section class="tab" id="tab-msg" style="padding-top:16px">
+    <div id="msgWarn" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div class="card">
+      <div class="head"><h2><svg class="ico"><use href="#i-chat"/></svg>ข้อความส่ง LINE</h2>
+        <div class="toggle" id="styleToggle"><button data-v="emoji">มีอีโมจิ</button><button data-v="formal">ทางการ</button></div></div>
+      <div class="chat">
+        <div class="who"><span class="av">AD</span>ตัวอย่างหน้าตาในแชต</div>
+        <div class="bubble" id="msg"></div>
+        <div class="time" id="msgTime"></div>
+      </div>
+      <button class="btn line" onclick="copyMsg()"><svg class="ico"><use href="#i-copy"/></svg>ก๊อปข้อความไปวางใน LINE</button>
+      <p class="tiny" style="margin:0">อ่านทวนก่อนส่งทุกครั้ง ตัวเลขคำนวณด้วยสูตร คำแนะนำมาจากกฎตายตัว ไม่ใช่ AI</p>
+    </div>
+  </section>
+
+  <!-- ================= ประวัติ ================= -->
+  <section class="tab" id="tab-hist" style="padding-top:16px">
+    <div class="card">
+      <div class="head"><h2><svg class="ico"><use href="#i-chart"/></svg>กำไรไลฟ์ย้อนหลัง</h2><span class="tiny">14 วันล่าสุดที่มีข้อมูล</span></div>
+      <div class="spark" id="spark"></div>
+    </div>
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-cal"/></svg>ทุกวันที่บันทึก</h2>
+      <p class="muted" style="margin:0">ระบบใช้ประวัตินี้นับว่ากำไรหรือขาดทุนติดกันกี่วัน (ต้องเป็นวันติดกันจริง)</p>
+      <div id="histList"></div>
+    </div>
+  </section>
+
+  <!-- ================= ตั้งค่า ================= -->
+  <section class="tab" id="tab-set" style="padding-top:16px">
+    <div class="card">
+      <div class="head"><h2><svg class="ico"><use href="#i-bag"/></svg>สินค้า</h2><button class="btn small" onclick="addProduct()"><svg class="ico" style="width:15px;height:15px"><use href="#i-plus"/></svg>เพิ่มสินค้า</button></div>
+      <p class="muted" style="margin:0">ใส่ราคาขายกับกำไรก่อนค่าแอด (หลังหักต้นทุนและค่าธรรมเนียมแล้ว) ระบบหาจุดคุ้มทุนให้</p>
+      <div id="prodList" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-live"/></svg>ไลฟ์</h2>
+      <div class="g2">
+        <div><label for="sLiveBE">จุดคุ้มทุนรวมของร้าน (ROI)</label><input class="f" id="sLiveBE" inputmode="decimal"></div>
+        <div><label for="sLiveTarget">เป้า ROI (ว่าง = คุ้มทุน × 1.2)</label><input class="f" id="sLiveTarget" inputmode="decimal"></div>
+      </div>
+      <div class="info" id="beSampleNote"><svg class="ico"><use href="#i-alert"/></svg>จุดคุ้มทุน 2.5 เป็นค่าตัวอย่าง ยังไม่ใช่ตัวเลขจริงของร้าน</div>
+      <div><label for="sChannels">ช่องที่ไลฟ์ (คั่นด้วย ,)</label><input class="f" id="sChannels" style="font-family:var(--body)"></div>
+      <div class="g2">
+        <div><label for="sStart">เริ่มไลฟ์</label><input class="f" id="sStart" placeholder="07:00"></div>
+        <div><label for="sCps">เวลาจดยอดสะสม (คั่นด้วย ,)</label><input class="f" id="sCps" placeholder="13:00, 19:00, 01:00"></div>
+      </div>
+      <p class="tiny" style="margin:0">จดยอดตอนเปลี่ยนกะ ระบบลบยอดสะสมให้เป็นรายช่วง เวลาสุดท้ายคือตอนจบไลฟ์</p>
+    </div>
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-chat"/></svg>ข้อความ</h2>
+      <div class="g2">
+        <div><label for="sMode">สรุปส่วนไหน</label><select class="f" id="sMode"><option value="both">ทั้งไลฟ์และสินค้า</option><option value="live">ไลฟ์อย่างเดียว</option><option value="product">สินค้าอย่างเดียว</option></select></div>
+        <div><label for="sStreak">ติดกันกี่วันถึงแนะนำเพิ่ม/ลดงบ</label><select class="f" id="sStreak"><option value="2">2 วัน</option><option value="3">3 วัน</option><option value="4">4 วัน</option></select></div>
+      </div>
+      <button class="btn primary" onclick="saveSettings()">บันทึกการตั้งค่า</button>
+    </div>
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-gear"/></svg>ข้อมูล</h2>
+      <p class="muted" style="margin:0">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้ ถ้าล้างเบราว์เซอร์หรือเปลี่ยนเครื่องจะหาย ก๊อปเก็บไว้เป็นระยะ</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="copyBackup()"><svg class="ico"><use href="#i-copy"/></svg>ก๊อปข้อมูลสำรอง</button><button class="btn" onclick="restoreBackup()">กู้คืนจากข้อความ</button></div>
+      <textarea class="f" id="backupBox" placeholder="วางข้อมูลสำรองที่นี่ แล้วกด กู้คืนจากข้อความ"></textarea>
+      <button class="btn danger" onclick="clearSample()"><svg class="ico"><use href="#i-trash"/></svg>ลบข้อมูลทั้งหมด เริ่มใช้จริง</button>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs"><div class="in">
+  <button data-t="today" class="on"><svg class="ico"><use href="#i-home"/></svg>วันนี้</button>
+  <button data-t="msg"><svg class="ico"><use href="#i-chat"/></svg>ข้อความ</button>
+  <button data-t="hist"><svg class="ico"><use href="#i-cal"/></svg>ประวัติ</button>
+  <button data-t="set"><svg class="ico"><use href="#i-gear"/></svg>ตั้งค่า</button>
+</div></nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script id="logic">
+const num = v => (v === '' || v == null || isNaN(+v)) ? null : +v;
+const pad = n => String(n).padStart(2, '0');
+function addDays(iso, k) {
+  const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + k);
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+}
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const signed = n => (Math.round(n) >= 0 ? '+' : '-') + fmt(Math.abs(n));
+const r2 = n => n.toFixed(2);
+const shortT = t => t.endsWith(':00') ? t.slice(0, 2) : t;
+function thaiDate(iso) {
+  return new Date(iso + 'T00:00:00').toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function classify(roi, orders, spend, be, target) {
+  if (!(spend > 0)) return 'noad';
+  if (orders < 3) return 'few';
+  if (roi >= target) return 'good';
+  if (roi >= be) return 'thin';
+  return 'loss';
+}
+
+/* ---------- สินค้า ---------- */
+function productBE(p) { return p.price / p.profit; }
+function productTarget(p) { return num(p.target) || productBE(p) * 1.2; }
+
+function productDay(state, date, p) {
+  const r = state.days[date]?.products?.[p.id];
+  if (!r) return null;
+  const spend = num(r.spend), gmv = num(r.gmv), orders = num(r.orders);
+  if (spend == null || gmv == null || orders == null) return null;
+  if (!(p.price > 0) || !(p.profit > 0)) return null;
+  const be = productBE(p), target = productTarget(p);
+  const roi = spend > 0 ? gmv / spend : null;
+  const impr = num(r.impr), clicks = num(r.clicks), stock = num(r.stock);
+  return {
+    spend, gmv, orders, be, target, roi,
+    profit: gmv / be - spend,
+    cpo: orders > 0 ? spend / orders : null,
+    status: classify(roi, orders, spend, be, target),
+    ctr: impr > 0 && clicks != null ? clicks / impr : null,
+    stock
+  };
+}
+function productStreak(state, date, p, status) {
+  let k = 1, d = date;
+  for (;;) { d = addDays(d, -1); const r = productDay(state, d, p); if (!r || r.status !== status) break; k++; }
+  return k;
+}
+
+/* ---------- ไลฟ์ ---------- */
+function liveBE(S) { return num(S.liveBE) || 2.5; }
+function liveTarget(S) { return num(S.liveTarget) || liveBE(S) * 1.2; }
+
+function liveDay(state, date) {
+  const S = state.settings, be = liveBE(S), target = liveTarget(S), cps = S.checkpoints;
+  const L = state.days[date]?.live || {};
+  const chans = [], errors = [];
+  for (const ch of S.channels) {
+    const arr = cps.map(t => {
+      const x = L[ch]?.[t]; if (!x) return null;
+      const s = num(x.spend), g = num(x.gmv), o = num(x.orders);
+      if (s == null || g == null || o == null) return null;
+      return { t, spend: s, gmv: g, orders: o };
+    });
+    const filled = arr.filter(Boolean);
+    if (!filled.length) continue;
+    let prev = { spend: 0, gmv: 0, orders: 0 };
+    for (const f of filled) {
+      if (f.spend < prev.spend || f.gmv < prev.gmv || f.orders < prev.orders)
+        errors.push(`${ch}: ยอดสะสมตอน ${f.t} น้อยกว่าตอนก่อนหน้า (ยอดสะสมต้องเท่าเดิมหรือเพิ่มขึ้น)`);
+      prev = f;
+    }
+    const last = filled[filled.length - 1];
+    chans.push({
+      name: ch, arr, lastT: last.t, spend: last.spend, gmv: last.gmv, orders: last.orders,
+      roi: last.spend > 0 ? last.gmv / last.spend : null,
+      profit: last.gmv / be - last.spend,
+      status: classify(last.spend > 0 ? last.gmv / last.spend : null, last.orders, last.spend, be, target)
+    });
+  }
+  if (!chans.length) return null;
+
+  const total = { spend: 0, gmv: 0, orders: 0 };
+  for (const c of chans) { total.spend += c.spend; total.gmv += c.gmv; total.orders += c.orders; }
+  total.roi = total.spend > 0 ? total.gmv / total.spend : null;
+  total.profit = total.gmv / be - total.spend;
+
+  // แยกช่วง: ใช้เฉพาะเวลาที่ทุกช่องจดครบ
+  const common = cps.filter((t, i) => chans.every(c => c.arr[i]));
+  const segments = [];
+  let prevT = S.liveStart, prev = { spend: 0, gmv: 0, orders: 0 };
+  for (const t of common) {
+    const i = cps.indexOf(t);
+    const cum = { spend: 0, gmv: 0, orders: 0 };
+    for (const c of chans) { cum.spend += c.arr[i].spend; cum.gmv += c.arr[i].gmv; cum.orders += c.arr[i].orders; }
+    const spend = cum.spend - prev.spend, gmv = cum.gmv - prev.gmv, orders = cum.orders - prev.orders;
+    const roi = spend > 0 ? gmv / spend : null;
+    segments.push({
+      label: shortT(prevT) + '–' + shortT(t), spend, gmv, orders, roi,
+      profit: gmv / be - spend, status: classify(roi, orders, spend, be, target)
+    });
+    prev = cum; prevT = t;
+  }
+  const lastCommon = common[common.length - 1];
+  const incomplete = chans.some(c => c.lastT !== lastCommon);
+  return { be, target, chans, total, segments, errors, incomplete, lastCommon };
+}
+function segStreak(state, date, label, status) {
+  let k = 1, d = date;
+  for (;;) {
+    d = addDays(d, -1);
+    const ld = liveDay(state, d);
+    const s = ld && !ld.errors.length ? ld.segments.find(x => x.label === label) : null;
+    if (!s || s.status !== status) break;
+    k++;
+  }
+  return k;
+}
+function liveAdvice(state, date, ld) {
+  const N = +state.settings.streakN, out = [];
+  const segs = ld.segments;
+  const elig = segs.filter(s => ['good', 'thin', 'loss'].includes(s.status));
+  let best = null, worst = null;
+  if (segs.length >= 2 && elig.length >= 2) {
+    best = elig.reduce((a, b) => b.roi > a.roi ? b : a);
+    worst = elig.reduce((a, b) => b.roi < a.roi ? b : a);
+    if (best === worst) best = worst = null;
+  }
+  if (best && worst && worst.status === 'loss' && best.status === 'good') {
+    const move = Math.round(worst.spend * 0.2 / 10) * 10;
+    out.push(`ย้ายงบแอดช่วง ${worst.label} ราว ${fmt(move)} บาท (20%) ไปช่วง ${best.label}`);
+  }
+  for (const s of segs) {
+    if (s.status === 'loss') {
+      const k = segStreak(state, date, s.label, 'loss');
+      s.streak = k;
+      if (k >= N) out.push(`ช่วง ${s.label} ขาดทุนติดกัน ${k} วัน แนะนำลดงบแอดช่วงนี้หรือหยุดยิงแอด`);
+    } else if (s.status === 'good') {
+      const k = segStreak(state, date, s.label, 'good');
+      s.streak = k;
+      if (k >= N && s === best) out.push(`ช่วง ${s.label} กำไรดีติดกัน ${k} วัน เพิ่มงบแอดช่วงนี้ได้ราว 20%`);
+    }
+  }
+  return { best: best && best.status !== 'loss' ? best : null, advice: out };
+}
+
+/* ---------- ข้อความ ---------- */
+function buildMessage(state, date) {
+  const S = state.settings, emo = S.style === 'emoji', N = +S.streakN;
+  const IC = emo
+    ? { good: '✅', thin: '🟡', loss: '🔴', few: '⚪', noad: '⚪', best: '🏆', tip: '💡', warn: '⚠️', prod: '📦 ', live: '📺 ' }
+    : { good: '-', thin: '-', loss: '-', few: '-', noad: '-', best: '-', tip: '-', warn: '-', prod: '', live: '' };
+  const lines = [`สรุปแอด TikTok ${thaiDate(date)}`];
+  const warns = [];
+
+  // --- ไลฟ์ ---
+  if (S.mode !== 'product') {
+    const ld = liveDay(state, date);
+    if (ld) {
+      const { best, advice } = liveAdvice(state, date, ld);
+      lines.push('', `${IC.live}แอดไลฟ์ (จุดคุ้มทุน ${r2(ld.be)})`);
+      if (ld.errors.length) lines.push(`(ตัวเลขไลฟ์มีจุดผิด ตรวจก่อนส่ง)`);
+      const t = ld.total;
+      lines.push(`งบ ${fmt(t.spend)} | ยอดขาย ${fmt(t.gmv)} | ROI ${t.roi != null ? r2(t.roi) : '-'} | กำไรหลังหักแอด ${signed(t.profit)} บาท`);
+      if (ld.chans.length > 1) {
+        for (const c of ld.chans)
+          lines.push(`${IC[c.status]} ช่อง ${c.name}: ${c.roi != null ? 'ROI ' + r2(c.roi) + ' ' : ''}${c.profit >= 0 ? 'กำไร' : 'ขาดทุน'} ${fmt(Math.abs(c.profit))} บาท`);
+      }
+      if (!ld.errors.length) {
+        if (ld.segments.length >= 2) {
+          lines.push('แยกช่วงเวลา:');
+          for (const s of ld.segments) lines.push(segLine(s, s === best, IC, N));
+          if (ld.incomplete) lines.push(`(ยังจดยอดไม่ครบทุกช่อง แยกช่วงได้ถึง ${ld.lastCommon})`);
+        } else {
+          lines.push(`(ไม่ได้จดยอดตอนเปลี่ยนกะ เลยแยกช่วงเวลาไม่ได้)`);
+        }
+        for (const a of advice) lines.push(`${IC.tip} ${a}`);
+      }
+    }
+  }
+
+  // --- สินค้า ---
+  if (S.mode !== 'live') {
+    const rows = state.products.map(p => ({ p, r: productDay(state, date, p) })).filter(x => x.r);
+    if (rows.length) {
+      const T = rows.reduce((a, { r }) => ({ spend: a.spend + r.spend, gmv: a.gmv + r.gmv, profit: a.profit + r.profit }), { spend: 0, gmv: 0, profit: 0 });
+      lines.push('', `${IC.prod}แอดสินค้า`);
+      lines.push(`งบ ${fmt(T.spend)} | ยอดขาย ${fmt(T.gmv)} | ROI ${T.spend > 0 ? r2(T.gmv / T.spend) : '-'} | กำไรหลังหักแอด ${signed(T.profit)} บาท`);
+      for (const { p, r } of rows) {
+        lines.push(productLine(state, date, p, r, IC, N));
+        if (r.stock != null && r.orders > 0 && r.stock / r.orders <= 3) {
+          const d = Math.floor(r.stock / r.orders);
+          warns.push(`${p.name} สต็อกเหลือ ${fmt(r.stock)} ชิ้น พอขาย${d >= 1 ? 'ประมาณ ' + d + ' วัน' : 'ไม่ถึง 1 วัน'} ควรลดงบหรือเติมของ`);
+        }
+      }
+    }
+  }
+
+  if (lines.length === 1) lines.push('', 'ยังไม่มีตัวเลขของวันนี้');
+  for (const w of warns) lines.push('', `${IC.warn} แจ้งเตือน: ${w}`);
+  const note = (state.days[date]?.note || '').trim();
+  if (note) lines.push('', `หมายเหตุ: ${note}`);
+  return lines.join('\n');
+}
+function segLine(s, isBest, IC, N) {
+  const roi = s.roi != null ? `ROI ${r2(s.roi)} ` : '';
+  const pl = `${s.profit >= 0 ? 'กำไร' : 'ขาดทุน'} ${fmt(Math.abs(s.profit))} บาท`;
+  if (s.status === 'noad') return `${IC.noad} ${s.label}: ไม่ได้ยิงแอด ยอดขาย ${fmt(s.gmv)} บาท`;
+  if (s.status === 'few') return `${IC.few} ${s.label}: ออเดอร์ ${s.orders} ข้อมูลยังน้อย (ใช้งบ ${fmt(s.spend)})`;
+  if (isBest) return `${IC.best} ${s.label}: ${roi}${pl} คุ้มที่สุดของวัน`;
+  if (s.status === 'thin') return `${IC.thin} ${s.label}: ${roi}กำไรบาง ${fmt(s.profit)} บาท`;
+  if (s.status === 'loss') return `${IC.loss} ${s.label}: ${roi}${pl}${s.streak > 1 ? ` (ขาดทุนติดกัน ${s.streak} วัน)` : ''}`;
+  return `${IC.good} ${s.label}: ${roi}${pl}`;
+}
+function productLine(state, date, p, r, IC, N) {
+  const head = `${IC[r.status]} ${p.name}: `;
+  const roiTxt = r.roi != null ? `ROI ${r2(r.roi)} (คุ้มทุนที่ ${r2(r.be)}) ` : '';
+  const funnel = () => r.ctr == null ? '' :
+    r.ctr < 0.01 ? ` คนเห็นแต่ไม่ค่อยคลิก (CTR ${(r.ctr * 100).toFixed(1)}%) ปัญหาน่าจะอยู่ที่คลิป`
+                 : ` คลิปโอเค (CTR ${(r.ctr * 100).toFixed(1)}%) ปัญหาน่าจะอยู่ที่หน้าสินค้า ราคา หรือรีวิว`;
+  switch (r.status) {
+    case 'noad': return head + `ไม่มีค่าแอด ยอดขาย ${fmt(r.gmv)} บาท`;
+    case 'few': return head + `ออเดอร์ ${r.orders} ข้อมูลยังน้อย ยังสรุปไม่ได้ (ใช้งบ ${fmt(r.spend)})`;
+    case 'good': {
+      const k = productStreak(state, date, p, 'good');
+      const tail = k >= N ? ` กำไรต่อเนื่อง ${k} วัน แนะนำเพิ่มงบ 20%` : k > 1 ? ` กำไรต่อเนื่อง ${k} วัน ดูต่ออีก ${N - k} วันก่อนเพิ่มงบ` : ' ดูต่อก่อนเพิ่มงบ';
+      return head + roiTxt + `กำไร ${fmt(r.profit)} บาท` + tail;
+    }
+    case 'thin': return head + roiTxt + `กำไรบาง ${fmt(r.profit)} บาท ยังไม่ควรเพิ่มงบ` + funnel();
+    case 'loss': {
+      const k = productStreak(state, date, p, 'loss');
+      const tail = k >= N ? ` ขาดทุนติดกัน ${k} วัน แนะนำลดงบหรือหยุด` : ` (วันที่ ${k}) ขอดูต่ออีก ${N - k} วัน`;
+      return head + roiTxt + `ขาดทุน ${fmt(Math.abs(r.profit))} บาท` + tail + funnel();
+    }
+  }
+}
+
+/* ---------- ข้อมูลตัวอย่าง ---------- */
+function sampleState(today) {
+  const y1 = addDays(today, -1), y2 = addDays(today, -2);
+  const live = (a, b) => ({ 'chy.cosmetic': a, 'story.chy': b });
+  const cp = (s1, g1, o1, s2, g2, o2, s3, g3, o3) => ({
+    '13:00': { spend: s1, gmv: g1, orders: o1 }, '19:00': { spend: s2, gmv: g2, orders: o2 }, '01:00': { spend: s3, gmv: g3, orders: o3 }
+  });
+  return {
+    sample: true,
+    settings: {
+      style: 'emoji', mode: 'both', streakN: 3, liveBE: 2.5, liveTarget: '',
+      channels: ['chy.cosmetic', 'story.chy'], liveStart: '07:00', checkpoints: ['13:00', '19:00', '01:00']
+    },
+    products: [
+      { id: 'p1', name: 'ลิปสติก', price: 300, profit: 150, target: '' },
+      { id: 'p2', name: 'เซรั่ม', price: 500, profit: 200, target: '' }
+    ],
+    days: {
+      [y2]: {
+        products: { p1: { spend: 1000, gmv: 2800, orders: 9 } },
+        live: live(cp(500, 700, 3, 1200, 2800, 13, 2600, 8800, 42), cp(300, 400, 2, 700, 1500, 7, 1400, 4500, 20))
+      },
+      [y1]: {
+        products: { p1: { spend: 1000, gmv: 2600, orders: 9 } },
+        live: live(cp(500, 750, 4, 1200, 2900, 14, 2700, 9000, 44), cp(300, 350, 2, 700, 1550, 7, 1500, 4700, 21))
+      },
+      [today]: {
+        products: {
+          p1: { spend: 1000, gmv: 2700, orders: 9, stock: 25 },
+          p2: { spend: 2000, gmv: 4400, orders: 9, impr: 20000, clicks: 300 }
+        },
+        live: live(cp(500, 800, 4, 1200, 2900, 14, 2700, 9100, 44), cp(300, 400, 2, 700, 1600, 7, 1500, 4850, 22)),
+        note: ''
+      }
+    }
+  };
+}
+if (typeof module !== 'undefined') module.exports = { liveDay, liveAdvice, productDay, buildMessage, sampleState, addDays };
+</script>
+
+<script>
+const KEY = 'chyAdSummary.v2';
+let state, curDate, view = 'live';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ic = (n, s = '') => `<svg class="ico" ${s}><use href="#i-${n}"/></svg>`;
+const ST = { good: 'กำไรดี', thin: 'กำไรบาง', loss: 'ขาดทุน', few: 'ข้อมูลน้อย', noad: 'ไม่มีแอด' };
+const STI = { good: 'up', thin: 'minus', loss: 'down', few: 'minus', noad: 'minus' };
+const pillH = s => `<span class="pill ${s}">${ic(STI[s])}${ST[s]}</span>`;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function todayISO() { const d = new Date(); if (d.getHours() < 5) d.setDate(d.getDate() - 1); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function load() { try { state = JSON.parse(localStorage.getItem(KEY)); } catch (e) { state = null; } if (!state || !state.settings) state = sampleState(todayISO()); }
+let saveWarned = false;
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { if (!saveWarned) { saveWarned = true; toast('เบราว์เซอร์นี้เก็บข้อมูลไม่ได้ ปิดหน้าแล้วข้อมูลจะหาย'); } } }
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 1900); }
+let askKey = null, askAt = 0;
+function ask(msg) { if (askKey === msg && Date.now() - askAt < 4000) { askKey = null; return true; } askKey = msg; askAt = Date.now(); toast(msg + ' กดอีกครั้งเพื่อยืนยัน'); return false; }
+function day() { return state.days[curDate] || (state.days[curDate] = { products: {}, live: {}, note: '' }); }
+function pruneDay(d) {
+  const x = state.days[d]; if (!x) return;
+  const empty = o => !o || Object.values(o).every(v => v === '' || v == null);
+  for (const k in x.products || {}) if (empty(x.products[k])) delete x.products[k];
+  for (const ch in x.live || {}) { for (const t in x.live[ch]) if (empty(x.live[ch][t])) delete x.live[ch][t]; if (!Object.keys(x.live[ch]).length) delete x.live[ch]; }
+  if (!Object.keys(x.products || {}).length && !Object.keys(x.live || {}).length && !(x.note || '').trim()) delete state.days[d];
+}
+
+/* ---------- count-up ---------- */
+function setNum(el, val, f) {
+  if (val == null || isNaN(val)) { el.textContent = '–'; el.dataset.v = ''; return; }
+  const from = el.dataset.v === '' || el.dataset.v == null ? val * 0.6 : +el.dataset.v; el.dataset.v = val;
+  if (reduce || Math.abs(from - val) < 1e-9) { el.textContent = f(val); return; }
+  const t0 = performance.now(), dur = 550;
+  cancelAnimationFrame(el._raf);
+  const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = f(from + (val - from) * e); if (k < 1) el._raf = requestAnimationFrame(step); };
+  el._raf = requestAnimationFrame(step);
+}
+
+/* ---------- hero ---------- */
+function heroData() {
+  if (view === 'live') {
+    const ld = liveDay(state, curDate); if (!ld) return null;
+    const t = ld.total; return { roi: t.roi, profit: t.profit, spend: t.spend, gmv: t.gmv, status: classify(t.roi, t.orders, t.spend, ld.be, ld.target),
+      note: `จุดคุ้มทุน ${ld.be.toFixed(2)} · เป้า ${ld.target.toFixed(2)} · ${ld.chans.length} ช่อง` };
+  }
+  const rows = state.products.map(p => productDay(state, curDate, p)).filter(Boolean); if (!rows.length) return null;
+  const sp = rows.reduce((a, r) => a + r.spend, 0), g = rows.reduce((a, r) => a + r.gmv, 0), pf = rows.reduce((a, r) => a + r.profit, 0), o = rows.reduce((a, r) => a + r.orders, 0);
+  const st = pf < 0 ? 'loss' : o < 3 ? 'few' : rows.every(r => r.status === 'good') ? 'good' : 'thin';
+  return { roi: sp > 0 ? g / sp : null, profit: pf, spend: sp, gmv: g, status: st, note: `${rows.length} สินค้า · จุดคุ้มทุนแยกตามสินค้า` };
+}
+function renderHero() {
+  const h = heroData();
+  $('heroLab').textContent = view === 'live' ? 'ROI แอดไลฟ์รวม' : 'ROI แอดสินค้ารวม';
+  setNum($('heroRoi'), h?.roi, v => v.toFixed(2));
+  setNum($('kProfit'), h?.profit, v => signed(v));
+  setNum($('kSpend'), h?.spend, v => fmt(v));
+  setNum($('kGmv'), h?.gmv, v => fmt(v));
+  $('kProfit').className = h ? (h.profit >= 0 ? 'pos' : 'neg') : '';
+  $('heroSt').innerHTML = h ? pillH(h.status) : '';
+  $('heroNote').textContent = h ? h.note : 'ยังไม่มีตัวเลขของวันนี้ กรอกด้านล่างได้เลย';
+}
+
+/* ---------- live view ---------- */
+function renderLive() {
+  const S = state.settings, L = state.days[curDate]?.live || {};
+  let h = `<div id="liveSummary" style="display:flex;flex-direction:column;gap:14px"></div>`;
+  for (const ch of S.channels) {
+    const filled = S.checkpoints.filter(t => L[ch]?.[t] && ['spend', 'gmv', 'orders'].every(f => (L[ch][t][f] ?? '') !== '')).length;
+    h += `<div class="card chan">
+      <div class="row"><h2>${ic('live')}${esc(ch)}</h2><span id="cpill-${esc(ch)}"></span></div>
+      <div class="stat" id="cstat-${esc(ch)}"></div>
+      <details class="inputs" ${filled < S.checkpoints.length ? 'open' : ''}>
+        <summary>${ic('edit')}กรอกยอดสะสม <span class="tiny" style="font-weight:400">(${filled}/${S.checkpoints.length} จุด)</span><svg class="ico chev" style="margin-left:auto"><use href="#i-down"/></svg></summary>
+        <p class="tiny" style="margin:8px 0 0">ยอดสะสมตั้งแต่เริ่มไลฟ์ ${esc(S.liveStart)} ถึงเวลานั้น ดูได้จากหน้าสรุปไลฟ์ของ TikTok</p>
+        <div class="cps">${S.checkpoints.map((t, i) => {
+          const v = L[ch]?.[t] || {}, last = i === S.checkpoints.length - 1;
+          return `<div class="cp"><div class="t"><span class="tm">${esc(t)}</span>${last ? 'จบไลฟ์' : 'เปลี่ยนกะ'}</div><div class="g3">
+            ${[['spend', 'ค่าแอด'], ['gmv', 'ยอดขาย'], ['orders', 'ออเดอร์']].map(([f, l]) => `<div><label>${l}</label><input class="f" inputmode="decimal" data-live="${esc(ch)}|${esc(t)}|${f}" value="${esc(v[f] ?? '')}"></div>`).join('')}
+          </div></div>`; }).join('')}</div>
+      </details></div>`;
+  }
+  $('liveView').innerHTML = h;
+  updateLive();
+}
+function updateLive() {
+  const ld = liveDay(state, curDate);
+  for (const ch of state.settings.channels) {
+    const c = ld?.chans.find(x => x.name === ch), p = document.getElementById('cpill-' + ch), s = document.getElementById('cstat-' + ch);
+    if (!p) continue;
+    p.innerHTML = c ? pillH(c.status) : '<span class="tiny">ยังไม่มีตัวเลข</span>';
+    s.innerHTML = c ? `<span>ROI <b>${c.roi != null ? c.roi.toFixed(2) : '–'}</b></span><span>กำไร <b>${signed(c.profit)}</b></span><span>ค่าแอด <b>${fmt(c.spend)}</b></span><span>ถึง <b>${c.lastT}</b></span>` : '';
+  }
+  const el = $('liveSummary'); if (!el) return;
+  if (!ld) { el.innerHTML = `<div class="card"><p class="muted" style="margin:0">ยังไม่มีตัวเลขไลฟ์ของวันนี้ กรอกยอดสะสมในการ์ดแต่ละช่องด้านล่าง</p></div>`; renderHero(); return; }
+  let h = ld.errors.map(e => `<div class="warn">${ic('alert')}<span>${esc(e)}</span></div>`).join('');
+  if (ld.incomplete) h += `<div class="info">${ic('alert')}<span>ยังจดยอดไม่ครบทุกช่อง แยกช่วงได้ถึง ${esc(ld.lastCommon || '–')}</span></div>`;
+  if (!ld.errors.length && ld.segments.length >= 2) {
+    const { best, advice } = liveAdvice(state, curDate, ld);
+    h += `<div class="card fade"><div class="head"><h2>${ic('chart')}แยกตามช่วงไลฟ์</h2><span class="tiny">รวมทุกช่อง</span></div>
+      <div class="shifts" style="--n:${ld.segments.length}">${ld.segments.map(s => `<div class="shift ${s.status} ${s === best ? 'best' : ''}">
+        ${s === best ? `<span class="crown" title="คุ้มที่สุดของวัน">${ic('crown')}</span>` : ''}
+        <span class="t">${s.label}</span><span class="r">${s.roi != null ? s.roi.toFixed(2) : '–'}</span>
+        <span class="p">${s.status === 'few' ? 'ออเดอร์ ' + s.orders + ' ข้อมูลน้อย' : s.status === 'noad' ? 'ไม่ได้ยิงแอด' : (s.profit >= 0 ? 'กำไร ' : 'ขาดทุน ') + fmt(Math.abs(s.profit))}</span></div>`).join('')}</div>
+      <div class="chart">${roiChart(ld)}</div>
+      <div class="legendrow"><span style="color:var(--ink-3)"><i></i>จุดคุ้มทุน ${ld.be.toFixed(2)}</span><span style="color:var(--good)"><i></i>เป้า ${ld.target.toFixed(2)}</span></div>
+      ${advice.length ? `<div class="advice">${advice.map(a => `<div class="adv">${ic('bulb')}<span>${esc(a)}</span></div>`).join('')}</div>` : ''}
+      <details><summary class="tiny" style="cursor:pointer">ดูตัวเลขละเอียด</summary><div class="tw">${segTable(ld)}</div></details>
+    </div>`;
+  } else if (!ld.errors.length) {
+    h += `<div class="info">${ic('alert')}<span>ยังไม่ได้จดยอดตอนเปลี่ยนกะ เลยแยกช่วงเวลาไม่ได้ ยอดรวมยังถูกต้อง</span></div>`;
+  }
+  el.innerHTML = h;
+  renderHero();
+}
+function roiChart(ld) {
+  const segs = ld.segments, W = 360, H = 200, L = 30, R = 8, T = 22, B = 30, pw = W - L - R, ph = H - T - B;
+  const maxV = Math.max(ld.target * 1.25, ...segs.map(s => s.roi || 0)) * 1.08;
+  const y = v => T + ph * (1 - v / maxV), bw = Math.min(56, pw / segs.length * 0.52);
+  const step = Math.max(0.5, Math.ceil(maxV / 4 * 2) / 2);
+  let g = '';
+  for (let v = 0; v <= maxV; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" ${v ? 'stroke-dasharray="2 4"' : ''}/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v.toFixed(1)}</text>`;
+  const col = { good: 'var(--good)', thin: 'var(--thin)', loss: 'var(--loss)', few: 'var(--few)', noad: 'var(--few)' };
+  segs.forEach((s, i) => {
+    const cx = L + pw * (i + 0.5) / segs.length, v = s.roi || 0, top = y(v), base = y(0);
+    const hgt = Math.max(0, base - top), r = Math.min(4, hgt);
+    g += `<path d="M${cx - bw / 2} ${base}V${top + r}q0 -${r} ${r} -${r}H${cx + bw / 2 - r}q${r} 0 ${r} ${r}V${base}Z" fill="${col[s.status]}" opacity="${s.status === 'few' || s.status === 'noad' ? .45 : .9}"><title>${s.label}: ROI ${s.roi != null ? s.roi.toFixed(2) : '–'} · ${s.profit >= 0 ? 'กำไร' : 'ขาดทุน'} ${fmt(Math.abs(s.profit))} บาท</title></path>`;
+    g += `<text class="lbl" x="${cx}" y="${top - 6}" text-anchor="middle">${s.roi != null ? s.roi.toFixed(2) : '–'}</text><text x="${cx}" y="${H - 10}" text-anchor="middle">${s.label}</text>`;
+  });
+  g += `<line x1="${L}" x2="${W - R}" y1="${y(ld.be)}" y2="${y(ld.be)}" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  g += `<line x1="${L}" x2="${W - R}" y1="${y(ld.target)}" y2="${y(ld.target)}" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="ROI แต่ละช่วงไลฟ์เทียบจุดคุ้มทุนและเป้า">${g}</svg>`;
+}
+function segTable(ld) {
+  return `<table><tr><th>ช่วง</th><th>ค่าแอด</th><th>ยอดขาย</th><th>ออเดอร์</th><th>ROI</th><th>กำไร</th></tr>` +
+    ld.segments.map(s => `<tr><td>${s.label}</td><td>${fmt(s.spend)}</td><td>${fmt(s.gmv)}</td><td>${s.orders}</td><td>${s.roi != null ? s.roi.toFixed(2) : '–'}</td><td style="color:${s.profit >= 0 ? 'var(--good)' : 'var(--loss)'}">${signed(s.profit)}</td></tr>`).join('') +
+    `<tr><td><b>รวม</b></td><td>${fmt(ld.total.spend)}</td><td>${fmt(ld.total.gmv)}</td><td>${ld.total.orders}</td><td>${ld.total.roi != null ? ld.total.roi.toFixed(2) : '–'}</td><td><b>${signed(ld.total.profit)}</b></td></tr></table>
+    <p class="tiny">กำไรหลังหักแอด = ยอดขาย ÷ ${ld.be.toFixed(2)} − ค่าแอด</p>`;
+}
+
+/* ---------- product view ---------- */
+function renderProducts() {
+  const P = state.days[curDate]?.products || {};
+  if (!state.products.length) { $('productView').innerHTML = `<div class="card"><p class="muted" style="margin:0">ยังไม่มีสินค้า เพิ่มได้ที่แท็บตั้งค่า</p></div>`; renderHero(); return; }
+  $('productView').innerHTML = state.products.map(p => {
+    const v = P[p.id] || {};
+    const f = (k, l) => `<div><label>${l}</label><input class="f" inputmode="decimal" data-prod="${p.id}|${k}" value="${esc(v[k] ?? '')}"></div>`;
+    return `<div class="card"><div class="head"><h2>${ic('bag')}${esc(p.name)}</h2><span id="ppill-${p.id}"></span></div>
+      <div class="res" id="pres-${p.id}"></div>
+      <div class="g3">${f('spend', 'ค่าแอด')}${f('gmv', 'ยอดขาย')}${f('orders', 'ออเดอร์')}</div>
+      <details class="inputs" ${v.impr || v.clicks || v.stock ? 'open' : ''}><summary>${ic('plus')}ช่องเสริม: คนเห็น คลิก สต็อก<svg class="ico chev" style="margin-left:auto"><use href="#i-down"/></svg></summary>
+      <div class="g3" style="margin-top:10px">${f('impr', 'คนเห็น')}${f('clicks', 'คลิก')}${f('stock', 'สต็อกเหลือ')}</div></details></div>`;
+  }).join('');
+  updateProducts();
+}
+function updateProducts() {
+  for (const p of state.products) {
+    const r = productDay(state, curDate, p), pp = document.getElementById('ppill-' + p.id), rs = document.getElementById('pres-' + p.id);
+    if (!pp) continue;
+    pp.innerHTML = r ? pillH(r.status) : '';
+    rs.innerHTML = r ? `<span>ROI <b>${r.roi != null ? r.roi.toFixed(2) : '–'}</b> / คุ้มทุน <b>${r.be.toFixed(2)}</b></span><span>CPO <b>${r.cpo != null ? fmt(r.cpo) : '–'}</b></span><span>กำไร <b>${signed(r.profit)}</b></span>${r.ctr != null ? `<span>CTR <b>${(r.ctr * 100).toFixed(1)}%</b></span>` : ''}` : '<span class="tiny">กรอกค่าแอด ยอดขาย ออเดอร์ เพื่อดูผล</span>';
+  }
+  renderHero();
+}
+
+function renderToday() {
+  $('date').value = curDate;
+  $('note').value = state.days[curDate]?.note || '';
+  $('sampleBadge').hidden = !state.sample;
+  document.querySelectorAll('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
+  $('liveView').classList.toggle('on', view === 'live'); $('productView').classList.toggle('on', view === 'product');
+  renderLive(); renderProducts();
+}
+
+/* ---------- message ---------- */
+function renderMsg() {
+  $('msg').textContent = buildMessage(state, curDate);
+  const now = new Date(); $('msgTime').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  document.querySelectorAll('#styleToggle button').forEach(b => b.classList.toggle('on', b.dataset.v === state.settings.style));
+  const ld = liveDay(state, curDate);
+  $('msgWarn').innerHTML = (ld?.errors || []).map(e => `<div class="warn">${ic('alert')}<span>${esc(e)}</span></div>`).join('') +
+    (state.sample ? `<div class="info">${ic('alert')}<span>ตอนนี้เป็นข้อมูลตัวอย่าง ลบได้ที่แท็บตั้งค่า</span></div>` : '');
+}
+function copyMsg() {
+  const t = $('msg').textContent;
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($('msg')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} toast(ok ? 'ก๊อปแล้ว ไปวางใน LINE ได้เลย' : 'เลือกข้อความไว้ให้แล้ว กดก๊อปจากเมนูได้เลย'); };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(t).then(() => toast('ก๊อปแล้ว ไปวางใน LINE ได้เลย'), fallback); else fallback();
+}
+
+/* ---------- history ---------- */
+function renderHist() {
+  const dates = Object.keys(state.days).sort();
+  const pts = dates.map(d => ({ d, ld: liveDay(state, d) })).filter(x => x.ld && !x.ld.errors.length).slice(-14);
+  $('spark').innerHTML = pts.length ? sparkline(pts) : '<p class="muted" style="margin:0">ยังไม่มีข้อมูลไลฟ์ย้อนหลัง</p>';
+  const rev = dates.slice().reverse();
+  $('histList').innerHTML = rev.length ? rev.map(d => {
+    const ld = liveDay(state, d), pr = state.products.map(p => productDay(state, d, p)).filter(Boolean), parts = [];
+    if (ld) parts.push(`ไลฟ์ ROI ${ld.total.roi != null ? ld.total.roi.toFixed(2) : '–'} (${signed(ld.total.profit)})`);
+    if (pr.length) { const sp = pr.reduce((a, r) => a + r.spend, 0), g = pr.reduce((a, r) => a + r.gmv, 0), pf = pr.reduce((a, r) => a + r.profit, 0); parts.push(`สินค้า ROI ${sp > 0 ? (g / sp).toFixed(2) : '–'} (${signed(pf)})`); }
+    return `<div class="hist"><div><div class="d">${thaiDate(d)}</div><div class="s">${parts.join(' · ') || 'มีแค่หมายเหตุ'}</div></div>
+      <div style="display:flex;gap:6px"><button class="btn small" onclick="openDay('${d}')">เปิด</button><button class="btn small danger" onclick="delDay('${d}')" aria-label="ลบ">${ic('trash', 'style="width:15px;height:15px"')}</button></div></div>`;
+  }).join('') : '<p class="muted">ยังไม่มีประวัติ</p>';
+}
+function sparkline(pts) {
+  const W = 360, H = 150, L = 8, R = 8, T = 20, B = 24, pw = W - L - R, ph = H - T - B;
+  const vals = pts.map(p => p.ld.total.profit), mx = Math.max(0, ...vals), mn = Math.min(0, ...vals), rng = (mx - mn) || 1;
+  const x = i => L + (pts.length === 1 ? pw / 2 : i * pw / (pts.length - 1)), y = v => T + ph * (1 - (v - mn) / rng);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.ld.total.profit).toFixed(1)).join('');
+  const area = d + `L${x(pts.length - 1)} ${y(0)}L${x(0)} ${y(0)}Z`;
+  const li = pts.length - 1, lv = vals[li];
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="กำไรไลฟ์ย้อนหลัง">
+    <line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)"/>
+    <path d="${area}" fill="var(--accent)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.25" stroke-linejoin="round"/>
+    ${pts.map((p, i) => `<circle cx="${x(i)}" cy="${y(vals[i])}" r="${i === li ? 5 : 3}" fill="${vals[i] >= 0 ? 'var(--good)' : 'var(--loss)'}" stroke="var(--surface)" stroke-width="2"><title>${thaiDate(p.d)}: ${signed(vals[i])} บาท</title></circle>`).join('')}
+    <text x="${x(li)}" y="${y(lv) - 10}" text-anchor="end" style="fill:var(--ink);font-family:var(--mono);font-weight:600">${signed(lv)}</text>
+    <text x="${x(0)}" y="${H - 6}">${thaiDate(pts[0].d)}</text><text x="${x(li)}" y="${H - 6}" text-anchor="end">${thaiDate(pts[li].d)}</text></svg>`;
+}
+function openDay(d) { curDate = d; renderToday(); showTab('today'); }
+function delDay(d) { if (!ask('ลบข้อมูลวันที่ ' + thaiDate(d) + '?')) return; delete state.days[d]; save(); renderHist(); }
+
+/* ---------- settings & products ---------- */
+function renderSettings() {
+  const S = state.settings;
+  $('sMode').value = S.mode; $('sStreak').value = String(S.streakN);
+  $('sLiveBE').value = S.liveBE; $('sLiveTarget').value = S.liveTarget ?? '';
+  $('sChannels').value = S.channels.join(', '); $('sStart').value = S.liveStart; $('sCps').value = S.checkpoints.join(', ');
+  $('beSampleNote').hidden = !(state.sample || +S.liveBE === 2.5);
+  $('prodList').innerHTML = state.products.map((p, i) => {
+    const ok = p.price > 0 && p.profit > 0;
+    return `<div style="background:var(--sunk);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:8px;align-items:end"><div style="flex:1"><label>ชื่อสินค้า</label><input class="f" style="background:var(--surface);font-family:var(--body)" data-p="${i}|name" value="${esc(p.name)}"></div>
+      <button class="btn small danger" onclick="delProduct(${i})" aria-label="ลบสินค้า">${ic('trash', 'style="width:15px;height:15px"')}</button></div>
+      <div class="g3">
+        <div><label>ราคาขาย</label><input class="f" style="background:var(--surface)" inputmode="decimal" data-p="${i}|price" value="${p.price ?? ''}"></div>
+        <div><label>กำไรก่อนค่าแอด</label><input class="f" style="background:var(--surface)" inputmode="decimal" data-p="${i}|profit" value="${p.profit ?? ''}"></div>
+        <div><label>เป้า ROI</label><input class="f" style="background:var(--surface)" inputmode="decimal" data-p="${i}|target" value="${p.target ?? ''}" placeholder="${ok ? (p.price / p.profit * 1.2).toFixed(2) : ''}"></div>
+      </div><div class="res" id="pbe-${i}">${beText(p)}</div></div>`;
+  }).join('') || '<p class="muted" style="margin:0">ยังไม่มีสินค้า</p>';
+}
+const beText = p => p.price > 0 && p.profit > 0 ? `<span>จุดคุ้มทุน <b>${(p.price / p.profit).toFixed(2)}</b></span><span>เป้าแนะนำ <b>${(p.price / p.profit * 1.2).toFixed(2)}</b></span>` : '<span class="tiny">ใส่ราคาและกำไรเพื่อคำนวณ</span>';
+function addProduct() { state.products.push({ id: 'p' + Date.now(), name: 'สินค้าใหม่', price: '', profit: '', target: '' }); save(); renderSettings(); }
+function delProduct(i) { if (!ask('ลบ ' + state.products[i].name + '?')) return; state.products.splice(i, 1); save(); renderSettings(); }
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
+function saveSettings() {
+  const chans = $('sChannels').value.split(',').map(s => s.trim()).filter(Boolean), cps = $('sCps').value.split(',').map(s => s.trim()).filter(Boolean);
+  const start = $('sStart').value.trim(), be = num($('sLiveBE').value);
+  if (!chans.length) return toast('ใส่ชื่อช่องอย่างน้อย 1 ช่อง');
+  if (!TIME_RE.test(start) || !cps.length || !cps.every(t => TIME_RE.test(t))) return toast('เวลาต้องเป็นแบบ 07:00');
+  if (!(be > 0)) return toast('จุดคุ้มทุนต้องมากกว่า 0');
+  Object.assign(state.settings, { mode: $('sMode').value, streakN: +$('sStreak').value, liveBE: be, liveTarget: $('sLiveTarget').value.trim(), channels: chans, liveStart: start, checkpoints: cps });
+  save(); renderSettings(); renderToday(); toast('บันทึกแล้ว');
+}
+function copyBackup() { const t = JSON.stringify(state); (navigator.clipboard?.writeText ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('ก๊อปข้อมูลสำรองแล้ว'), () => { $('backupBox').value = t; $('backupBox').select(); toast('ใส่ไว้ในกล่องแล้ว กดก๊อปเองได้เลย'); }); }
+function restoreBackup() {
+  try { const s = JSON.parse($('backupBox').value); if (!s.settings || !s.days || !s.products) throw 0; if (!ask('แทนที่ข้อมูลทั้งหมดด้วยข้อมูลสำรองนี้?')) return; state = s; save(); renderSettings(); renderToday(); toast('กู้คืนแล้ว'); }
+  catch (e) { toast('ข้อความไม่ใช่ข้อมูลสำรองที่ถูกต้อง'); }
+}
+function clearSample() { if (!ask('ลบสินค้าและประวัติทั้งหมด (การตั้งค่ายังอยู่)?')) return; state.days = {}; state.products = []; state.sample = false; save(); renderSettings(); renderToday(); toast('ลบแล้ว เริ่มใช้จริงได้เลย'); }
+
+/* ---------- nav & events ---------- */
+function showTab(t) {
+  document.querySelectorAll('main > .tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + t));
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  if (t === 'msg') renderMsg(); if (t === 'hist') renderHist(); if (t === 'set') renderSettings(); if (t === 'today') renderHero();
+  window.scrollTo(0, 0);
+}
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.live) { const [ch, cp, f] = t.dataset.live.split('|'); const d = day(); d.live ??= {}; d.live[ch] ??= {}; d.live[ch][cp] ??= {}; d.live[ch][cp][f] = t.value.trim(); pruneDay(curDate); save(); updateLive(); }
+  else if (t.dataset.prod) { const [id, f] = t.dataset.prod.split('|'); const d = day(); d.products ??= {}; d.products[id] ??= {}; d.products[id][f] = t.value.trim(); pruneDay(curDate); save(); updateProducts(); }
+  else if (t.dataset.p) { const [i, f] = t.dataset.p.split('|'); const p = state.products[+i]; p[f] = f === 'name' ? t.value : (num(t.value) ?? ''); save(); $('pbe-' + i).innerHTML = beText(p); }
+  else if (t.id === 'note') { day().note = t.value; pruneDay(curDate); save(); }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  load(); curDate = state.sample ? Object.keys(state.days).sort().pop() : todayISO();
+  document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.t));
+  document.querySelectorAll('#modeSeg button').forEach(b => b.onclick = () => { view = b.dataset.v; document.querySelectorAll('#modeSeg button').forEach(x => x.classList.toggle('on', x === b)); $('liveView').classList.toggle('on', view === 'live'); $('productView').classList.toggle('on', view === 'product'); ['heroRoi', 'kProfit', 'kSpend', 'kGmv'].forEach(id => $(id).dataset.v = ''); renderHero(); });
+  document.querySelectorAll('#styleToggle button').forEach(b => b.onclick = () => { state.settings.style = b.dataset.v; save(); renderMsg(); });
+  $('date').onchange = e => { if (e.target.value) { curDate = e.target.value; renderToday(); } };
+  renderToday();
+});
+</script>
+
+</html>
