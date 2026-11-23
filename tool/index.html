@@ -623,7 +623,7 @@ function setNum(el, val, f) {
   if (reduce || Math.abs(from - val) < 1e-9) { el.textContent = f(val); return; }
   const t0 = performance.now(), dur = 550;
   cancelAnimationFrame(el._raf);
-  const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = f(from + (val - from) * e); if (k < 1) el._raf = requestAnimationFrame(step); };
+  const step = t => { const k = Math.max(0, Math.min(1, (t - t0) / dur)), e = 1 - Math.pow(1 - k, 3); el.textContent = f(from + (val - from) * e); if (k < 1) el._raf = requestAnimationFrame(step); };
   el._raf = requestAnimationFrame(step);
 }
 
