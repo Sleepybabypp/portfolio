@@ -2,231 +2,311 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>แพรพลอย พิพัฒน์ภาธรกุล · พอร์ตโฟลิโอ Content & Ads Analyst</title>
 <meta name="description" content="วิเคราะห์คลิป TikTok ของ CHY เทียบคู่แข่ง 7 แบรนด์ แผนพาลูกค้ากลับมาตอนสินค้าเข้า และเครื่องมือสรุปผลโฆษณารายวัน">
+<meta name="theme-color" content="#140C12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&family=Trirong:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&family=Trirong:ital,wght@0,500;0,600;0,700;1,500&display=swap">
+<script>document.documentElement.classList.add('js')</script>
 <style>
 :root{
-  --paper:#FAF6F7; --card:#FFFFFF; --ink:#2B1B26; --ink2:#5E4D58; --ink3:#8C7B86; --rule:#EADFE4;
-  --lip:#B42852; --lip-soft:#F7E4EA; --teal:#1F7A80; --teal-soft:#E1F0F0;
+  --bg:#140C12; --bg2:#1C1219; --card:#24181F; --line:rgba(255,236,244,.09);
+  --ink:#F6EDF1; --ink2:#C9B6C0; --ink3:#8F7C88;
+  --lip:#E24A74; --lip2:#B42852; --teal:#4DB6BA;
   --s1:#F2D6C6; --s2:#E3B897; --s3:#C8916C; --s4:#8E5B40;
-  --good:#2F7D4F; --good-soft:#E3F2E8; --warn:#9A6A12; --warn-soft:#FBF0D9;
+  --good:#7CD39B; --warn:#F0C66B;
   --serif:"Trirong","Noto Serif Thai",Georgia,serif;
   --sans:"Anuphan","IBM Plex Sans Thai","Leelawadee UI",system-ui,sans-serif;
-  --wrap:1120px;
+  --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:72px}
-body{background:var(--paper);color:var(--ink);font:400 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+html{scroll-padding-top:70px;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
-img,svg,iframe{display:block;max-width:100%}
-:focus-visible{outline:2.5px solid var(--lip);outline-offset:3px;border-radius:4px}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
-p{max-width:68ch}
+img,svg,canvas,iframe{display:block;max-width:100%}
+:focus-visible{outline:2.5px solid var(--lip);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+p{max-width:66ch}
 .num{font-variant-numeric:tabular-nums}
+::selection{background:var(--lip);color:#fff}
 
-/* nav: a shade card of the four sections */
-.nav{position:sticky;top:0;z-index:20;background:rgba(250,246,247,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--rule)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+/* ---------- intro curtain: four foundation shades wipe away ---------- */
+.curtain{position:fixed;inset:0;z-index:100;display:grid;grid-template-columns:repeat(4,1fr);pointer-events:none}
+.curtain i{background:var(--c);transform-origin:top;animation:wipe .9s var(--ease) forwards;animation-delay:calc(var(--d) * 90ms + 250ms)}
+.curtain span{position:absolute;inset:0;display:grid;place-items:center;font:500 20px/1 var(--serif);color:#2B1B26;animation:fadeout .3s .25s forwards}
+@keyframes wipe{to{transform:scaleY(0)}}
+@keyframes fadeout{to{opacity:0}}
+html:not(.js) .curtain{display:none}
+
+/* ---------- scroll progress ---------- */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:linear-gradient(90deg,var(--s2),var(--lip));transform-origin:left;transform:scaleX(0)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(20,12,18,.78);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
 .brand{font:600 16px/1 var(--serif);text-decoration:none;white-space:nowrap}
-.shades{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.shades{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .shades::-webkit-scrollbar{display:none}
-.shades a{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border-radius:999px;text-decoration:none;font-size:14.5px;color:var(--ink2);white-space:nowrap;transition:background .2s,color .2s}
-.shades a i{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
-.shades a:hover,.shades a.on{background:#fff;color:var(--ink)}
+.shades a{display:flex;align-items:center;gap:8px;padding:8px 12px 8px 9px;border-radius:999px;text-decoration:none;font-size:14.5px;color:var(--ink2);white-space:nowrap;transition:background .25s,color .25s}
+.shades a i{width:13px;height:13px;border-radius:50%;flex:none;transition:transform .35s var(--ease)}
+.shades a:hover i,.shades a.on i{transform:scale(1.35)}
+.shades a:hover,.shades a.on{color:var(--ink);background:rgba(255,255,255,.06)}
 
-/* hero */
-.hero{padding:64px 0 40px}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:center}
-.who{font-size:15.5px;color:var(--ink2);margin-bottom:20px;line-height:1.5}
-.who b{display:block;font:600 19px/1.4 var(--serif);color:var(--ink)}
-h1{font:600 clamp(34px,4.6vw,54px)/1.22 var(--serif);letter-spacing:-.01em;margin-bottom:22px;text-wrap:balance}
-.lead{font-size:18.5px;color:var(--ink2);margin-bottom:30px}
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;padding:120px 0 72px}
+#ribbon{position:absolute;inset:0;width:100%;height:100%}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.who{font-size:16px;color:var(--ink2);margin-bottom:22px}
+.who b{color:var(--ink);font-weight:600}
+h1{font:600 clamp(42px,7.4vw,104px)/1.08 var(--serif);letter-spacing:-.02em;max-width:13ch;margin-bottom:28px}
+h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+h1 .ln span{display:inline-block}
+h1 em{font-style:italic;font-weight:500;color:var(--s2)}
+.hero-foot{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between}
+.lead{font-size:19px;color:var(--ink2);max-width:46ch}
 .actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;text-decoration:none;font-weight:500;padding:13px 22px;border-radius:999px;transition:transform .15s,background .2s}
-.btn:hover{background:var(--lip)}
-.btn:active{transform:scale(.97)}
-.textlink{font-weight:500;text-decoration:underline;text-decoration-color:var(--s2);text-decoration-thickness:2px;text-underline-offset:5px}
-.textlink:hover{text-decoration-color:var(--lip)}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;padding:15px 26px;border-radius:999px;overflow:hidden;transition:color .35s;will-change:transform}
+.btn::before{content:"";position:absolute;inset:0;background:var(--lip);transform:translateY(101%);transition:transform .45s var(--ease);border-radius:inherit}
+.btn:hover{color:#fff}
+.btn:hover::before{transform:none}
+.btn span{position:relative}
+.ghost{color:var(--ink);text-decoration:none;font-weight:500;padding:14px 4px;border-bottom:1.5px solid var(--s3)}
+.ghost:hover{border-color:var(--lip)}
+.cue{position:absolute;left:50%;bottom:22px;z-index:2;width:22px;height:36px;border:1.5px solid var(--ink3);border-radius:12px;transform:translateX(-50%)}
+.cue::after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;border-radius:2px;background:var(--ink2);transform:translateX(-50%);animation:cue 1.8s infinite}
+@keyframes cue{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}80%{opacity:0;transform:translate(-50%,12px)}100%{opacity:0}}
 
-.chartcard{background:var(--card);border-radius:22px;padding:22px 22px 14px;box-shadow:0 1px 0 var(--rule),0 18px 40px -24px rgba(43,27,38,.35)}
-.chartcard figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-bottom:6px;font-size:14px;color:var(--ink3)}
-.chartcard figcaption b{color:var(--ink);font-weight:600;font-size:15px}
+/* ticker */
+.ticker{border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:16px 0;font-size:15px;color:var(--ink2)}
+.ticker .track{display:inline-flex;gap:44px;animation:tick 42s linear infinite;padding-left:44px}
+.ticker:hover .track{animation-play-state:paused}
+.ticker b{color:var(--ink);font-weight:600;margin-right:8px}
+.ticker .chy b{color:var(--lip)}
+.ticker .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:10px;vertical-align:1px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- statement: words light up as you scroll ---------- */
+.statement{padding:150px 0 120px}
+.statement p{font:500 clamp(28px,3.9vw,52px)/1.45 var(--serif);max-width:24ch;letter-spacing:-.01em}
+.js .statement .w{opacity:.16;transition:opacity .25s}
+.js .statement .w.lit{opacity:1}
+.statement .w.hl{color:var(--s2)}
+.statement small{display:block;margin-top:30px;font-size:15px;color:var(--ink3)}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec{padding:110px 0 40px}
+.kicker{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink2);margin-bottom:18px}
+.kicker i{width:12px;height:12px;border-radius:50%}
+h2{font:600 clamp(32px,4.6vw,60px)/1.15 var(--serif);letter-spacing:-.015em;max-width:18ch;margin-bottom:20px}
+.sub{font-size:18.5px;color:var(--ink2);margin-bottom:56px}
+h3{font:600 clamp(22px,2.4vw,28px)/1.35 var(--serif);margin:80px 0 22px}
+.small{font-size:14.5px;color:var(--ink3)}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ---------- sticky story chart ---------- */
+.story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px}
+.steps{padding:6vh 0 24vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .5s}
+.step.on{opacity:1}
+.step .tag{font-size:14px;color:var(--ink3);margin-bottom:10px}
+.step h4{font:600 clamp(24px,2.6vw,32px)/1.35 var(--serif);margin-bottom:14px}
+.step p{color:var(--ink2);font-size:17px}
+.stickybox{position:sticky;top:12vh;height:76vh;display:flex;align-items:center}
+.chartcard{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:26px;padding:24px 24px 16px;position:relative;overflow:hidden}
+.chartcard .head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;margin-bottom:8px;font-size:14px;color:var(--ink3)}
+.chartcard .head b{color:var(--ink);font-weight:600;font-size:15.5px}
 .legend{display:flex;gap:14px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:16px;height:3px;border-radius:2px}
 .chartbox{position:relative;touch-action:pan-y}
 .chartbox svg{width:100%;height:auto;overflow:visible}
 .chartbox text{font-family:var(--sans)}
-.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:13.5px;line-height:1.5;padding:8px 11px;border-radius:10px;white-space:nowrap;opacity:0;transform:translate(-50%,-8px);transition:opacity .12s}
+.band{transition:opacity .6s}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13.5px;line-height:1.5;padding:8px 11px;border-radius:10px;white-space:nowrap;opacity:0;transform:translate(-50%,-8px);transition:opacity .12s;z-index:3}
 .tip.on{opacity:1}
-.tip b{font-weight:600}
 .tip .d{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.bigdrop{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;background:rgba(20,12,18,.88);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .6s;text-align:center;padding:20px}
+.bigdrop.on{opacity:1}
+.bigdrop .a{font:600 clamp(40px,6vw,76px)/1 var(--serif);color:var(--ink3);text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--lip)}
+.bigdrop .b{font:600 clamp(58px,9vw,120px)/1 var(--serif);color:var(--lip)}
+.bigdrop .c{font-size:15px;color:var(--ink2);max-width:30ch}
 
-@media (prefers-reduced-motion:no-preference){
-  .hero-text>*{opacity:0;animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
-  .hero-text>*:nth-child(2){animation-delay:.08s}
-  .hero-text>*:nth-child(3){animation-delay:.16s}
-  .hero-text>*:nth-child(4){animation-delay:.24s}
-  .chartcard{opacity:0;animation:rise .8s .2s cubic-bezier(.2,.7,.2,1) forwards}
-}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
-/* sections */
-section{padding:80px 0 32px}
-.sechead{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;margin-bottom:28px}
-.sechead i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
-.sechead h2{font:600 clamp(28px,3.4vw,38px)/1.25 var(--serif);letter-spacing:-.005em}
-.sechead p{grid-column:2;color:var(--ink2);font-size:18px}
-h3{font:600 21px/1.4 var(--serif);margin:52px 0 16px}
-.small{font-size:14.5px;color:var(--ink3)}
-mark{background:linear-gradient(transparent 55%,var(--lip-soft) 55%);color:inherit;padding:0 2px}
-
-/* the drop */
-.drop{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;padding:26px 28px;background:var(--card);border-radius:20px;margin-bottom:8px}
-.drop .big{font:600 clamp(36px,5vw,56px)/1 var(--serif)}
-.drop .big.after{color:var(--lip)}
-.drop .to{font-size:15px;color:var(--ink3)}
-.drop .cap{flex-basis:100%;font-size:15px;color:var(--ink2)}
-
-.finds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;background:var(--rule);border-radius:20px;overflow:hidden}
-.find{background:var(--card);padding:24px 26px}
-.find h4{font:600 18px/1.45 var(--sans);margin:10px 0 6px}
+/* ---------- findings ---------- */
+.finds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.find{position:relative;background:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:28px 28px 26px;overflow:hidden}
+.find::before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(226,74,116,.14),transparent 60%);opacity:0;transition:opacity .4s}
+.find:hover::before{opacity:1}
+.find>*{position:relative}
+.find .tag{display:inline-block;font-size:13px;font-weight:500;padding:3px 11px;border-radius:999px;background:rgba(124,211,155,.12);color:var(--good)}
+.find .tag.maybe{background:rgba(240,198,107,.12);color:var(--warn)}
+.find h4{font:600 19px/1.45 var(--sans);margin:12px 0 8px}
 .find p{font-size:15.5px;color:var(--ink2)}
-.tag{display:inline-block;font-size:13px;font-weight:500;padding:3px 10px;border-radius:999px;background:var(--good-soft);color:var(--good)}
-.tag.maybe{background:var(--warn-soft);color:var(--warn)}
 
-/* competitor race */
-.race{background:var(--card);border-radius:20px;padding:24px 26px}
-.racetop{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:18px}
-.months{display:inline-flex;background:var(--paper);border-radius:999px;padding:4px}
-.months button{font:500 15px/1 var(--sans);border:0;background:none;color:var(--ink2);padding:9px 14px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
-.months button[aria-pressed="true"]{background:var(--ink);color:#fff}
+/* ---------- race ---------- */
+.race{background:var(--bg2);border:1px solid var(--line);border-radius:24px;padding:28px}
+.racetop{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:space-between;margin-bottom:22px}
+.months{position:relative;display:inline-flex;background:rgba(255,255,255,.05);border-radius:999px;padding:4px}
+.months .pill{position:absolute;top:4px;bottom:4px;left:0;border-radius:999px;background:var(--ink);transition:transform .45s var(--ease),width .45s var(--ease)}
+.months button{position:relative;z-index:1;font:500 15px/1 var(--sans);border:0;background:none;color:var(--ink2);padding:10px 15px;border-radius:999px;cursor:pointer;transition:color .3s}
+.months button[aria-pressed="true"]{color:var(--bg)}
 .months button.stock[aria-pressed="false"]{color:var(--lip)}
 .hint{font-size:14.5px;color:var(--ink3)}
-.bars{display:grid;gap:9px}
-.bar{display:grid;grid-template-columns:132px minmax(0,1fr);gap:14px;align-items:center;font-size:15px}
-.bar .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar.chy .n{font-weight:600}
-.track{position:relative;height:26px}
-.fill{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--s2);width:0;transition:width .7s cubic-bezier(.3,.8,.2,1)}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:140px minmax(0,1fr);gap:14px;align-items:center;font-size:15px}
+.bar .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
+.bar.chy .n{color:var(--ink);font-weight:600}
+.track{position:relative;height:28px}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:7px;background:rgba(227,184,151,.55);width:0;transition:width .8s var(--ease)}
 .bar.chy .fill{background:var(--lip)}
-.bar.chy.story .fill{background:var(--teal)}
-.val{position:absolute;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--ink2);white-space:nowrap;transition:left .7s cubic-bezier(.3,.8,.2,1)}
-.val.in{transform:translate(-100%,-50%);color:#fff;font-weight:500}
-.racenote{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:22px;padding-top:20px;border-top:1px solid var(--rule)}
-.racenote h4{font:600 16.5px/1.45 var(--sans);margin-bottom:4px}
+.bar.story .fill{background:var(--teal)}
+.val{position:absolute;top:50%;transform:translateY(-50%);font-size:13.5px;color:var(--ink2);white-space:nowrap;transition:left .8s var(--ease)}
+.val.in{transform:translate(-100%,-50%);color:#fff;font-weight:600}
+.racenote{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.racenote h4{font:600 17px/1.45 var(--sans);margin-bottom:4px}
 .racenote p{font-size:15px;color:var(--ink2)}
 
-.patterns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.pat{padding:20px 0 0;border-top:3px solid var(--s3)}
-.pat:nth-child(2){border-color:var(--s2)}
-.pat:nth-child(3){border-color:var(--lip)}
-.pat:nth-child(4){border-color:var(--s4)}
-.pat .stat{font:600 34px/1.1 var(--serif);margin-bottom:8px}
-.pat b{display:block;font-weight:600;font-size:16px;margin-bottom:4px}
+/* ---------- patterns ---------- */
+.patterns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.pat{padding-top:22px;border-top:2px solid var(--c)}
+.pat .stat{font:600 clamp(36px,4vw,52px)/1 var(--serif);margin-bottom:12px;color:var(--c)}
+.pat b{display:block;font-weight:600;font-size:16.5px;margin-bottom:4px}
 .pat span{font-size:14.5px;color:var(--ink3)}
-.urgent{margin-top:36px;padding:24px 28px;border-radius:20px;background:var(--lip-soft);font-size:16.5px}
-.urgent b{display:block;font-family:var(--serif);font-size:19px;margin-bottom:4px}
+.urgent{margin-top:64px;padding:32px 34px;border-radius:24px;background:linear-gradient(120deg,rgba(226,74,116,.18),rgba(226,74,116,.04));border:1px solid rgba(226,74,116,.25);font-size:17px;color:var(--ink2)}
+.urgent b{display:block;font:600 22px/1.4 var(--serif);color:var(--ink);margin-bottom:6px}
 
-/* plan: stepper + phone */
-.planbox{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:44px;align-items:start}
-.steps{list-style:none;display:grid;gap:10px;counter-reset:s}
-.steps button{width:100%;text-align:left;border:0;cursor:pointer;background:var(--card);border-radius:18px;padding:18px 20px 18px 64px;position:relative;font:inherit;color:inherit;transition:box-shadow .2s,background .2s}
-.steps button::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:18px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 16px/1 var(--serif);background:var(--paper);color:var(--ink2);transition:background .2s,color .2s}
-.steps button[aria-selected="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
-.steps button[aria-selected="true"]::before{background:var(--ink);color:#fff}
-.steps .when{display:block;font-weight:600;font-size:17px;margin-bottom:2px}
-.steps .what{display:block;font-size:15.5px;color:var(--ink2)}
-.phone{position:sticky;top:84px}
-.screen{aspect-ratio:9/16;border-radius:34px;padding:14px;background:var(--ink);box-shadow:0 30px 50px -30px rgba(43,27,38,.55)}
-.clip{position:relative;height:100%;border-radius:24px;overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 18px;transition:background .5s}
-.clip .hook{padding-right:34px;font:600 21px/1.4 var(--serif);text-shadow:0 2px 12px rgba(0,0,0,.25);margin-bottom:14px}
-.clip .acct{font-size:13.5px;font-weight:600}
-.clip .capt{font-size:13px;opacity:.9}
-.clip .side{position:absolute;right:12px;top:34%;display:grid;gap:14px}
-.clip .side i{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.28)}
-.clip .tagline{position:absolute;top:16px;left:16px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.22);padding:4px 10px;border-radius:999px}
-.clip.swap .hook,.clip.swap .capt{animation:swap .45s ease}
-@keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.spec{margin-top:16px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14.5px}
+/* ---------- plan: horizontal ---------- */
+.hz{position:relative;overflow:hidden}
+.hz-track{display:flex;gap:28px;padding:10px 28px 30px;width:max-content}
+.panel{width:min(820px,82vw);flex:none;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:36px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:28px;padding:36px}
+.panel .no{font:600 64px/1 var(--serif);color:transparent;-webkit-text-stroke:1.2px var(--s3);margin-bottom:10px}
+.panel .when{font:600 26px/1.35 var(--serif);margin-bottom:10px}
+.panel .what{color:var(--ink2);font-size:16.5px;margin-bottom:18px}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:14.5px;color:var(--ink2)}
 .spec dt{color:var(--ink3)}
-.why{margin-top:10px;font-size:14px;color:var(--ink3)}
+.why{margin-top:14px;font-size:14px;color:var(--ink3)}
+.phone{aspect-ratio:9/16;border-radius:30px;padding:10px;background:#0B0709;box-shadow:0 40px 60px -30px rgba(0,0,0,.8),0 0 0 1px var(--line)}
+.clip{position:relative;height:100%;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 16px;color:#fff;background:var(--g)}
+.clip::before{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 45%);animation:sheen 7s ease-in-out infinite alternate}
+@keyframes sheen{to{transform:translate(18%,22%)}}
+.clip>*{position:relative}
+.clip .tg{position:absolute;top:14px;left:14px;font-size:12px;font-weight:600;background:rgba(255,255,255,.22);padding:4px 10px;border-radius:999px}
+.clip .side{position:absolute;right:10px;top:36%;display:grid;gap:13px}
+.clip .side i{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.3)}
+.clip .hook{font:600 19px/1.4 var(--serif);text-shadow:0 2px 14px rgba(0,0,0,.3);margin-bottom:12px;padding-right:32px}
+.clip .acct{font-size:13px;font-weight:600}
+.clip .capt{font-size:12.5px;opacity:.9}
+.mob{display:none}
+.panel.intro{grid-template-columns:1fr;background:none;border:0;width:min(440px,80vw);padding:36px 8px}
+.panel.intro h2{margin-bottom:16px}
+.panel.intro p{color:var(--ink2)}
+.panel.intro .small{margin-top:20px}
 
-.measure{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:m}
-.measure li{position:relative;padding:34px 18px 0 0}
-.measure li::before{counter-increment:m;content:"";position:absolute;top:8px;left:0;right:0;height:2px;background:var(--rule)}
-.measure li::after{content:"";position:absolute;top:2px;left:0;width:14px;height:14px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--paper)}
-.measure b{display:block;font-weight:600;font-size:16.5px;margin-bottom:4px}
+/* measure */
+.measure{list-style:none;position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px}
+.measure::before{content:"";position:absolute;top:7px;left:0;right:0;height:2px;background:var(--line)}
+.measure .line{position:absolute;top:7px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--s2));transform-origin:left;transform:scaleX(var(--p,1))}
+.measure li{position:relative;padding-top:36px}
+.measure li::before{content:"";position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:var(--bg);box-shadow:inset 0 0 0 3px var(--teal)}
+.measure b{display:block;font-weight:600;font-size:17px;margin-bottom:4px}
 .measure span{font-size:15px;color:var(--ink2)}
-
-.report{margin-top:36px;background:var(--card);border-radius:20px;padding:22px 24px;overflow-x:auto}
+.report{margin-top:48px;background:var(--bg2);border:1px solid var(--line);border-radius:24px;padding:24px 26px;overflow-x:auto}
 .report .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.report .top b{font-family:var(--serif);font-size:18px}
-table{width:100%;border-collapse:collapse;font-size:15px;min-width:520px}
-th{text-align:left;font-weight:500;color:var(--ink3);font-size:13.5px;padding:8px 10px;border-bottom:1px solid var(--rule)}
-td{padding:11px 10px;border-bottom:1px solid var(--rule)}
-td.r,th.r{text-align:right}
-.pill{display:inline-block;font-size:13px;font-weight:500;padding:3px 10px;border-radius:999px}
-.pill.go{background:var(--good-soft);color:var(--good)}
-.pill.wait{background:var(--warn-soft);color:var(--warn)}
-.pill.fix{background:var(--lip-soft);color:var(--lip)}
+.report .top b{font:600 19px/1.4 var(--serif)}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:540px}
+th{text-align:left;font-weight:500;color:var(--ink3);font-size:13.5px;padding:9px 10px;border-bottom:1px solid var(--line)}
+td{padding:12px 10px;border-bottom:1px solid var(--line)}
+.r{text-align:right}
+.pl{display:inline-block;font-size:13px;font-weight:500;padding:3px 11px;border-radius:999px}
+.pl.go{background:rgba(124,211,155,.14);color:var(--good)}
+.pl.wait{background:rgba(240,198,107,.14);color:var(--warn)}
+.pl.fix{background:rgba(226,74,116,.16);color:#FF8FAE}
 
-/* tool */
-.toolbox{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:48px;align-items:start}
-.checks{list-style:none;display:grid;gap:12px;margin:22px 0 28px}
+/* ---------- tool ---------- */
+.toolbox{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:60px;align-items:center}
+.checks{list-style:none;display:grid;gap:13px;margin:26px 0 32px}
 .checks li{position:relative;padding-left:30px;font-size:16px;color:var(--ink2)}
-.checks li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:50%;background:var(--s1);box-shadow:inset 0 0 0 4px var(--s3)}
-.device{background:var(--ink);border-radius:30px;padding:10px;box-shadow:0 30px 60px -30px rgba(43,27,38,.6)}
-.device iframe{width:100%;height:760px;border:0;border-radius:22px;background:#fff}
-.devcap{margin-top:12px;font-size:14px;color:var(--ink3);text-align:center}
+.checks li::before{content:"";position:absolute;left:0;top:7px;width:15px;height:15px;border-radius:50%;background:var(--s1);box-shadow:inset 0 0 0 4px var(--s3)}
+.device{background:#0B0709;border-radius:34px;padding:10px;box-shadow:0 50px 90px -40px rgba(226,74,116,.45),0 0 0 1px var(--line);will-change:transform}
+.device iframe{width:100%;height:760px;border:0;border-radius:25px;background:#fff}
+.devcap{margin-top:14px;font-size:14px;color:var(--ink3);text-align:center}
 
-/* about */
-.about{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-.about h4{font:600 18px/1.45 var(--serif);margin-bottom:6px}
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.about div{padding:28px;border-radius:22px;background:var(--bg2);border:1px solid var(--line)}
+.about h4{font:600 19px/1.45 var(--serif);margin-bottom:8px}
 .about p{font-size:15.5px;color:var(--ink2)}
-.learn{margin-top:36px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.learn b{font-weight:600;margin-right:6px}
-.learn span{font-size:14.5px;padding:6px 12px;border-radius:999px;background:var(--card);box-shadow:inset 0 0 0 1px var(--rule)}
+.learn{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.learn b{font-weight:600;margin-right:8px}
+.learn span{font-size:14.5px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);color:var(--ink2)}
+.end{padding:140px 0 60px;text-align:center}
+.end p{margin:0 auto;font:500 clamp(28px,4vw,48px)/1.35 var(--serif);max-width:20ch}
+.end .actions{justify-content:center;margin-top:36px}
+footer{padding:28px 0 48px;border-top:1px solid var(--line);font-size:14px;color:var(--ink3)}
+footer p{max-width:92ch}
 
-footer{margin-top:72px;padding:28px 0 48px;border-top:1px solid var(--rule);font-size:14px;color:var(--ink3)}
-footer p{max-width:90ch}
-
-/* responsive */
+/* ---------- responsive ---------- */
 @media (max-width:960px){
-  .hero .wrap,.toolbox{grid-template-columns:1fr;gap:36px}
-  .planbox{grid-template-columns:1fr}
-  .phone{position:static;max-width:300px;margin:0 auto;width:100%}
-  .patterns{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}
-  .measure{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 0}
-  .device{max-width:420px;margin:0 auto}
+  .story{grid-template-columns:1fr;gap:0}
+  .stickybox{order:-1;top:64px;height:auto;z-index:2;padding:8px 0 18px;background:linear-gradient(var(--bg) 88%,transparent)}
+  .step{opacity:.35}
+  .steps{padding:4vh 0 10vh}
+  .step{min-height:62vh;justify-content:flex-start;padding-top:8vh}
+  .toolbox{grid-template-columns:1fr;gap:40px}
+  .device{max-width:420px;margin:0 auto;width:100%}
+  .patterns{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 18px}
+  .measure{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .measure::before,.measure .line{display:none}
+  .hz{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .hz::-webkit-scrollbar{display:none}
+  .panel{scroll-snap-align:center;grid-template-columns:1fr;width:84vw;padding:26px}
+  .panel .phone{max-width:240px;margin:0 auto;width:100%}
+  .panel.intro{display:none}
+  .mob{display:block}
 }
 @media (max-width:680px){
   body{font-size:16px}
-  .wrap{padding:0 18px}
+  .wrap{padding:0 20px}
   .brand{display:none}
   .nav .wrap{justify-content:center}
-  .hero{padding:36px 0 20px}
-  section{padding:60px 0 20px}
-  .sechead{grid-template-columns:1fr}
-  .sechead i{width:22px;height:22px}
-  .sechead p{grid-column:1}
+  .hero{padding:110px 0 70px}
+  .lead{font-size:17px}
+  .statement{padding:100px 0 80px}
+  .sec{padding:80px 0 24px}
+  .sub{margin-bottom:36px}
+  h3{margin-top:60px}
   .finds,.racenote,.about{grid-template-columns:1fr}
-  .race,.find,.drop{padding:20px}
-  .bar{grid-template-columns:96px minmax(0,1fr);gap:10px;font-size:14px}
-  .months button{padding:8px 10px;font-size:14px}
+  .race,.find{padding:22px}
+  .chartcard{padding:16px 14px 10px;border-radius:20px}
+  .bar{grid-template-columns:98px minmax(0,1fr);gap:10px;font-size:14px}
+  .months button{padding:9px 10px;font-size:14px}
   .measure{grid-template-columns:1fr}
   .device iframe{height:680px}
+  .hz-track{padding:10px 20px 24px;gap:16px}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .curtain{display:none}
+  .js .rv{opacity:1;transform:none}
+  .js .statement .w{opacity:1}
+}
 </style>
 </head>
 <body>
 
-<nav class="nav" aria-label="ส่วนต่าง ๆ ของหน้า">
+<div class="curtain" aria-hidden="true">
+  <i style="--c:var(--s1);--d:0"></i><i style="--c:var(--s2);--d:1"></i><i style="--c:var(--s3);--d:2"></i><i style="--c:var(--s4);--d:3"></i>
+</div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<nav class="nav" id="nav" aria-label="ส่วนต่าง ๆ ของหน้า">
   <div class="wrap">
     <a class="brand" href="#top">แพรพลอย พิพัฒน์ภาธรกุล</a>
     <div class="shades">
@@ -239,118 +319,158 @@ footer p{max-width:90ch}
 </nav>
 
 <header class="hero" id="top">
+  <canvas id="ribbon" aria-hidden="true"></canvas>
   <div class="wrap">
-    <div class="hero-text">
-      <p class="who"><b>แพรพลอย พิพัฒน์ภาธรกุล</b>พอร์ตโฟลิโอสำหรับตำแหน่งนักวิเคราะห์คอนเทนต์และผลโฆษณา</p>
-      <h1>วิวคลิปของ CHY ลดลง 15 เท่าในเดือนเดียว ตรงกับช่วงที่สินค้าขาด</h1>
-      <p class="lead">เก็บสถิติ 732 คลิปจากสองช่องของ CHY เทียบกับคู่แข่ง 7 แบรนด์ วางแผนพาลูกค้ากลับมาตอนสินค้าเข้า และทำเครื่องมือสรุปผลโฆษณาที่ใช้งานได้จริงในหน้านี้</p>
+    <p class="who"><b>แพรพลอย พิพัฒน์ภาธรกุล</b> · พอร์ตโฟลิโอสำหรับตำแหน่งนักวิเคราะห์คอนเทนต์และผลโฆษณา</p>
+    <h1 id="h1"><span class="ln"><span>ยอดวิวหายไป</span></span><span class="ln"><span><em>แต่ลูกค้า</em></span></span><span class="ln"><span>ยังรออยู่</span></span></h1>
+    <div class="hero-foot">
+      <p class="lead">เส้นที่ไหลอยู่ด้านหลังคือยอดวิวคลิปจริงของ CHY ตั้งแต่ปี 2568 ถึงวันนี้ หน้านี้เล่าว่ามันดิ่งลงเพราะอะไร และจะพามันกลับมาได้อย่างไร</p>
       <div class="actions">
-        <a class="btn" href="#tool">ลองใช้เครื่องมือ</a>
-        <a class="textlink" href="#analysis">อ่านผลการวิเคราะห์</a>
+        <a class="btn magnet" href="#analysis"><span>เริ่มอ่าน</span></a>
+        <a class="ghost" href="#tool">ลองใช้เครื่องมือ</a>
       </div>
     </div>
-    <figure class="chartcard">
-      <figcaption>
-        <b>วิวกลางต่อคลิป รายเดือน</b>
-        <span class="legend"><span><i style="background:var(--lip)"></i>chy.cosmetic</span><span><i style="background:var(--teal)"></i>story.chy</span></span>
-      </figcaption>
-      <div class="chartbox" id="heroBox">
-        <svg id="hero" viewBox="0 0 480 300" role="img" aria-label="กราฟวิวกลางต่อคลิปรายเดือน ม.ค. 2568 ถึง พ.ย. 2569 ทั้งสองช่องลดลงแรงในเดือนกันยายน 2569"></svg>
-        <div class="tip" id="heroTip"></div>
-      </div>
-      <p class="small" style="margin-top:4px">แกนตั้งเป็นสเกลลอการิทึม แต่ละเส้นแบ่งคือ 10 เท่า · แตะหรือชี้บนกราฟเพื่อดูตัวเลข</p>
-    </figure>
   </div>
+  <div class="cue" aria-hidden="true"></div>
 </header>
+
+<div class="ticker" aria-label="วิวกลางต่อคลิปเดือน ต.ค. 2569 ของแต่ละช่อง">
+  <div class="track" id="ticker"></div>
+</div>
+
+<section class="statement">
+  <div class="wrap">
+    <p id="statement">ระหว่างที่สินค้าหลักขาด ยอดวิวคลิปของ CHY ลดลง 15 เท่าในเดือนเดียว แต่ในคอมเมนต์ยังมีคน<span class="hl">ถามหาคุชชั่นทุกวัน</span> คนกลุ่มนี้คือลูกค้าที่พร้อมซื้อที่สุด ถ้าเราพาเขากลับมาได้ทันวันที่ของเข้า</p>
+    <small>เก็บสถิติจาก 732 คลิปของ chy.cosmetic และ story.chy เทียบกับคู่แข่ง 7 แบรนด์ ข้อมูล ณ 24 พ.ย. 2569</small>
+  </div>
+</section>
 
 <main>
 
-<section id="analysis">
+<section class="sec" id="analysis">
   <div class="wrap">
-    <div class="sechead">
-      <i style="background:var(--s1)"></i>
-      <h2>ผลการวิเคราะห์: วิวคลิปช่วงสินค้าขาด</h2>
-      <p>สถิติจากหน้าช่อง TikTok สาธารณะของ chy.cosmetic (293 คลิป) และ story.chy (439 คลิป) ข้อมูล ณ 24 พ.ย. 2569</p>
+    <div class="kicker rv"><i style="background:var(--s1)"></i>ผลงาน 1 · ผลการวิเคราะห์</div>
+    <h2 class="rv">ยอดวิวดิ่งลงตอนไหน และเพราะอะไร</h2>
+    <p class="sub rv">เลื่อนลงช้า ๆ กราฟจะเล่าไปทีละช่วง แตะหรือชี้บนกราฟเพื่อดูตัวเลขแต่ละเดือน</p>
+
+    <div class="story">
+      <div class="steps" id="steps">
+        <div class="step" data-step="0"><span class="tag">ม.ค. 2568 – ม.ค. 2569</span><h4>คลิปของ CHY เคยได้วิวหลักแสนถึงหลักล้านเป็นปกติ</h4><p>คลิปที่ปังที่สุดได้ 5.1 ล้านวิว ทั้งสองช่องมีฐานผู้ติดตามรวม 2.5 ล้านคน มากที่สุดในกลุ่มแบรนด์ที่เทียบ</p></div>
+        <div class="step" data-step="1"><span class="tag">ก.พ. – ส.ค. 2569</span><h4>วิวส่วนใหญ่มาจากการดันคลิปด้วยโฆษณา</h4><p>chy.cosmetic ติดป้ายโฆษณา 132 จาก 143 คลิป story.chy 377 จาก 378 คลิป แต่ได้ไลก์เพียง 0.5–1.2% ของวิว และลงคลิปถี่ขึ้นจาก 1.4 เป็น 4.7 คลิปต่อสัปดาห์ งบแต่ละคลิปจึงบางลง</p></div>
+        <div class="step" data-step="2"><span class="tag">ก.ย. 2569</span><h4>สินค้าหลักขาด วิวตกพร้อมกันทั้งสองช่องในเดือนเดียว</h4><p>chy.cosmetic วิวกลางลดจาก 141,700 เหลือ 9,908 story.chy จาก 251,200 เหลือ 21,400 ถ้าเป็นเพราะคอนเทนต์ ไม่น่าจะตกพร้อมกันขนาดนี้ การหยุดโฆษณาตอนไม่มีของให้ขายจึงเป็นการตัดสินใจที่ถูก</p></div>
+        <div class="step" data-step="3"><span class="tag">สรุปช่วงนี้</span><h4>วิวรวมต่อสัปดาห์เหลือเพียงราว 1 ใน 45</h4><p>สิ่งที่หายไปคือคนที่เคยเห็นคลิปจากโฆษณา ส่วนผู้ติดตามจริงยังอยู่ และยังถามหาสินค้า ตอนของเข้าจึงต้องเตรียมกลับมาลงโฆษณาให้พร้อม</p></div>
+      </div>
+      <div class="stickybox">
+        <figure class="chartcard">
+          <div class="head"><b>วิวกลางต่อคลิป รายเดือน</b><span class="legend"><span><i style="background:var(--lip)"></i>chy.cosmetic</span><span><i style="background:var(--teal)"></i>story.chy</span></span></div>
+          <div class="chartbox" id="chartBox">
+            <svg id="chart" viewBox="0 0 480 300" role="img" aria-label="กราฟวิวกลางต่อคลิปรายเดือน ม.ค. 2568 ถึง พ.ย. 2569 ทั้งสองช่องลดลงแรงในเดือนกันยายน 2569"></svg>
+            <div class="tip" id="tip"></div>
+          </div>
+          <p class="small">แกนตั้งเป็นสเกลลอการิทึม แต่ละเส้นแบ่งคือ 10 เท่า</p>
+          <div class="bigdrop" id="bigdrop" aria-hidden="true">
+            <span class="a num">713,000</span><span class="b num" id="dropNum">16,000</span>
+            <span class="c">วิวรวมต่อสัปดาห์ของ chy.cosmetic ช่วง ก.พ.–ส.ค. เทียบกับ ก.ย.–พ.ย. 2569</span>
+          </div>
+        </figure>
+      </div>
     </div>
 
-    <div class="drop">
-      <span class="big num">713,000</span><span class="to">ลดเหลือ</span><span class="big after num">16,000</span>
-      <span class="cap">วิวรวมต่อสัปดาห์ของ chy.cosmetic ช่วง ก.พ.–ส.ค. 2569 เทียบกับ ก.ย.–พ.ย. 2569 ลดลงราว 45 เท่า <mark>ตรงกับช่วงที่สินค้าหลักขาดและหยุดดันคลิปด้วยโฆษณา</mark> ซึ่งเป็นการตัดสินใจที่ถูก เพราะไม่มีของให้ขาย</span>
-    </div>
-
-    <h3>สิ่งที่ตัวเลขบอก</h3>
+    <h3 class="rv">สิ่งที่ตัวเลขบอก</h3>
     <div class="finds">
-      <div class="find"><span class="tag">เห็นชัดจากข้อมูล</span><h4>วิวตกพร้อมกันทั้งสองช่องในเดือนเดียว</h4><p>chy.cosmetic วิวกลางลดจาก 141,700 (ส.ค.) เหลือ 9,908 (ก.ย.) ส่วน story.chy ลดจาก 251,200 เหลือ 21,400 ถ้าเป็นเพราะคอนเทนต์ของช่องใดช่องหนึ่ง ไม่น่าจะตกพร้อมกันขนาดนี้</p></div>
-      <div class="find"><span class="tag">ตรงกับช่วงสินค้าขาด</span><h4>วิวส่วนใหญ่เคยมาจากการดันคลิปด้วยโฆษณา</h4><p>ก.พ.–ส.ค. 2569 chy.cosmetic ติดป้ายโฆษณา 132 จาก 143 คลิป story.chy 377 จาก 378 คลิป ได้ไลก์เพียง 0.5–1.2% ของวิว เมื่อหยุดดันคลิป วิวจึงเหลือแค่ผู้ติดตามจริง ตอนสินค้าเข้าจึงต้องเตรียมกลับมาลงโฆษณาให้พร้อม</p></div>
-      <div class="find"><span class="tag">เห็นชัดจากข้อมูล</span><h4>ลงคลิปถี่ขึ้น แต่วิวรวมลดลง</h4><p>ปี 2568 chy.cosmetic ลง 1.4 คลิปต่อสัปดาห์ ได้วิวรวมราว 2.6 ล้าน พอ ก.พ. 2569 ลง 4.7 คลิป วิวรวมเหลือราว 713,000 ถ้างบดันคลิปเท่าเดิมแต่กระจายหลายคลิป แต่ละคลิปจะได้งบน้อยลง</p></div>
-      <div class="find"><span class="tag maybe">ต้องเช็กกับข้อมูลหลังบ้าน</span><h4>คลิปเป็นทางพาคนเข้าไลฟ์</h4><p>คลิป "รีบเข้าไลฟ์ด่วน" (ก.ค. 2569) ได้ 719,000 วิว ถ้าคลิปเป็นทางหนึ่งที่พาคนเข้าไลฟ์ วิวที่ลดลงอาจทำให้คนดูไลฟ์ลดลงด้วย</p></div>
+      <div class="find rv" style="--i:0"><span class="tag">เห็นชัดจากข้อมูล</span><h4>วิวตกพร้อมกันทั้งสองช่องในเดือนเดียว</h4><p>ทั้งสองช่องลงคอนเทนต์คนละแบบ แต่ตกในเดือนเดียวกัน ตรงกับช่วงที่สินค้าหลักขาดและหยุดดันคลิป</p></div>
+      <div class="find rv" style="--i:1"><span class="tag">ตรงกับช่วงสินค้าขาด</span><h4>วิวส่วนใหญ่เคยมาจากโฆษณา</h4><p>เกือบทุกคลิปช่วง ก.พ.–ส.ค. ติดป้ายโฆษณา เมื่อหยุดดัน วิวจึงเหลือแค่ผู้ติดตามจริง</p></div>
+      <div class="find rv" style="--i:2"><span class="tag">เห็นชัดจากข้อมูล</span><h4>ลงคลิปถี่ขึ้น แต่วิวรวมลดลง</h4><p>ปี 2568 ลง 1.4 คลิปต่อสัปดาห์ได้วิวรวมราว 2.6 ล้าน ก.พ. 2569 ลง 4.7 คลิป วิวรวมเหลือราว 713,000</p></div>
+      <div class="find rv" style="--i:3"><span class="tag maybe">ต้องเช็กกับข้อมูลหลังบ้าน</span><h4>คลิปเป็นทางพาคนเข้าไลฟ์</h4><p>คลิป "รีบเข้าไลฟ์ด่วน" (ก.ค. 2569) ได้ 719,000 วิว ถ้าคลิปพาคนเข้าไลฟ์ วิวที่ลดลงอาจทำให้คนดูไลฟ์ลดลงด้วย</p></div>
     </div>
 
-    <h3>เทียบกับคู่แข่ง: ตลาดเงียบทั้งหมด หรือแค่ CHY</h3>
-    <div class="race">
+    <h3 class="rv">ตลาดเงียบทั้งหมด หรือแค่ CHY</h3>
+    <div class="race rv" id="race">
       <div class="racetop">
-        <div class="months" role="group" aria-label="เลือกเดือน" id="months"></div>
-        <span class="hint" id="raceHint">วิวกลางต่อคลิปเดือน ส.ค. 2569 · ลองกด ก.ย. เพื่อดูช่วงที่สินค้าขาด</span>
+        <div class="months" role="group" aria-label="เลือกเดือน" id="months"><span class="pill" id="pill"></span></div>
+        <span class="hint" id="raceHint"></span>
       </div>
       <div class="bars" id="bars"></div>
       <div class="racenote">
-        <div><h4>ตลาดเงียบลงบ้าง แต่ CHY ตกหนักกว่ามาก</h4><p>ใน 7 แบรนด์ ตกหนักที่สุดคือ LA GLACE ราว 2.3 เท่า หลายแบรนด์เท่าเดิมหรือเพิ่มขึ้น ส่วน CHY ตก 14–15 เท่า อัลกอริทึมหรือตลาดอธิบายได้แค่ส่วนน้อย</p></div>
-        <div><h4>ผู้ติดตามมากที่สุด แต่คลิปไปถึงคนน้อยที่สุด</h4><p>วิวกลางเดือน ต.ค. เทียบกับจำนวนผู้ติดตาม: chy.cosmetic 0.6% story.chy 0.5% ขณะที่ Chat 2.7% KAGE 8.6% และ Cathy Doll 13.7%</p></div>
+        <div><h4>ตลาดเงียบลงบ้าง แต่ CHY ตกหนักกว่ามาก</h4><p>ใน 7 แบรนด์ ตกหนักที่สุดคือ LA GLACE ราว 2.3 เท่า หลายแบรนด์เท่าเดิมหรือเพิ่มขึ้น ส่วน CHY ตก 14–15 เท่า</p></div>
+        <div><h4>ผู้ติดตามมากที่สุด แต่คลิปไปถึงคนน้อยที่สุด</h4><p>วิวกลางเดือน ต.ค. เทียบกับผู้ติดตาม: chy.cosmetic 0.6% story.chy 0.5% ขณะที่ Chat 2.7% KAGE 8.6% Cathy Doll 13.7%</p></div>
       </div>
       <p class="small" style="margin-top:14px">ตัวเลขปัดจากหน้าช่อง ช่องว่างคือเดือนที่ยังไม่มีคลิปหรือโหลดไม่ได้ ไม่รวม Mistine เพราะลงคลิปถี่มากจนโหลดได้แค่เดือน พ.ย.</p>
     </div>
 
-    <h3>คลิปที่เคยได้ผล มีอะไรเหมือนกัน</h3>
+    <h3 class="rv">คลิปที่เคยได้ผล มีอะไรเหมือนกัน</h3>
     <div class="patterns">
-      <div class="pat"><div class="stat num">5.1M</div><b>ผลลัพธ์บนหน้าชัด</b><span>"แล้วเนียนอะไรขนาดนี้" ต.ค. 2568</span></div>
-      <div class="pat"><div class="stat num">5.0M</div><b>เกาะกระแส</b><span>"เจนนี่ ใช้แต่สูตรนี้" ต.ค. 2568</span></div>
-      <div class="pat"><div class="stat num">2.1M</div><b>ราคาชัดตั้งแต่วินาทีแรก</b><span>โปร 99 บาท ช่วง 8.8 ส.ค. 2569</span></div>
-      <div class="pat"><div class="stat num">26,400</div><b>ชวนตอบ แล้วคนแชร์ต่อ</b><span>"ชอบสีอะไร" 2.3M วิว แชร์ 26,400 ครั้ง</span></div>
+      <div class="pat rv" style="--c:var(--s1);--i:0"><div class="stat num" data-count="5.1" data-suffix="M" data-dec="1">5.1M</div><b>ผลลัพธ์บนหน้าชัด</b><span>"แล้วเนียนอะไรขนาดนี้" ต.ค. 2568</span></div>
+      <div class="pat rv" style="--c:var(--s2);--i:1"><div class="stat num" data-count="5.0" data-suffix="M" data-dec="1">5.0M</div><b>เกาะกระแส</b><span>"เจนนี่ ใช้แต่สูตรนี้" ต.ค. 2568</span></div>
+      <div class="pat rv" style="--c:var(--lip);--i:2"><div class="stat num" data-count="2.1" data-suffix="M" data-dec="1">2.1M</div><b>ราคาชัดตั้งแต่วินาทีแรก</b><span>โปร 99 บาท ช่วง 8.8 ส.ค. 2569</span></div>
+      <div class="pat rv" style="--c:var(--s3);--i:3"><div class="stat num" data-count="26400" data-dec="0">26,400</div><b>ชวนตอบ แล้วคนแชร์ต่อ</b><span>"ชอบสีอะไร" 2.3M วิว แชร์ 26,400 ครั้ง</span></div>
     </div>
 
-    <div class="urgent"><b>สิ่งที่ต้องรีบทำเมื่อสินค้าเข้า</b>ระหว่างที่ CHY ขาดของ KAGE เพิ่งเปิดตัวคุชชั่นรุ่นใหม่ (562K วิว) และ Chat ที่ขายสินค้าหมวดเดียวกันมีวิวสม่ำเสมอ ยิ่งเงียบนาน ลูกค้ายิ่งลองแบรนด์อื่น ตอนสินค้ากลับมาจึงต้องประกาศให้ดังและพาคนที่รออยู่กลับมาให้เร็วที่สุด</div>
+    <div class="urgent rv"><b>ยิ่งเงียบนาน ลูกค้ายิ่งลองแบรนด์อื่น</b>ระหว่างที่ CHY ขาดของ KAGE เพิ่งเปิดตัวคุชชั่นรุ่นใหม่ (562K วิว) และ Chat ที่ขายสินค้าหมวดเดียวกันมีวิวสม่ำเสมอ ตอนสินค้ากลับมาจึงต้องประกาศให้ดังและพาคนที่รออยู่กลับมาให้เร็วที่สุด</div>
   </div>
 </section>
 
-<section id="plan">
+<section class="sec" id="plan" style="padding-bottom:0">
   <div class="wrap">
-    <div class="sechead">
-      <i style="background:var(--s2)"></i>
-      <h2>แผนพาลูกค้ากลับมาตอนสินค้าเข้า</h2>
-      <p>ระหว่างที่ของขาด มีลูกค้าถามหาในคอมเมนต์ตลอด คนกลุ่มนี้พร้อมซื้อที่สุด แผนนี้เริ่มใช้งบโฆษณาเมื่อมีของพร้อมส่งจริงเท่านั้น และพาทุกคนเข้าไลฟ์ เพราะยอดขายหลักของ CHY อยู่ที่ไลฟ์</p>
-    </div>
-
-    <div class="planbox">
-      <ol class="steps" role="tablist" aria-label="ช่วงของแผน" id="steps"></ol>
-      <div class="phone">
-        <div class="screen"><div class="clip" id="clip" role="tabpanel" aria-live="polite">
-          <span class="tagline" id="clipTag"></span>
-          <div class="side" aria-hidden="true"><i></i><i></i><i></i></div>
-          <p class="hook" id="clipHook"></p>
-          <span class="acct">@chy.cosmetic</span>
-          <span class="capt" id="clipCapt"></span>
-        </div></div>
-        <dl class="spec" id="clipSpec"></dl>
-        <p class="why" id="clipWhy"></p>
+    <div class="kicker rv"><i style="background:var(--s2)"></i>ผลงาน 2 · ข้อเสนอ</div>
+    <div class="mob"><h2>แผนพาลูกค้ากลับมาตอนสินค้าเข้า</h2><p class="sub" style="margin-bottom:20px">เริ่มใช้งบโฆษณาเมื่อมีของพร้อมส่งจริงเท่านั้น และพาทุกคนเข้าไลฟ์ ปัดการ์ดไปทางซ้ายเพื่อดูช่วงถัดไป</p></div>
+  </div>
+  <div class="hz" id="hz">
+    <div class="hz-track" id="hzTrack">
+      <div class="panel intro">
+        <h2>แผนพาลูกค้ากลับมาตอนสินค้าเข้า</h2>
+        <p>เริ่มใช้งบโฆษณาเมื่อมีของพร้อมส่งจริงเท่านั้น และพาทุกคนเข้าไลฟ์ เพราะยอดขายหลักของ CHY อยู่ที่ไลฟ์ แต่ละช่วงมีคลิปหนึ่งแบบที่ต่อยอดจากคลิปที่เคยได้ผล</p>
+        <p class="small">เลื่อนลงเพื่อดูทีละช่วง</p>
       </div>
+      <article class="panel">
+        <div>
+          <div class="no">1</div>
+          <div class="when">ก่อนสินค้าเข้า 7 วัน</div>
+          <p class="what">บอกใบ้ว่าของกำลังกลับมา ตอบคอมเมนต์คนที่เคยถามหา ชวนกดติดตามและเม้นเบอร์ที่รอ ยังไม่ลงโฆษณา</p>
+          <dl class="spec"><dt>ความยาว</dt><dd>15–30 วินาที</dd><dt>ภาพ</dt><dd>แคปคอมเมนต์ลูกค้าที่ถามหา แล้วตัดมาที่กล่องสินค้า</dd></dl>
+          <p class="why">ต่อยอดจากคลิป "คุชชั่นหายไปไหนกัน" ที่ทีมลงไว้ระหว่างของขาด</p>
+        </div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#E3B897,#C8916C 55%,#8E5B40)"><span class="tg">ตอบคนที่รอ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ใครถามว่าคุชชั่นหายไปไหน อีก 7 วันเจอกันค่ะ เม้นเบอร์ที่รอไว้เลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">กดติดตามไว้ วันของเข้ามีไลฟ์ใหญ่</span></div></div>
+      </article>
+      <article class="panel">
+        <div>
+          <div class="no">2</div>
+          <div class="when">วันสินค้าเข้า</div>
+          <p class="what">ประกาศว่ากลับมาแล้ว พร้อมโปรต้อนรับ เปิดขายในไลฟ์ช่วงที่คนดูเยอะ เริ่มลงโฆษณาเมื่อเช็กแล้วว่าสต็อกพอขาย</p>
+          <dl class="spec"><dt>ความยาว</dt><dd>15–30 วินาที</dd><dt>ลงเมื่อ</dt><dd>เช้าวันสินค้าเข้า และก่อนไลฟ์ช่วงที่คนดูเยอะ</dd></dl>
+          <p class="why">อิงคลิปโปร 99 บาทช่วง 8.8 ที่ได้ 2.1M วิว</p>
+        </div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#F0628A,#B42852 55%,#5E1230)"><span class="tg">ราคาชัด</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"กลับมาแล้ว! คุชชั่นราคาพิเศษ เฉพาะในไลฟ์คืนนี้"</p><span class="acct">@chy.cosmetic</span><span class="capt">สินค้า ราคา เวลาไลฟ์ ขึ้นเป็นตัวอักษรใหญ่</span></div></div>
+      </article>
+      <article class="panel">
+        <div>
+          <div class="no">3</div>
+          <div class="when">2 สัปดาห์หลังจากนั้น</div>
+          <p class="what">รวมรีวิวจากลูกค้าที่ได้ของ เปิดให้นายหน้าช่วยทำคลิปปักตะกร้า เลือกคลิปที่คนตอบรับดีไปลงโฆษณาต่อ</p>
+          <dl class="spec"><dt>ความยาว</dt><dd>20–40 วินาที</dd><dt>ภาพ</dt><dd>สวอตช์ทุกเบอร์บนผิวหลายโทน</dd></dl>
+          <p class="why">อิงคลิป "ชอบสีอะไร" ที่ได้แชร์ 26,400 ครั้ง และเข้ากับสโลแกน "ผิวไหนก็เนียน"</p>
+        </div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#F2D6C6,#E3B897 40%,#C8916C 75%,#8E5B40)"><span class="tg">ชวนตอบ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ผิวสองสี ผิวคล้ำ ผิวขาวเหลือง ใช้เบอร์ไหนดี เม้นมาเลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">ตอบทุกเม้นในไลฟ์คืนนี้</span></div></div>
+      </article>
     </div>
-
-    <h3>วัดผลคลิปแต่ละตัวภายใน 7 วัน</h3>
-    <ol class="measure">
-      <li><b>ชั่วโมงแรก</b><span>คนดูหยุดดูไหม ดูถึงวินาทีไหน ถ้าเลื่อนผ่านเร็ว แปลว่าประโยคเปิดยังไม่ดึง</span></li>
-      <li><b>วันที่ 1</b><span>ไลก์และแชร์ต่อวิว เทียบกับค่ากลางของช่อง และมีคนกดดูสินค้าไหม</span></li>
-      <li><b>วันที่ 2</b><span>ส่งคลิปที่คนตอบรับดีที่สุดให้ทีมโฆษณา ตั้งงบจากจุดคุ้มทุน และเช็กสต็อกก่อนเพิ่มงบ</span></li>
-      <li><b>วันที่ 7</b><span>สรุปว่าแบบไหนได้ผล ส่งต่อให้ทีมผลิตทำคลิปรอบถัดไป</span></li>
+  </div>
+  <div class="wrap" style="padding-bottom:40px">
+    <h3 class="rv">วัดผลคลิปแต่ละตัวภายใน 7 วัน</h3>
+    <ol class="measure" id="measure">
+      <span class="line" aria-hidden="true"></span>
+      <li class="rv" style="--i:0"><b>ชั่วโมงแรก</b><span>คนดูหยุดดูไหม ดูถึงวินาทีไหน ถ้าเลื่อนผ่านเร็ว แปลว่าประโยคเปิดยังไม่ดึง</span></li>
+      <li class="rv" style="--i:1"><b>วันที่ 1</b><span>ไลก์และแชร์ต่อวิว เทียบกับค่ากลางของช่อง และมีคนกดดูสินค้าไหม</span></li>
+      <li class="rv" style="--i:2"><b>วันที่ 2</b><span>ส่งคลิปที่คนตอบรับดีที่สุดให้ทีมโฆษณา ตั้งงบจากจุดคุ้มทุน และเช็กสต็อกก่อนเพิ่มงบ</span></li>
+      <li class="rv" style="--i:3"><b>วันที่ 7</b><span>สรุปว่าแบบไหนได้ผล ส่งต่อให้ทีมผลิตทำคลิปรอบถัดไป</span></li>
     </ol>
-
-    <div class="report">
+    <div class="report rv">
       <div class="top"><b>ตัวอย่างรายงานส่งทีมหลัง 48 ชั่วโมง</b><span class="small">ตัวเลขสมมติ</span></div>
       <table>
         <thead><tr><th>คลิป</th><th class="r">วิว</th><th class="r">ไลก์+แชร์ต่อวิว</th><th class="r">ดูจนจบ</th><th class="r">ข้อสรุป</th></tr></thead>
         <tbody>
-          <tr><td>แบบที่ 3 ชวนตอบ</td><td class="r num">48,200</td><td class="r num">4.1%</td><td class="r num">38%</td><td class="r"><span class="pill go">ส่งไปลงโฆษณา</span></td></tr>
-          <tr><td>แบบที่ 1 ตอบคนที่รอ</td><td class="r num">21,500</td><td class="r num">2.2%</td><td class="r num">31%</td><td class="r"><span class="pill wait">ดูต่ออีก 1 วัน</span></td></tr>
-          <tr><td>แบบที่ 2 ราคาชัด</td><td class="r num">9,800</td><td class="r num">0.9%</td><td class="r num">12%</td><td class="r"><span class="pill fix">เปลี่ยนประโยคเปิด</span></td></tr>
+          <tr><td>แบบที่ 3 ชวนตอบ</td><td class="r num">48,200</td><td class="r num">4.1%</td><td class="r num">38%</td><td class="r"><span class="pl go">ส่งไปลงโฆษณา</span></td></tr>
+          <tr><td>แบบที่ 1 ตอบคนที่รอ</td><td class="r num">21,500</td><td class="r num">2.2%</td><td class="r num">31%</td><td class="r"><span class="pl wait">ดูต่ออีก 1 วัน</span></td></tr>
+          <tr><td>แบบที่ 2 ราคาชัด</td><td class="r num">9,800</td><td class="r num">0.9%</td><td class="r num">12%</td><td class="r"><span class="pl fix">เปลี่ยนประโยคเปิด</span></td></tr>
         </tbody>
       </table>
       <p class="small" style="margin-top:12px">เกณฑ์: ไลก์+แชร์ต่อวิวสูงกว่าค่ากลางของช่อง 1.5 เท่าขึ้นไป ส่งไปลงโฆษณา ถ้าใกล้ค่ากลาง รอดูอีก 1 วัน ถ้าดูจนจบต่ำกว่า 15% แก้ประโยคเปิดก่อนลงใหม่</p>
@@ -358,48 +478,46 @@ footer p{max-width:90ch}
   </div>
 </section>
 
-<section id="tool">
+<section class="sec" id="tool">
   <div class="wrap">
-    <div class="sechead">
-      <i style="background:var(--s3)"></i>
-      <h2>เครื่องมือสรุปผลโฆษณารายวัน</h2>
-      <p>CHY ไลฟ์ต่อเนื่อง 18 ชั่วโมงพร้อมกันสองช่อง เครื่องมือนี้บอกได้ว่าโฆษณาช่วงไหนคุ้ม ช่วงไหนเปลือง และสร้างข้อความสรุปพร้อมส่ง LINE</p>
-    </div>
     <div class="toolbox">
       <div>
-        <p>ทดลองใช้ได้เลยในกรอบด้านข้าง เปิดมาจะมีข้อมูลตัวอย่างให้ ลองแก้ตัวเลข สลับโหมดไลฟ์กับสินค้า หรือกดดูข้อความสรุปได้ ข้อมูลที่กรอกเก็บไว้ในเครื่องของคนที่เปิดเท่านั้น</p>
+        <div class="kicker rv"><i style="background:var(--s3)"></i>ผลงาน 3 · เครื่องมือที่ใช้ได้จริง</div>
+        <h2 class="rv">สรุปผลโฆษณารายวัน ในสองนาที</h2>
+        <p class="rv" style="color:var(--ink2)">CHY ไลฟ์ต่อเนื่อง 18 ชั่วโมงพร้อมกันสองช่อง เครื่องมือนี้บอกได้ว่าโฆษณาช่วงไหนคุ้ม ช่วงไหนเปลือง และสร้างข้อความสรุปพร้อมส่ง LINE ลองใช้ได้เลยในกรอบนี้ เปิดมาจะมีข้อมูลตัวอย่างให้</p>
         <ul class="checks">
-          <li>กรอกยอดสะสมตอนเปลี่ยนกะ 13:00, 19:00 และ 01:00 ระบบแยกผลเป็นช่วง 07–13, 13–19 และ 19–01</li>
-          <li>แยกผลตามช่อง chy.cosmetic และ story.chy</li>
-          <li>คำนวณจุดคุ้มทุน ROI และกำไรหลังหักค่าโฆษณา</li>
-          <li>แนะนำให้เพิ่ม ลด หรือย้ายงบ จากกฎที่ตรวจสอบได้ทุกข้อ</li>
-          <li>เตือนเมื่อตัวเลขผิดปกติหรือสต็อกใกล้หมด</li>
-          <li>ตัวเลขทุกตัวคำนวณด้วยสูตร ไม่ให้ AI คิดเลข และทดสอบเทียบกับการคำนวณด้วยมือแล้ว</li>
+          <li class="rv" style="--i:0">กรอกยอดสะสมตอนเปลี่ยนกะ 13:00, 19:00 และ 01:00 ระบบแยกผลเป็นช่วง 07–13, 13–19 และ 19–01</li>
+          <li class="rv" style="--i:1">แยกผลตามช่อง chy.cosmetic และ story.chy</li>
+          <li class="rv" style="--i:2">คำนวณจุดคุ้มทุน ROI และกำไรหลังหักค่าโฆษณา</li>
+          <li class="rv" style="--i:3">แนะนำให้เพิ่ม ลด หรือย้ายงบ จากกฎที่ตรวจสอบได้ทุกข้อ</li>
+          <li class="rv" style="--i:4">ตัวเลขทุกตัวคำนวณด้วยสูตร ไม่ให้ AI คิดเลข และทดสอบเทียบกับการคำนวณด้วยมือแล้ว</li>
         </ul>
-        <div class="actions"><a class="btn" href="tool/" target="_blank" rel="noopener">เปิดเครื่องมือเต็มหน้าจอ</a></div>
+        <div class="actions rv"><a class="btn magnet" href="tool/" target="_blank" rel="noopener"><span>เปิดเครื่องมือเต็มหน้าจอ</span></a></div>
       </div>
       <div>
-        <div class="device"><iframe src="tool/" title="เครื่องมือสรุปผลโฆษณารายวัน" loading="lazy"></iframe></div>
-        <p class="devcap">ตัวเลขในเครื่องมือเป็นข้อมูลตัวอย่าง</p>
+        <div class="device" id="device"><iframe src="tool/" title="เครื่องมือสรุปผลโฆษณารายวัน" loading="lazy"></iframe></div>
+        <p class="devcap">ตัวเลขในเครื่องมือเป็นข้อมูลตัวอย่าง ข้อมูลที่กรอกเก็บในเครื่องของคนที่เปิดเท่านั้น</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="about">
+<section class="sec" id="about">
   <div class="wrap">
-    <div class="sechead">
-      <i style="background:var(--s4)"></i>
-      <h2>เกี่ยวกับผู้สมัคร</h2>
-      <p>นักศึกษาวิทยาการคอมพิวเตอร์ ชั้นปีที่ 3 มหาวิทยาลัยธรรมศาสตร์ อดีตพนักงานไลฟ์สดของ CHY</p>
-    </div>
+    <div class="kicker rv"><i style="background:var(--s4)"></i>เกี่ยวกับผู้สมัคร</div>
+    <h2 class="rv">รู้จักแบรนด์จากหน้ากล้อง อ่านข้อมูลด้วยโค้ด</h2>
+    <p class="sub rv">นักศึกษาวิทยาการคอมพิวเตอร์ ชั้นปีที่ 3 มหาวิทยาลัยธรรมศาสตร์ อดีตพนักงานไลฟ์สดของ CHY</p>
     <div class="about">
-      <div><h4>รู้จัก CHY จากหน้ากล้อง</h4><p>เคยไลฟ์ขายให้แบรนด์ รู้ว่าลูกค้าถามอะไรบ่อย สินค้าตัวไหนขายง่าย และช่วงไหนคนดูเยอะ ระหว่างทำงานได้จัดทำเครื่องมือติดตามคลิปคู่แข่ง และวางแผน CRM ให้ลูกค้ากลับมาซื้อซ้ำ พร้อมแผนผัง Customer Journey</p></div>
-      <div><h4>อ่านข้อมูลและเขียนโค้ดได้</h4><p>เก็บข้อมูลเอง วิเคราะห์เอง และทำเครื่องมือช่วยทีมได้ทันทีโดยไม่ต้องรอฝ่ายอื่น</p></div>
-      <div><h4>ใช้ AI แบบตรวจสอบได้</h4><p>ใช้ AI ช่วยสรุปและร่างงาน แต่ตัวเลขที่ส่งให้ผู้บริหารต้องมาจากสูตรที่เปิดตรวจได้เสมอ</p></div>
+      <div class="rv" style="--i:0"><h4>รู้จัก CHY จากหน้ากล้อง</h4><p>เคยไลฟ์ขายให้แบรนด์ รู้ว่าลูกค้าถามอะไรบ่อย และช่วงไหนคนดูเยอะ ระหว่างทำงานได้จัดทำเครื่องมือติดตามคลิปคู่แข่ง และวางแผน CRM ให้ลูกค้ากลับมาซื้อซ้ำ พร้อมแผนผัง Customer Journey</p></div>
+      <div class="rv" style="--i:1"><h4>อ่านข้อมูลและเขียนโค้ดได้</h4><p>เก็บข้อมูลเอง วิเคราะห์เอง และทำเครื่องมือช่วยทีมได้ทันทีโดยไม่ต้องรอฝ่ายอื่น</p></div>
+      <div class="rv" style="--i:2"><h4>ใช้ AI แบบตรวจสอบได้</h4><p>ใช้ AI ช่วยสรุปและร่างงาน แต่ตัวเลขที่ส่งให้ผู้บริหารต้องมาจากสูตรที่เปิดตรวจได้เสมอ</p></div>
     </div>
-    <div class="learn"><b>กำลังศึกษาเพิ่มเติม</b><span>Funnel เห็น คลิก ซื้อ</span><span>ROI และจุดคุ้มทุน</span><span>Product GMV Max</span><span>LIVE GMV Max</span><span>CPO และกำไรหลังหักโฆษณา</span></div>
-    <p class="small" style="margin-top:14px">ศึกษาด้วยตนเอง ยังไม่มีประสบการณ์ลงโฆษณาจริง · ข้อมูลติดต่ออยู่ใน Resume</p>
+    <div class="learn rv"><b>กำลังศึกษาเพิ่มเติม</b><span>Funnel เห็น คลิก ซื้อ</span><span>ROI และจุดคุ้มทุน</span><span>Product GMV Max</span><span>LIVE GMV Max</span><span>CPO และกำไรหลังหักโฆษณา</span></div>
+    <p class="small rv" style="margin-top:14px">ศึกษาด้วยตนเอง ยังไม่มีประสบการณ์ลงโฆษณาจริง ข้อมูลติดต่ออยู่ใน Resume</p>
+  </div>
+  <div class="end wrap">
+    <p class="rv">พร้อมช่วยพาลูกค้าของ CHY กลับมา ตั้งแต่วันแรกที่สินค้าเข้า</p>
+    <div class="actions rv"><a class="btn magnet" href="#top"><span>กลับไปด้านบน</span></a></div>
   </div>
 </section>
 
@@ -407,153 +525,230 @@ footer p{max-width:90ch}
 
 <footer>
   <div class="wrap">
-    <p>วิธีเก็บข้อมูล: สถิติจากหน้าช่อง TikTok สาธารณะของ chy.cosmetic และ story.chy ตั้งแต่ ก.ย. 2565 ถึง 23 พ.ย. 2569 และหน้าช่องของคู่แข่ง 7 แบรนด์ ไม่มีข้อมูลหลังบ้าน เช่น อัตราการดูจนจบ การกดดูสินค้า หรืองบโฆษณาจริง คลิปช่วง ก.ย.–พ.ย. 2569 ส่วนใหญ่มีเพียงยอดวิว ตัวเลขในรายงานตัวอย่างและในเครื่องมือเป็นตัวเลขสมมติ</p>
+    <p>วิธีเก็บข้อมูล: สถิติจากหน้าช่อง TikTok สาธารณะของ chy.cosmetic และ story.chy ตั้งแต่ ก.ย. 2565 ถึง 23 พ.ย. 2569 และหน้าช่องของคู่แข่ง 7 แบรนด์ ไม่มีข้อมูลหลังบ้าน เช่น อัตราการดูจนจบ การกดดูสินค้า หรืองบโฆษณาจริง ตัวเลขในรายงานตัวอย่างและในเครื่องมือเป็นตัวเลขสมมติ</p>
   </div>
 </footer>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script defer>
+(function(){
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const desktop = matchMedia('(min-width: 961px)');
 const TH=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 const fmtK=v=>v>=1e6?(v/1e6).toFixed(1).replace(/\.0$/,'')+'M':v>=1e3?Math.round(v/1e3)+'K':String(v);
-const fmtN=v=>v.toLocaleString('en-US');
+const fmtN=v=>Math.round(v).toLocaleString('en-US');
 const NS='http://www.w3.org/2000/svg';
-function el(parent,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;parent.appendChild(e);return e}
+const el=(p,t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e};
+const months=[];for(let y=2025;y<=2026;y++)for(let m=0;m<12;m++){if(y===2026&&m>10)break;months.push([y,m])}
+const lab=i=>TH[months[i][1]]+' '+String(months[i][0]+543).slice(2);
+const CHY=[1500000,2700000,null,905400,3500000,3800000,286400,1200000,1100000,1600000,1100000,921000,1500000,15100,61300,77800,110900,71200,165500,141700,9908,5450,3203];
+const STORY=[null,7535,1200000,null,391200,488400,180800,369200,216600,1000000,87500,142800,9995,13100,61000,95800,117100,144500,279500,251200,21400,8730,1748];
 
-/* ---------- hero chart ---------- */
+/* ---------- hero headline entrance ---------- */
+if(!reduce){
+  document.querySelectorAll('#h1 .ln>span').forEach((s,i)=>s.animate([{transform:'translateY(110%)'},{transform:'none'}],{duration:1100,delay:650+i*110,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'}));
+  document.querySelectorAll('.who,.hero-foot').forEach((s,i)=>s.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:900,delay:900+i*250,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'}));
+}
+
+/* ---------- ribbon: the real view data as a flowing band ---------- */
 (function(){
-  const months=[];for(let y=2025;y<=2026;y++)for(let m=0;m<12;m++){if(y===2026&&m>10)break;months.push([y,m])}
-  const lab=i=>TH[months[i][1]]+' '+String(months[i][0]+543).slice(2);
-  const S=[
-    {name:'chy.cosmetic',color:'var(--lip)',v:[1500000,2700000,null,905400,3500000,3800000,286400,1200000,1100000,1600000,1100000,921000,1500000,15100,61300,77800,110900,71200,165500,141700,9908,5450,3203]},
-    {name:'story.chy',color:'var(--teal)',v:[null,7535,1200000,null,391200,488400,180800,369200,216600,1000000,87500,142800,9995,13100,61000,95800,117100,144500,279500,251200,21400,8730,1748]}
-  ];
-  const svg=document.getElementById('hero'),box=document.getElementById('heroBox'),tip=document.getElementById('heroTip');
-  const W=480,H=300,L=40,R=86,T=30,B=30,pw=W-L-R,ph=H-T-B,lo=3,hi=7,n=months.length;
+  const cv=document.getElementById('ribbon'),ctx=cv.getContext('2d');
+  // fill gaps and convert to 0..1 log height
+  const v=CHY.map((x,i)=>x??(STORY[i]||CHY[i-1]));
+  const h=v.map(x=>(Math.log10(x)-3)/4);
+  const sample=t=>{const f=t*(h.length-1),i=Math.floor(f),k=f-i;const a=h[Math.max(0,i)],b=h[Math.min(h.length-1,i+1)];const s=k*k*(3-2*k);return a+(b-a)*s};
+  let W,H,dpr,lines,pts,mx=0,my=0,tmx=0,tmy=0,flat=0,run=true,t=0;
+  function size(){dpr=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const small=W<700;lines=small?16:30;pts=small?70:140}
+  size();addEventListener('resize',size);
+  addEventListener('pointermove',e=>{tmx=e.clientX/innerWidth-.5;tmy=e.clientY/innerHeight-.5},{passive:true});
+  const cols=['#F2D6C6','#E3B897','#C8916C','#E24A74'];
+  function frame(){
+    if(!run)return;
+    t+=reduce?0:0.006;mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;
+    ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+    const top=H*.13,bot=H*(W<700?.5:.6);
+    for(let l=0;l<lines;l++){
+      const p=l/(lines-1),spread=(p-.5);
+      ctx.beginPath();
+      for(let j=0;j<=pts;j++){
+        const u=j/pts,x=u*W*1.08-W*.04;
+        const base=bot-(bot-top)*sample(u)*(1-flat*.7);
+        const wob=Math.sin(u*6+t*2+l*.35)*14+Math.sin(u*13-t*1.3+l*.2)*7;
+        const y=base+spread*(70+40*Math.sin(t+u*3))*(1-flat*.6)+wob*(1-flat*.5)+my*30*p+mx*20*(u-.5);
+        j?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      const c=cols[l%4];
+      ctx.strokeStyle=c;ctx.globalAlpha=.10+.22*(1-Math.abs(spread)*1.6);ctx.lineWidth=1.1;ctx.stroke();
+    }
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+    // the stock-out marker
+    const sx=(20/22)*W*1.08-W*.04;
+    ctx.fillStyle='rgba(226,74,116,.85)';ctx.font='600 13px Anuphan, sans-serif';ctx.textAlign='right';
+    ctx.globalAlpha=Math.max(0,.9-flat*1.5);ctx.fillText('ก.ย. 69 สินค้าขาด',sx-8,top-8);
+    ctx.fillRect(sx,top,1,bot-top);ctx.globalAlpha=1;
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  frame();
+  const io=new IntersectionObserver(([e])=>{const was=run;run=e.isIntersecting;if(run&&!was&&!reduce)requestAnimationFrame(frame)});io.observe(cv);
+  addEventListener('scroll',()=>{flat=Math.min(1,scrollY/(innerHeight*.9));if(reduce)frame()},{passive:true});
+})();
+
+/* ---------- ticker ---------- */
+(function(){
+  const d=[['chy.cosmetic',5450,'chy','var(--lip)'],['story.chy',8730,'chy','var(--teal)'],['LA GLACE',44900],['Chat Cosmetics',31900],['KAGE',20100],['Cathy Doll',17500],['Srichand',15000],['4U2',13700],['Meilinda',3517]];
+  const html=d.map(x=>'<span class="'+(x[2]||'')+'"><i class="sw" style="background:'+(x[3]||'var(--s2)')+'"></i><b>'+x[0]+'</b>'+fmtN(x[1])+' วิวกลาง ต.ค.</span>').join('');
+  document.getElementById('ticker').innerHTML=html+html;
+})();
+
+/* ---------- statement: split into words ---------- */
+(function(){
+  const p=document.getElementById('statement');
+  const seg=('Segmenter' in Intl)?new Intl.Segmenter('th',{granularity:'word'}):null;
+  function split(node){
+    [...node.childNodes].forEach(n=>{
+      if(n.nodeType===3){
+        const parts=seg?[...seg.segment(n.textContent)].map(s=>s.segment):n.textContent.split(/(\s+)/);
+        const f=document.createDocumentFragment();
+        parts.forEach(s=>{if(!s)return;const w=document.createElement('span');w.className='w'+(node.classList&&node.classList.contains('hl')?' hl':'');w.textContent=s;f.appendChild(w)});
+        node.replaceChild(f,n);
+      }else if(n.nodeType===1){split(n)}
+    });
+  }
+  split(p);
+  const words=[...p.querySelectorAll('.w')];
+  function update(){
+    const r=p.getBoundingClientRect(),vh=innerHeight;
+    const prog=Math.min(1,Math.max(0,(vh*.85-r.top)/(r.height+vh*.35)));
+    const n=Math.round(prog*words.length);
+    words.forEach((w,i)=>w.classList.toggle('lit',i<n));
+  }
+  if(!reduce){addEventListener('scroll',update,{passive:true});update()}
+})();
+
+/* ---------- reveal on enter ---------- */
+(function(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
+  document.querySelectorAll('.rv').forEach(n=>io.observe(n));
+})();
+
+/* ---------- story chart ---------- */
+(function(){
+  const svg=document.getElementById('chart'),box=document.getElementById('chartBox'),tip=document.getElementById('tip'),drop=document.getElementById('bigdrop');
+  const W=480,H=300,L=40,R=74,T=30,B=30,pw=W-L-R,ph=H-T-B,lo=3,hi=7,n=months.length;
   const x=i=>L+i*pw/(n-1), y=v=>T+ph*(1-(Math.log10(v)-lo)/(hi-lo));
-  for(let p=lo;p<=hi;p++){
-    el(svg,'line',{x1:L,x2:W-R+6,y1:y(10**p),y2:y(10**p),stroke:'var(--rule)','stroke-width':1});
-    el(svg,'text',{x:L-8,y:y(10**p)+5,'text-anchor':'end','font-size':13,fill:'var(--ink3)'},fmtK(10**p));
+  const defs=el(svg,'defs',{});const cp=el(defs,'clipPath',{id:'reveal'});const cr=el(cp,'rect',{x:0,y:0,width:x(12)+4,height:H});
+  for(let p=lo;p<=hi;p++){el(svg,'line',{x1:L,x2:W-R+6,y1:y(10**p),y2:y(10**p),stroke:'rgba(255,236,244,.08)'});el(svg,'text',{x:L-8,y:y(10**p)+5,'text-anchor':'end','font-size':13,fill:'#8F7C88'},fmtK(10**p))}
+  [0,6,12,18].forEach(i=>el(svg,'text',{x:x(i),y:H-6,'text-anchor':'middle','font-size':13,fill:'#8F7C88'},lab(i)));
+  const adBand=el(svg,'g',{class:'band',opacity:0});
+  el(adBand,'rect',{x:x(13),y:T-4,width:x(19)-x(13),height:ph+4,fill:'rgba(227,184,151,.12)',rx:4});
+  el(adBand,'text',{x:(x(13)+x(19))/2,y:T-10,'text-anchor':'middle','font-size':12.5,'font-weight':600,fill:'#E3B897'},'ดันด้วยโฆษณา');
+  const outBand=el(svg,'g',{class:'band',opacity:0});
+  el(outBand,'rect',{x:x(20)-6,y:T-4,width:W-R-x(20)+12,height:ph+4,fill:'rgba(226,74,116,.16)',rx:4});
+  el(outBand,'text',{x:x(20)-10,y:T-10,'text-anchor':'end','font-size':12.5,'font-weight':600,fill:'#E24A74'},'ก.ย. 69 สินค้าขาด');
+  const g=el(svg,'g',{'clip-path':'url(#reveal)'});
+  const S=[{name:'chy.cosmetic',c:'#E24A74',v:CHY},{name:'story.chy',c:'#4DB6BA',v:STORY}];
+  S.forEach(s=>{let d='',pen=false;s.v.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1);pen=true});
+    el(g,'path',{d,fill:'none',stroke:s.c,'stroke-width':2.6,'stroke-linejoin':'round','stroke-linecap':'round'})});
+  const ends=el(svg,'g',{class:'band',opacity:0});
+  S.forEach((s,k)=>{const v=s.v[n-1];el(ends,'circle',{cx:x(n-1),cy:y(v),r:4.5,fill:s.c});el(ends,'text',{x:x(n-1)+9,y:y(v)+(k?14:-6),'font-size':13,'font-weight':600,fill:'#F6EDF1'},fmtK(v))});
+  let cur=x(12)+4,anim;
+  function reveal(to){cancelAnimationFrame(anim);if(reduce){cur=to;cr.setAttribute('width',to);return}
+    const from=cur,t0=performance.now(),dur=1300;
+    const st=now=>{const k=Math.max(0,Math.min(1,(now-t0)/dur)),e=1-Math.pow(1-k,3);cur=from+(to-from)*e;cr.setAttribute('width',cur);if(k<1)anim=requestAnimationFrame(st)};
+    anim=requestAnimationFrame(st)}
+  let dropDone=false;
+  function countDrop(){if(dropDone||reduce)return;dropDone=true;const elN=document.getElementById('dropNum'),t0=performance.now();
+    const st=now=>{const k=Math.max(0,Math.min(1,(now-t0)/1600)),e=1-Math.pow(1-k,4);elN.textContent=fmtN(713000+(16000-713000)*e);if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)}
+  function setStep(s){
+    document.querySelectorAll('.step').forEach(n=>n.classList.toggle('on',+n.dataset.step===s));
+    const to=[x(12)+4,x(19)+4,W,W][s];reveal(to);
+    adBand.setAttribute('opacity',s===1?1:0);
+    outBand.setAttribute('opacity',s>=2?1:0);
+    ends.setAttribute('opacity',s>=2?1:0);
+    drop.classList.toggle('on',s===3);if(s===3)countDrop();
   }
-  [0,6,12,18].forEach(i=>el(svg,'text',{x:x(i),y:H-6,'text-anchor':'middle','font-size':13,fill:'var(--ink3)'},lab(i)));
-  const sep=20;
-  const mark=el(svg,'g',{class:'mk',opacity:reduce?1:0});
-  el(mark,'rect',{x:x(sep),y:T-6,width:W-R-x(sep)+6,height:ph+6,fill:'var(--lip-soft)',opacity:.6,rx:4});
-  el(mark,'text',{x:x(sep)-6,y:T-12,'text-anchor':'end','font-size':13,'font-weight':600,fill:'var(--lip)'},'ก.ย. 69 สินค้าขาด');
-  const paths=[];
-  S.forEach(s=>{
-    let d='',pen=false;
-    s.v.forEach((v,i)=>{if(v==null){pen=false;return}d+=(pen?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1);pen=true});
-    paths.push(el(svg,'path',{d,fill:'none',stroke:s.color,'stroke-width':2.6,'stroke-linejoin':'round','stroke-linecap':'round'}));
-  });
-  const ends=S.map((s,k)=>{const v=s.v[n-1];const g=el(svg,'g',{opacity:reduce?1:0});
-    el(g,'circle',{cx:x(n-1),cy:y(v),r:4.5,fill:s.color});
-    const ty=y(v)+(k===0?-6:14);
-    el(g,'text',{x:x(n-1)+10,y:ty,'font-size':13,'font-weight':600,fill:'var(--ink)'},fmtK(v)+' วิว');
-    return g});
-  const guide=el(svg,'line',{y1:T-6,y2:T+ph,stroke:'var(--ink3)','stroke-width':1,'stroke-dasharray':'3 3',opacity:0});
-  const dots=S.map(s=>el(svg,'circle',{r:5,fill:'#fff',stroke:s.color,'stroke-width':2.5,opacity:0}));
-
-  if(!reduce){
-    paths.forEach((p,k)=>{const len=p.getTotalLength();p.style.strokeDasharray=len;p.style.strokeDashoffset=len;
-      p.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:1900,delay:450+k*180,easing:'cubic-bezier(.45,.05,.3,1)',fill:'forwards'})});
-    mark.animate([{opacity:0},{opacity:1}],{duration:500,delay:2050,fill:'forwards'});
-    ends.forEach((g,k)=>g.animate([{opacity:0,transform:'translateX(-6px)'},{opacity:1,transform:'none'}],{duration:450,delay:2300+k*120,fill:'forwards'}));
-  }
-
-  function show(clientX){
-    const r=svg.getBoundingClientRect();const sx=(clientX-r.left)/r.width*W;
-    const i=Math.max(0,Math.min(n-1,Math.round((sx-L)/(pw/(n-1)))));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setStep(+e.target.dataset.step)}),{rootMargin:'-45% 0px -45% 0px'});
+  document.querySelectorAll('.step').forEach(n=>io.observe(n));
+  setStep(0);
+  // scrub tooltip
+  const guide=el(svg,'line',{y1:T-4,y2:T+ph,stroke:'#8F7C88','stroke-dasharray':'3 3',opacity:0});
+  const dots=S.map(s=>el(svg,'circle',{r:5,fill:'#140C12',stroke:s.c,'stroke-width':2.5,opacity:0}));
+  function show(cx){if(drop.classList.contains('on'))return;const r=svg.getBoundingClientRect(),sx=(cx-r.left)/r.width*W;
+    let i=Math.max(0,Math.min(n-1,Math.round((sx-L)/(pw/(n-1)))));if(x(i)>cur)i=Math.max(0,Math.floor((cur-L)/(pw/(n-1))));
     guide.setAttribute('x1',x(i));guide.setAttribute('x2',x(i));guide.setAttribute('opacity',1);
     let html='<b>'+lab(i)+'</b>';
-    S.forEach((s,k)=>{const v=s.v[i];const d=dots[k];
-      if(v==null){d.setAttribute('opacity',0);html+='<br><span class="d" style="background:'+s.color+'"></span>'+s.name+' ไม่มีคลิป';return}
-      d.setAttribute('cx',x(i));d.setAttribute('cy',y(v));d.setAttribute('opacity',1);
-      html+='<br><span class="d" style="background:'+s.color+'"></span>'+s.name+' '+fmtN(v)});
-    tip.innerHTML=html;
-    const px=x(i)/W*r.width;const tw=tip.offsetWidth;
-    tip.style.left=Math.max(tw/2,Math.min(r.width-tw/2,px))+'px';tip.style.top='0px';tip.classList.add('on');
-  }
+    S.forEach((s,k)=>{const v=s.v[i],d=dots[k];if(v==null){d.setAttribute('opacity',0);html+='<br><span class="d" style="background:'+s.c+'"></span>'+s.name+' ไม่มีคลิป';return}
+      d.setAttribute('cx',x(i));d.setAttribute('cy',y(v));d.setAttribute('opacity',1);html+='<br><span class="d" style="background:'+s.c+'"></span>'+s.name+' '+fmtN(v)});
+    tip.innerHTML=html;const px=x(i)/W*r.width,tw=tip.offsetWidth;tip.style.left=Math.max(tw/2,Math.min(r.width-tw/2,px))+'px';tip.style.top='0px';tip.classList.add('on')}
   function hide(){tip.classList.remove('on');guide.setAttribute('opacity',0);dots.forEach(d=>d.setAttribute('opacity',0))}
-  box.addEventListener('pointermove',e=>show(e.clientX));
-  box.addEventListener('pointerdown',e=>show(e.clientX));
-  box.addEventListener('pointerleave',hide);
+  box.addEventListener('pointermove',e=>show(e.clientX));box.addEventListener('pointerdown',e=>show(e.clientX));box.addEventListener('pointerleave',hide);
 })();
 
-/* ---------- competitor bars ---------- */
+/* ---------- spotlight on finding cards ---------- */
+document.querySelectorAll('.find').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
+
+/* ---------- competitor race ---------- */
 (function(){
   const M=['มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.'];
-  const D=[
-    {n:'chy.cosmetic',c:'chy',v:[71200,165500,141700,9908,5450]},
-    {n:'story.chy',c:'chy story',v:[144500,279500,251200,21400,8730]},
-    {n:'LA GLACE',v:[134800,73000,176700,44900,44900]},
-    {n:'Srichand',v:[9967,18800,273900,15500,15000]},
-    {n:'Chat Cosmetics',v:[50400,26300,30200,46100,31900]},
-    {n:'KAGE',v:[null,null,36600,28300,20100]},
-    {n:'Cathy Doll',v:[null,9098,10900,6460,17500]},
-    {n:'4U2',v:[null,5081,24600,29600,13700]},
-    {n:'Meilinda',v:[6554,7173,3819,3075,3517]}
-  ];
-  const MAX=280000;
-  const bars=document.getElementById('bars'),mon=document.getElementById('months'),hint=document.getElementById('raceHint');
-  const rows=D.map(d=>{const r=document.createElement('div');r.className='bar '+(d.c||'');
-    r.innerHTML='<span class="n">'+d.n+'</span><div class="track"><div class="fill"></div><span class="val num"></span></div>';
-    bars.appendChild(r);return {d,fill:r.querySelector('.fill'),val:r.querySelector('.val')}});
-  const btns=M.map((m,i)=>{const b=document.createElement('button');b.type='button';b.textContent=m;if(i>=3)b.className='stock';
-    b.addEventListener('click',()=>set(i));mon.appendChild(b);return b});
-  function set(i){
-    btns.forEach((b,k)=>b.setAttribute('aria-pressed',k===i));
-    rows.forEach(({d,fill,val})=>{const v=d.v[i];const pct=v?Math.max(.6,v/MAX*100):0;
-      fill.style.width=pct+'%';val.textContent=v?fmtN(v):'ยังไม่มีข้อมูล';
-      const inside=pct>62;val.classList.toggle('in',inside);
-      val.style.left=inside?'calc('+pct+'% - 10px)':'calc('+pct+'% + 8px)'});
-    hint.textContent='วิวกลางต่อคลิปเดือน '+M[i]+' 2569'+(i<3?' · ลองกด ก.ย. เพื่อดูช่วงที่สินค้าขาด':' · ช่วงที่สินค้าของ CHY ขาด');
-  }
-  set(2);
+  const D=[{n:'chy.cosmetic',c:'chy',v:[71200,165500,141700,9908,5450]},{n:'story.chy',c:'chy story',v:[144500,279500,251200,21400,8730]},
+    {n:'LA GLACE',v:[134800,73000,176700,44900,44900]},{n:'Srichand',v:[9967,18800,273900,15500,15000]},{n:'Chat Cosmetics',v:[50400,26300,30200,46100,31900]},
+    {n:'KAGE',v:[null,null,36600,28300,20100]},{n:'Cathy Doll',v:[null,9098,10900,6460,17500]},{n:'4U2',v:[null,5081,24600,29600,13700]},{n:'Meilinda',v:[6554,7173,3819,3075,3517]}];
+  const MAX=280000,bars=document.getElementById('bars'),mon=document.getElementById('months'),pill=document.getElementById('pill'),hint=document.getElementById('raceHint');
+  const rows=D.map(d=>{const r=document.createElement('div');r.className='bar '+(d.c||'');r.innerHTML='<span class="n">'+d.n+'</span><div class="track"><div class="fill"></div><span class="val num"></span></div>';bars.appendChild(r);return{d,fill:r.querySelector('.fill'),val:r.querySelector('.val')}});
+  const btns=M.map((m,i)=>{const b=document.createElement('button');b.type='button';b.textContent=m;if(i>=3)b.className='stock';b.addEventListener('click',()=>set(i));mon.appendChild(b);return b});
+  let cur=2,shown=false;
+  function movePill(){const b=btns[cur];pill.style.width=b.offsetWidth+'px';pill.style.transform='translateX('+b.offsetLeft+'px)'}
+  function set(i){cur=i;btns.forEach((b,k)=>b.setAttribute('aria-pressed',k===i));movePill();
+    rows.forEach(({d,fill,val},k)=>{const v=d.v[i],pct=v?Math.max(.6,v/MAX*100):0;
+      setTimeout(()=>{fill.style.width=(shown?pct:0)+'%';const inside=pct>62;val.classList.toggle('in',inside);val.textContent=v?fmtN(v):'ยังไม่มีข้อมูล';val.style.left=shown?(inside?'calc('+pct+'% - 10px)':'calc('+pct+'% + 8px)'):'8px';val.style.opacity=shown?1:0},shown&&!reduce?k*35:0)});
+    hint.textContent='วิวกลางต่อคลิปเดือน '+M[i]+' 2569'+(i<3?' · ลองกด ก.ย. เพื่อดูช่วงที่สินค้าขาด':' · ช่วงที่สินค้าของ CHY ขาด')}
+  set(2);addEventListener('resize',movePill);
+  if(document.fonts)document.fonts.ready.then(movePill);
+  const io=new IntersectionObserver(([e])=>{if(e.isIntersecting){shown=true;set(cur);io.disconnect()}},{threshold:.35});io.observe(document.getElementById('race'));
 })();
 
-/* ---------- plan stepper ---------- */
+/* ---------- count up ---------- */
 (function(){
-  const P=[
-    {when:'ก่อนสินค้าเข้า 7 วัน',what:'บอกใบ้ว่าของกำลังกลับมา ตอบคอมเมนต์คนที่เคยถามหา ชวนกดติดตามและเม้นเบอร์ที่รอ ยังไม่ลงโฆษณา',
-     tag:'ตอบคนที่รอ',hook:'"ใครถามว่าคุชชั่นหายไปไหน อีก 7 วันเจอกันค่ะ เม้นเบอร์ที่รอไว้เลย"',capt:'กดติดตามไว้ วันของเข้ามีไลฟ์ใหญ่',
-     spec:[['ความยาว','15–30 วินาที'],['ภาพ','แคปคอมเมนต์ลูกค้าที่ถามหา แล้วตัดมาที่กล่องสินค้า']],
-     why:'ต่อยอดจากคลิป "คุชชั่นหายไปไหนกัน" ที่ทีมลงไว้ระหว่างของขาด',bg:'linear-gradient(160deg,#E3B897 0%,#C8916C 55%,#8E5B40 100%)'},
-    {when:'วันสินค้าเข้า',what:'ประกาศว่ากลับมาแล้ว พร้อมโปรต้อนรับ เปิดขายในไลฟ์ช่วงที่คนดูเยอะ เริ่มลงโฆษณาเมื่อเช็กแล้วว่าสต็อกพอขาย',
-     tag:'ราคาชัด',hook:'"กลับมาแล้ว! คุชชั่นราคาพิเศษ เฉพาะในไลฟ์คืนนี้"',capt:'สินค้า ราคา และเวลาไลฟ์ ขึ้นเป็นตัวอักษรใหญ่',
-     spec:[['ความยาว','15–30 วินาที'],['ลงเมื่อ','เช้าวันสินค้าเข้า และก่อนไลฟ์ช่วงที่คนดูเยอะ']],
-     why:'อิงคลิปโปร 99 บาทช่วง 8.8 ที่ได้ 2.1M วิว',bg:'linear-gradient(160deg,#D9456E 0%,#B42852 55%,#6E1733 100%)'},
-    {when:'2 สัปดาห์หลังจากนั้น',what:'รวมรีวิวจากลูกค้าที่ได้ของ เปิดให้นายหน้าช่วยทำคลิปปักตะกร้า เลือกคลิปที่คนตอบรับดีไปลงโฆษณาต่อ',
-     tag:'ชวนตอบ',hook:'"ผิวสองสี ผิวคล้ำ ผิวขาวเหลือง ใช้เบอร์ไหนดี เม้นมาเลย"',capt:'ตอบทุกเม้นในไลฟ์คืนนี้',
-     spec:[['ความยาว','20–40 วินาที'],['ภาพ','สวอตช์ทุกเบอร์บนผิวหลายโทน']],
-     why:'อิงคลิป "ชอบสีอะไร" ที่ได้แชร์ 26,400 ครั้ง และเข้ากับสโลแกน "ผิวไหนก็เนียน"',bg:'linear-gradient(160deg,#F2D6C6 0%,#E3B897 40%,#C8916C 75%,#8E5B40 100%)'}
-  ];
-  const ol=document.getElementById('steps'),clip=document.getElementById('clip');
-  const $=id=>document.getElementById(id);
-  const btns=P.map((p,i)=>{const li=document.createElement('li');const b=document.createElement('button');
-    b.type='button';b.setAttribute('role','tab');b.id='step'+i;b.setAttribute('aria-controls','clip');
-    b.innerHTML='<span class="when">'+p.when+'</span><span class="what">'+p.what+'</span>';
-    b.addEventListener('click',()=>{pick(i);if(matchMedia('(max-width:960px)').matches)document.querySelector('.phone').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})});
-    b.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();pick((i+1)%P.length,true)}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();pick((i+P.length-1)%P.length,true)}});
-    li.appendChild(b);ol.appendChild(li);return b});
-  function pick(i,focus){
-    const p=P[i];
-    btns.forEach((b,k)=>{b.setAttribute('aria-selected',k===i);b.tabIndex=k===i?0:-1});
-    if(focus)btns[i].focus();
-    clip.setAttribute('aria-labelledby','step'+i);
-    clip.style.background=p.bg;
-    $('clipTag').textContent=p.tag;$('clipHook').textContent=p.hook;$('clipCapt').textContent=p.capt;
-    $('clipSpec').innerHTML=p.spec.map(s=>'<dt>'+s[0]+'</dt><dd>'+s[1]+'</dd>').join('');
-    $('clipWhy').textContent=p.why;
-    clip.classList.remove('swap');void clip.offsetWidth;clip.classList.add('swap');
-  }
-  pick(0);
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;io.unobserve(e.target);if(reduce)return;
+    const n=e.target,to=+n.dataset.count,dec=+n.dataset.dec,suf=n.dataset.suffix||'',t0=performance.now();
+    const st=now=>{const k=Math.max(0,Math.min(1,(now-t0)/1400)),v=to*(1-Math.pow(1-k,3));n.textContent=(dec?v.toFixed(dec):fmtN(v))+suf;if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)}),{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(n=>io.observe(n));
 })();
 
-/* ---------- nav highlight ---------- */
+/* ---------- nav, progress, magnet ---------- */
 (function(){
+  const nav=document.getElementById('nav'),bar=document.getElementById('progress');
+  const onScroll=()=>{nav.classList.toggle('solid',scrollY>40);const max=document.documentElement.scrollHeight-innerHeight;bar.style.transform='scaleX('+(max>0?scrollY/max:0)+')'};
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
   const links=[...document.querySelectorAll('.shades a')];
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
   links.forEach(a=>{const s=document.querySelector(a.getAttribute('href'));if(s)io.observe(s)});
+  if(!reduce&&matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.magnet').forEach(b=>{
+      b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.18)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)'});
+      b.addEventListener('pointerleave',()=>{b.style.transition='transform .5s cubic-bezier(.2,.7,.2,1),color .35s';b.style.transform='';setTimeout(()=>b.style.transition='',500)});
+    });
+  }
+})();
+
+/* ---------- GSAP: horizontal plan, timeline line, device ---------- */
+function withGsap(){
+  if(!window.gsap||!window.ScrollTrigger||reduce)return;
+  gsap.registerPlugin(ScrollTrigger);
+  const mm=gsap.matchMedia();
+  mm.add('(min-width: 961px)',()=>{
+    const track=document.getElementById('hzTrack');
+    const dist=()=>track.scrollWidth-innerWidth+56;
+    gsap.to(track,{x:()=>-dist(),ease:'none',scrollTrigger:{trigger:'#hz',start:'center center',end:()=>'+='+dist(),pin:true,scrub:.6,invalidateOnRefresh:true,anticipatePin:1}});
+    gsap.fromTo('#measure .line',{'--p':0},{'--p':1,ease:'none',scrollTrigger:{trigger:'#measure',start:'top 80%',end:'top 35%',scrub:true}});
+  });
+  gsap.fromTo('#device',{scale:.86,rotateX:14,y:40,transformPerspective:1200},{scale:1,rotateX:0,y:0,ease:'none',scrollTrigger:{trigger:'#device',start:'top 95%',end:'top 35%',scrub:.5}});
+  gsap.to('.hero .wrap',{y:-80,opacity:.15,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+  if(document.fonts)document.fonts.ready.then(()=>ScrollTrigger.refresh());
+}
+if(document.readyState==='complete')withGsap();else addEventListener('load',withGsap);
 })();
 </script>
 </body>
