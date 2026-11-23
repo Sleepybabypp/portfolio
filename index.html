@@ -613,7 +613,7 @@ if(!reduce){
         const f=document.createDocumentFragment();
         parts.forEach(s=>{if(!s)return;const w=document.createElement('span');w.className='w'+(node.classList&&node.classList.contains('hl')?' hl':'');w.textContent=s;f.appendChild(w)});
         node.replaceChild(f,n);
-      }else if(n.nodeType===1){split(n)}
+      }else if(n.nodeType===1&&n.classList.contains('hl')){n.className='w hl';n.style.whiteSpace='nowrap'}else if(n.nodeType===1){split(n)}
     });
   }
   split(p);
