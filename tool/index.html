@@ -196,9 +196,37 @@ th{color:var(--ink-3);font-weight:600;font-size:12px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chips button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;cursor:pointer;font-weight:500}
 .chips button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.mrow{display:flex;align-items:center;gap:12px}
-.mrow input[type=range]{flex:1;accent-color:var(--accent)}
-.mrow b{font-family:var(--mono);font-size:20px;min-width:56px;text-align:right}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
+.mval{display:flex;align-items:center;gap:6px}
+.mval input{width:2.4ch;border:0;background:none;font-family:var(--display);font-size:44px;font-weight:700;line-height:1;color:var(--accent);text-align:center;padding:0;font-variant-numeric:tabular-nums}
+.mval input:focus{outline:none;border-bottom:2px solid var(--accent)}
+.mval span{font-size:15px;color:var(--ink-2);margin-right:6px}
+.step{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:22px;line-height:1;cursor:pointer;color:var(--ink)}
+.step:hover{border-color:var(--accent);color:var(--accent)}
+.mneed{margin:0;font-size:14px;color:var(--ink-2);background:var(--accent-soft);padding:8px 12px;border-radius:10px}
+.mneed b{font-family:var(--mono);color:var(--ink);font-size:15px}
+.split{position:relative;--pp:.4;margin:4px 0 2px}
+.split input{-webkit-appearance:none;appearance:none;display:block;width:100%;height:52px;margin:0;border-radius:14px;cursor:ew-resize;
+  background:linear-gradient(90deg,var(--accent) 0 calc(8px + (100% - 16px) * var(--pp)),var(--sunk) calc(8px + (100% - 16px) * var(--pp)) 100%)}
+.split input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:64px;border-radius:8px;background:var(--surface);border:3px solid var(--accent);box-shadow:0 3px 10px rgba(30,10,25,.28)}
+.split input::-moz-range-thumb{width:10px;height:58px;border-radius:8px;background:var(--surface);border:3px solid var(--accent);box-shadow:0 3px 10px rgba(30,10,25,.28)}
+.split input::-moz-range-track{background:transparent}
+.split input:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.split .lb{position:absolute;top:50%;transform:translateY(-50%);pointer-events:none;font-size:13.5px;font-weight:600;white-space:nowrap;transition:opacity .15s}
+.split .lb.p{left:14px;color:var(--accent-ink)} .split .lb.c{right:14px;color:var(--ink-2)}
+.split .lb.off{opacity:0}
+.split .lb.short .lx{display:none}
+@media(max-width:560px){.split .lb .lx{display:none}.mval input{font-size:40px}}
+.sscale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3);font-family:var(--mono);padding:0 4px}
+.chips .muted{align-self:center;margin-right:2px}
+.mhelp{border-top:1px dashed var(--line);padding-top:12px}
+.mhelp summary{cursor:pointer;font-weight:600;font-size:14.5px;color:var(--accent);list-style:none}
+.mhelp summary::-webkit-details-marker{display:none}
+.mhelp summary::after{content:" +"} .mhelp[open] summary::after{content:" −"}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.mres{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+.mres p{margin:0;font-size:14px;color:var(--ink-2);flex:1;min-width:200px}
+.mres p b{color:var(--ink)} .mres p .neg{color:var(--loss)}
 details.card summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:16px;list-style:none}
 details.card summary::-webkit-details-marker{display:none}
 details.card summary::after{content:" +";color:var(--accent)} details.card[open] summary::after{content:" −"}
@@ -258,6 +286,31 @@ nav.tabs button.on{color:var(--accent);font-weight:600}
       <div class="qv" id="qVerdict" aria-live="polite"><div class="face" id="qFace">·</div><div><b id="qWord">–</b><p id="qLine"></p></div></div>
     </div></div>
 
+    <div class="card mcard">
+      <h2><svg class="ico"><use href="#i-bag"/></svg>ขายได้ 100 บาท เหลือกำไรกี่บาท</h2>
+      <p class="muted" style="margin:0">หักต้นทุนสินค้า ค่าส่ง และค่าธรรมเนียมแล้ว แต่ยังไม่หักค่าแอด ถ้ายังไม่รู้ ใช้ 40 บาทไปก่อน</p>
+      <div class="mtop">
+        <div class="mval"><button type="button" class="step" data-d="-1" aria-label="ลด 1 บาท">−</button><input id="qMarginN" inputmode="numeric" value="40" maxlength="2" aria-label="กำไรต่อยอดขาย 100 บาท"><span>บาท</span><button type="button" class="step" data-d="1" aria-label="เพิ่ม 1 บาท">+</button></div>
+        <p class="mneed" id="qNeed" aria-live="polite">–</p>
+      </div>
+      <div class="split" id="qSplit">
+        <input type="range" id="qMargin" min="0" max="100" step="1" value="40" aria-label="ลากเพื่อแบ่งเงิน 100 บาท ระหว่างกำไรกับต้นทุน">
+        <span class="lb p" id="qLbP">กำไร 40</span><span class="lb c" id="qLbC">ต้นทุน ค่าส่ง ค่าธรรมเนียม 60</span>
+      </div>
+      <div class="sscale" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100 บาท</span></div>
+      <div class="chips" id="qChips"><span class="muted">ค่าที่ใช้บ่อย</span><button type="button" data-m="30">30 บาท</button><button type="button" data-m="40" class="on">40 บาท</button><button type="button" data-m="50">50 บาท</button></div>
+      <details class="mhelp" id="qHelp">
+        <summary>ไม่รู้ตัวเลข? คิดจากราคาขายต่อชิ้น</summary>
+        <div class="mgrid">
+          <div><label for="hPrice">ราคาขายต่อชิ้น (บาท)</label><input class="f" id="hPrice" inputmode="decimal" placeholder="เช่น 299"></div>
+          <div><label for="hCost">ต้นทุนสินค้าและแพ็ก (บาท)</label><input class="f" id="hCost" inputmode="decimal" placeholder="เช่น 90"></div>
+          <div><label for="hShip">ค่าส่งที่ร้านจ่าย (บาท)</label><input class="f" id="hShip" inputmode="decimal" placeholder="ไม่มีให้เว้นไว้"></div>
+          <div><label for="hFee">ค่าธรรมเนียมแพลตฟอร์ม (%)</label><input class="f" id="hFee" inputmode="decimal" placeholder="เช่น 10"></div>
+        </div>
+        <div class="mres"><p id="hOut">ใส่ราคาขายและต้นทุนก่อน</p><button type="button" class="btn primary" id="hUse" disabled>ใช้ตัวเลขนี้</button></div>
+      </details>
+    </div>
+
     <div class="card">
       <h2><svg class="ico"><use href="#i-chart"/></svg>ผลลัพธ์</h2>
       <div class="gauge" id="qGauge"><div class="mk" id="qMkBe"><span>ไม่ขาดทุน</span></div><div class="mk" id="qMkTg"><span>กำไรดี</span></div><div class="you" id="qYou"><span id="qYouT">–</span></div></div>
@@ -272,12 +325,6 @@ nav.tabs button.on{color:var(--accent);font-weight:600}
       <div><label for="qOrders">จำนวนออเดอร์ (ไม่ใส่ก็ได้)</label><input class="f" id="qOrders" inputmode="numeric" placeholder="เช่น 12"></div>
     </div>
 
-    <div class="card">
-      <h2><svg class="ico"><use href="#i-bag"/></svg>ขาย 100 บาท เหลือกำไรกี่บาท</h2>
-      <p class="muted" style="margin:0">หักต้นทุนสินค้า ค่าส่ง และค่าธรรมเนียมแล้ว แต่ยังไม่หักค่าแอด ถ้ายังไม่รู้ตัวเลขจริง ใช้ 40 บาทไปก่อน</p>
-      <div class="chips" id="qChips"><button data-m="30">30 บาท</button><button data-m="40" class="on">40 บาท</button><button data-m="50">50 บาท</button></div>
-      <div class="mrow"><input type="range" id="qMargin" min="10" max="80" step="1" value="40" aria-label="กำไรต่อยอดขาย 100 บาท"><b id="qMarginT">40</b></div>
-    </div>
 
     <details class="card">
       <summary>ROI คืออะไร</summary>
@@ -929,11 +976,32 @@ function clearSample() { if (!ask('ลบสินค้าและประว
 
 
 /* ---------- quick calc ---------- */
+function setMargin(v) {
+  v = Math.round(Math.max(5, Math.min(90, +v || 40)));
+  $('qMargin').value = v;
+  try { localStorage.setItem('chy-qmargin', v); } catch (e) {}
+  calcQuick();
+}
+function calcHelp() {
+  const rd = id => num($(id).value.replace(/[,\s%]/g, ''));
+  const p = rd('hPrice'), c = rd('hCost'), sh = rd('hShip') || 0, f = rd('hFee') || 0, out = $('hOut'), use = $('hUse');
+  use.disabled = true;
+  if (!(p > 0) || c == null) { out.textContent = 'ใส่ราคาขายและต้นทุนก่อน'; return; }
+  const left = p - c - sh - p * f / 100, m = left / p * 100;
+  if (left <= 0) { out.innerHTML = 'ขายชิ้นละ ' + fmt(p) + ' บาท <span class="neg">ขาดทุนชิ้นละ ' + fmt(-left) + ' บาท ตั้งแต่ยังไม่ยิงแอด</span>'; return; }
+  out.innerHTML = 'ขายชิ้นละ ' + fmt(p) + ' บาท เหลือ ' + fmt(left) + ' บาท เท่ากับขาย 100 บาท เหลือ <b>' + Math.round(m) + ' บาท</b>';
+  if (m >= 5 && m <= 90) { use.disabled = false; use.dataset.m = Math.round(m); }
+  else out.innerHTML += ' (เกินช่วงที่ตั้งได้ 5–90)';
+}
 function calcQuick() {
   const rd = id => num($(id).value.replace(/[,\s]/g, ''));
   const sp = rd('qSpend'), g = rd('qGmv'), o = rd('qOrders');
   const mv = +$('qMargin').value, m = mv / 100, be = 1 / m, tg = be * 1.2;
-  $('qMarginT').textContent = mv;
+  $('qSplit').style.setProperty('--pp', m);
+  $('qLbP').textContent = 'กำไร ' + mv; $('qLbC').innerHTML = 'ต้นทุน<span class="lx"> ค่าส่ง ค่าธรรมเนียม</span> ' + (100 - mv); $('qLbC').classList.toggle('short', mv > 58);
+  $('qLbP').classList.toggle('off', mv < 20); $('qLbC').classList.toggle('off', mv > 80);
+  if (document.activeElement !== $('qMarginN')) $('qMarginN').value = mv;
+  $('qNeed').innerHTML = 'ROI ต้องได้อย่างน้อย <b>' + be.toFixed(2) + '</b> ถึงจะไม่ขาดทุน';
   document.querySelectorAll('#qChips button').forEach(b => b.classList.toggle('on', +b.dataset.m === mv));
   const V = $('qVerdict'), max = tg * 1.6, pos = v => Math.max(3, Math.min(97, v / max * 100)) + '%';
   $('qGauge').style.setProperty('--be', pos(be)); $('qGauge').style.setProperty('--tg', pos(tg));
@@ -960,8 +1028,18 @@ function calcQuick() {
   $('qYou').style.left = pos(roi); $('qYouT').textContent = 'ของคุณ ' + roi.toFixed(2);
 }
 document.addEventListener('DOMContentLoaded', () => {
-  ['qSpend', 'qGmv', 'qOrders', 'qMargin'].forEach(id => $(id).addEventListener('input', calcQuick));
-  document.querySelectorAll('#qChips button').forEach(b => b.onclick = () => { $('qMargin').value = b.dataset.m; calcQuick(); });
+  ['qSpend', 'qGmv', 'qOrders'].forEach(id => $(id).addEventListener('input', calcQuick));
+  ['qSpend', 'qGmv'].forEach(id => $(id).addEventListener('blur', () => { const v = num($(id).value.replace(/[,\s]/g, '')); if (v != null) $(id).value = v.toLocaleString('en-US', { maximumFractionDigits: 2 }); }));
+  $('qMargin').addEventListener('input', () => setMargin($('qMargin').value));
+  $('qMarginN').addEventListener('input', () => { const v = parseInt($('qMarginN').value, 10); if (v >= 5 && v <= 90) setMargin(v); });
+  $('qMarginN').addEventListener('change', () => { setMargin(parseInt($('qMarginN').value, 10) || 40); $('qMarginN').value = $('qMargin').value; });
+  $('qMarginN').addEventListener('keydown', e => { if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); setMargin(+$('qMargin').value + (e.key === 'ArrowUp' ? 1 : -1)); $('qMarginN').value = $('qMargin').value; } });
+  document.querySelectorAll('.mval .step').forEach(b => b.onclick = () => setMargin(+$('qMargin').value + +b.dataset.d));
+  document.querySelectorAll('#qChips button').forEach(b => b.onclick = () => setMargin(b.dataset.m));
+  ['hPrice', 'hCost', 'hShip', 'hFee'].forEach(id => $(id).addEventListener('input', calcHelp));
+  $('hUse').onclick = () => { setMargin($('hUse').dataset.m); toast('ตั้งกำไรเป็น ' + $('qMargin').value + ' บาทแล้ว'); };
+  let saved = null; try { saved = localStorage.getItem('chy-qmargin'); } catch (e) {}
+  if (saved) $('qMargin').value = Math.max(5, Math.min(90, +saved || 40));
   calcQuick();
 });
 
