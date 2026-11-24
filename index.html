@@ -76,15 +76,13 @@ h1 .ln{display:block}
 .btn.light{background:#fff;color:var(--ink);box-shadow:0 10px 24px -14px rgba(217,19,74,.5)}
 
 .art{position:relative;aspect-ratio:1/1;max-width:520px;width:100%;justify-self:center}
-.art .disc-unused{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE3EC,#FFB7CD 55%,#FF8FB4);box-shadow:inset 0 -30px 60px rgba(217,19,74,.18)}
-.art svg{position:absolute}
-.ph{position:absolute;margin:0;overflow:hidden;background:#EDE3D8}
-.ph img{width:100%;height:100%;object-fit:cover}
-.ph.main{left:16%;top:3%;width:66%;height:90%;border-radius:999px 999px 34px 34px;box-shadow:0 40px 70px -34px rgba(90,40,30,.55)}
-.ph.main img{object-position:52% 60%;animation:slowzoom 14s ease-in-out infinite alternate}
-@keyframes slowzoom{to{transform:scale(1.07)}}
-.ph.side{left:-2%;bottom:4%;width:38%;aspect-ratio:474/631;border-radius:22px;border:7px solid #fff;rotate:-7deg;box-shadow:0 26px 40px -22px rgba(42,15,31,.5)}
-.ph.side img{object-position:0 0}
+.art .disc{position:absolute;inset:9%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFF0F4,#FFC6D7 55%,#FF9DBE);box-shadow:inset 0 -30px 60px rgba(217,19,74,.16)}
+.art .ring{position:absolute;inset:3%;border-radius:50%;border:2px dashed rgba(255,61,127,.35);animation:spin 60s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.cut{position:absolute;filter:drop-shadow(0 26px 22px rgba(90,30,40,.28))}
+.cut.cush{width:56%;left:26%;top:10%;animation:bob 6s ease-in-out infinite}
+.cut.lip{width:13%;right:9%;top:3%;rotate:16deg;animation:bob 5s -2s ease-in-out infinite}
+.cut.puff{width:36%;left:-4%;bottom:0;animation:bob 7s -1s ease-in-out infinite}
 
 .cushion{width:66%;left:10%;top:22%;animation:bob 6s ease-in-out infinite}
 .lipstick{width:22%;right:10%;top:6%;rotate:16deg;animation:bob 5s -2s ease-in-out infinite}
@@ -92,10 +90,10 @@ h1 .ln{display:block}
 @keyframes bob{50%{translate:0 -14px}}
 .sticker{position:absolute;background:#fff;border-radius:18px;padding:10px 16px;box-shadow:0 14px 30px -14px rgba(42,15,31,.35);font-weight:600;font-size:15px;line-height:1.3;transition:transform .4s var(--ease)}
 .sticker b{display:block;font:600 26px/1.1 var(--display);color:var(--pink)}
-.sticker.s1{right:-4%;bottom:24%;rotate:5deg;background:var(--butter)}
+.sticker.s1{right:-5%;bottom:30%;rotate:5deg;background:var(--butter)}
 .sticker.s1 b,.sticker.s3 b{color:var(--ink)}
-.sticker.s2{left:0;top:8%;rotate:-7deg}
-.sticker.s3{right:6%;bottom:-1%;rotate:-3deg;background:var(--lilac)}
+.sticker.s2{left:-2%;top:10%;rotate:-7deg}
+.sticker.s3{right:8%;bottom:2%;rotate:-3deg;background:var(--lilac)}
 .sticker:hover{transform:scale(1.08) rotate(-2deg)}
 .note{position:absolute;right:-6%;top:2%;font:700 20px/1.2 var(--hand);color:var(--cherry);rotate:-6deg}
 
@@ -401,8 +399,10 @@ footer p{max-width:92ch}
       </div>
     </div>
     <div class="art" id="art" aria-hidden="true">
-      <figure class="ph main" data-depth="12"><img src="chy-gloss.webp" alt="" width="960" height="1200" fetchpriority="high"></figure>
-      <figure class="ph side" data-depth="28"><img src="chy-cushion.webp" alt="" width="474" height="631"></figure>
+      <div class="disc"></div><div class="ring"></div>
+      <img class="cut cush" src="cut-cush.webp" alt="" width="399" height="502" data-depth="14" fetchpriority="high">
+      <img class="cut lip" src="cut-lip.webp" alt="" width="113" height="356" data-depth="34">
+      <img class="cut puff" src="cut-puff.webp" alt="" width="390" height="371" data-depth="24">
       <div class="sticker s2" data-depth="40"><b class="num">732</b>คลิปที่เก็บสถิติ</div>
       <div class="sticker s1" data-depth="34"><b class="num">12</b>แบรนด์คู่แข่ง</div>
       <div class="sticker s3" data-depth="26"><b class="num">1</b>เครื่องมือใช้ได้จริง</div>
