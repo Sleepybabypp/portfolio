@@ -8,15 +8,15 @@
 <meta name="theme-color" content="#FFF4EF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Chonburi&family=Sriracha&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trirong:wght@500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600;700&family=Charm:wght@700&display=swap">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 :root{
   --paper:#FFF4EF; --ink:#2A0F1F; --ink2:#5F4352; --ink3:#9A8090; --line:#F1DCE3;
   --pink:#FF3D7F; --cherry:#D9134A; --peach:#FFB38A; --butter:#FFE07A; --lilac:#CDB8FF; --mint:#A6E8CC;
   --s1:#F6D9C8; --s2:#E8BC98; --s3:#CF9370; --s4:#94603F; --teal:#18989D;
-  --display:"Chonburi","Trirong",Georgia,serif; --hand:"Sriracha","Itim",cursive;
-  --sans:"Anuphan","IBM Plex Sans Thai","Leelawadee UI",system-ui,sans-serif;
+  --display:"Trirong",Georgia,serif; --hand:"Charm","Sriracha",cursive;
+  --sans:"IBM Plex Sans Thai Looped","IBM Plex Sans Thai","Leelawadee UI",system-ui,sans-serif;
   --ease:cubic-bezier(.2,.75,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -43,7 +43,7 @@ p{max-width:64ch}
 /* nav */
 .nav{position:fixed;top:12px;left:0;right:0;z-index:50;pointer-events:none}
 .nav .bar{pointer-events:auto;max-width:1180px;margin:0 auto;width:calc(100% - 32px);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 20px;border-radius:999px;background:rgba(255,255,255,.75);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 8px 30px -12px rgba(217,19,74,.25),inset 0 0 0 1px rgba(255,255,255,.8)}
-.brand{font:400 17px/1 var(--display);text-decoration:none;white-space:nowrap}
+.brand{font:600 17px/1 var(--display);text-decoration:none;white-space:nowrap}
 .brand b{color:var(--pink);font-weight:400}
 .shades{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .shades::-webkit-scrollbar{display:none}
@@ -57,7 +57,7 @@ p{max-width:64ch}
 .hello{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:600;background:#fff;padding:6px 16px 6px 6px;border-radius:999px;box-shadow:0 6px 20px -10px rgba(217,19,74,.35);margin-bottom:24px}
 .hello img{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:center 20%}
 .hello .dot{width:8px;height:8px;border-radius:50%;background:#2BD67B;box-shadow:0 0 0 4px rgba(43,214,123,.18)}
-h1{font:400 clamp(44px,6.2vw,90px)/1.14 var(--display);letter-spacing:-.01em;margin-bottom:24px}
+h1{font:700 clamp(42px,5.8vw,84px)/1.28 var(--display);letter-spacing:-.015em;margin-bottom:24px}
 h1 .ln{display:block}
 .mark{position:relative;white-space:nowrap;z-index:0}
 .mark::before{content:"";position:absolute;left:-.08em;right:-.08em;bottom:.08em;height:.42em;background:var(--butter);z-index:-1;border-radius:.2em;transform:scaleX(0);transform-origin:left;animation:swipe .9s .9s var(--ease) forwards;rotate:-1.5deg}
@@ -76,31 +76,39 @@ h1 .ln{display:block}
 .btn.light{background:#fff;color:var(--ink);box-shadow:0 10px 24px -14px rgba(217,19,74,.5)}
 
 .art{position:relative;aspect-ratio:1/1;max-width:520px;width:100%;justify-self:center}
-.art .disc{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE3EC,#FFB7CD 55%,#FF8FB4);box-shadow:inset 0 -30px 60px rgba(217,19,74,.18)}
+.art .disc-unused{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE3EC,#FFB7CD 55%,#FF8FB4);box-shadow:inset 0 -30px 60px rgba(217,19,74,.18)}
 .art svg{position:absolute}
+.ph{position:absolute;margin:0;overflow:hidden;background:#EDE3D8}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph.main{left:16%;top:3%;width:66%;height:90%;border-radius:999px 999px 34px 34px;box-shadow:0 40px 70px -34px rgba(90,40,30,.55)}
+.ph.main img{object-position:52% 60%;animation:slowzoom 14s ease-in-out infinite alternate}
+@keyframes slowzoom{to{transform:scale(1.07)}}
+.ph.side{left:-2%;bottom:4%;width:38%;aspect-ratio:474/631;border-radius:22px;border:7px solid #fff;rotate:-7deg;box-shadow:0 26px 40px -22px rgba(42,15,31,.5)}
+.ph.side img{object-position:0 0}
+
 .cushion{width:66%;left:10%;top:22%;animation:bob 6s ease-in-out infinite}
 .lipstick{width:22%;right:10%;top:6%;rotate:16deg;animation:bob 5s -2s ease-in-out infinite}
 .puff{width:30%;left:3%;bottom:8%;animation:bob 7s -1s ease-in-out infinite}
 @keyframes bob{50%{translate:0 -14px}}
 .sticker{position:absolute;background:#fff;border-radius:18px;padding:10px 16px;box-shadow:0 14px 30px -14px rgba(42,15,31,.35);font-weight:600;font-size:15px;line-height:1.3;transition:transform .4s var(--ease)}
-.sticker b{display:block;font:400 26px/1.1 var(--display);color:var(--pink)}
-.sticker.s1{right:-2%;bottom:20%;rotate:5deg;background:var(--butter)}
+.sticker b{display:block;font:600 26px/1.1 var(--display);color:var(--pink)}
+.sticker.s1{right:-4%;bottom:24%;rotate:5deg;background:var(--butter)}
 .sticker.s1 b,.sticker.s3 b{color:var(--ink)}
-.sticker.s2{left:-4%;top:10%;rotate:-7deg}
-.sticker.s3{right:16%;bottom:-2%;rotate:-3deg;background:var(--lilac)}
+.sticker.s2{left:0;top:8%;rotate:-7deg}
+.sticker.s3{right:6%;bottom:-1%;rotate:-3deg;background:var(--lilac)}
 .sticker:hover{transform:scale(1.08) rotate(-2deg)}
-.note{position:absolute;left:44%;top:0;font:400 20px/1.2 var(--hand);color:var(--cherry);rotate:-6deg}
+.note{position:absolute;right:-6%;top:2%;font:700 20px/1.2 var(--hand);color:var(--cherry);rotate:-6deg}
 
 /* marquee */
 .marquee{background:var(--pink);color:#fff;overflow:hidden;white-space:nowrap;padding:18px 0;rotate:-1.5deg;margin:10px -20px 0;box-shadow:0 18px 40px -20px rgba(255,61,127,.8)}
 .marquee .track{display:inline-flex;gap:40px;align-items:center;animation:tick 40s linear infinite;padding-left:40px;font-size:17px;font-weight:600}
-.marquee b{font:400 21px/1 var(--display);margin-right:8px}
+.marquee b{font:600 21px/1 var(--display);margin-right:8px}
 .marquee svg{width:18px;height:18px;flex:none}
 @keyframes tick{to{transform:translateX(-50%)}}
 
 /* statement */
 .statement{padding:140px 0 100px}
-.statement p{font:400 clamp(28px,3.7vw,48px)/1.55 var(--display);max-width:24ch}
+.statement p{font:600 clamp(28px,3.7vw,48px)/1.55 var(--display);max-width:24ch}
 .js .statement .w{opacity:.14;transition:opacity .25s}
 .js .statement .w.lit{opacity:1}
 .statement .hl{color:var(--pink)}
@@ -109,9 +117,9 @@ h1 .ln{display:block}
 .sec{padding:100px 0 40px}
 .kicker{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;background:#fff;padding:7px 15px 7px 9px;border-radius:999px;box-shadow:0 6px 18px -12px rgba(217,19,74,.4);margin-bottom:20px}
 .kicker i{width:16px;height:16px;border-radius:50%}
-h2{font:400 clamp(34px,4.4vw,58px)/1.25 var(--display);max-width:18ch;margin-bottom:16px}
+h2{font:700 clamp(34px,4.4vw,58px)/1.32 var(--display);letter-spacing:-.01em;max-width:18ch;margin-bottom:16px}
 .sub{font-size:18.5px;color:var(--ink2);margin-bottom:48px}
-h3{font:400 clamp(24px,2.6vw,32px)/1.4 var(--display);margin:90px 0 10px}
+h3{font:600 clamp(24px,2.6vw,32px)/1.4 var(--display);margin:90px 0 10px}
 h3+.sub{font-size:17px;margin-bottom:28px}
 .small{font-size:14.5px;color:var(--ink3)}
 .js .rv{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 90ms)}
@@ -121,7 +129,7 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .answers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
 .ans{border-radius:28px;padding:26px;background:#fff;box-shadow:0 20px 40px -30px rgba(217,19,74,.5)}
 .ans .q{font-size:14.5px;font-weight:600;color:var(--ink3);margin-bottom:6px}
-.ans .a{font:400 26px/1.35 var(--display)}
+.ans .a{font:600 26px/1.35 var(--display)}
 .ans:nth-child(1){background:var(--butter)}
 .ans:nth-child(2){background:#FFD6E3}
 .ans:nth-child(3){background:var(--mint)}
@@ -133,7 +141,7 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .step{min-height:72vh;display:flex;flex-direction:column;justify-content:center;opacity:.3;transition:opacity .5s}
 .step.on{opacity:1}
 .step .tag{align-self:flex-start;font-size:14px;font-weight:600;background:var(--ink);color:#fff;padding:4px 12px;border-radius:999px;margin-bottom:14px}
-.step h4{font:400 clamp(25px,2.6vw,33px)/1.45 var(--display);margin-bottom:12px}
+.step h4{font:600 clamp(25px,2.6vw,33px)/1.45 var(--display);margin-bottom:12px}
 .step p{color:var(--ink2)}
 .stickybox{position:sticky;top:14vh;height:72vh;display:flex;align-items:center}
 .chartcard{position:relative;width:100%;background:#fff;border-radius:30px;padding:26px 26px 18px;box-shadow:0 30px 60px -30px rgba(217,19,74,.35)}
@@ -152,9 +160,9 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .tip .d{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
 .bigdrop{position:absolute;inset:0;border-radius:inherit;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;background:rgba(255,255,255,.95);opacity:0;pointer-events:none;transition:opacity .6s;text-align:center;padding:20px}
 .bigdrop.on{opacity:1}
-.bigdrop .a{font:400 clamp(34px,5vw,60px)/1 var(--display);color:var(--ink3);text-decoration:line-through;text-decoration-thickness:4px;text-decoration-color:var(--pink)}
-.bigdrop .b{font:400 clamp(58px,9vw,116px)/1.05 var(--display);color:var(--pink)}
-.bigdrop .c{font:400 20px/1.3 var(--hand);color:var(--cherry);max-width:24ch;rotate:-2deg}
+.bigdrop .a{font:600 clamp(34px,5vw,60px)/1 var(--display);color:var(--ink3);text-decoration:line-through;text-decoration-thickness:4px;text-decoration-color:var(--pink)}
+.bigdrop .b{font:600 clamp(58px,9vw,116px)/1.05 var(--display);color:var(--pink)}
+.bigdrop .c{font:700 20px/1.3 var(--hand);color:var(--cherry);max-width:24ch;rotate:-2deg}
 
 /* compare list */
 .compare{background:#fff;border-radius:30px;padding:28px 30px;box-shadow:0 30px 60px -36px rgba(217,19,74,.4)}
@@ -175,34 +183,34 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .badge.up{--c:#3CC98A;color:#1D8A5A}
 .cnote{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:20px}
 .cnote div{border-radius:24px;padding:22px;background:#fff;box-shadow:0 16px 34px -28px rgba(217,19,74,.5)}
-.cnote b{display:block;font:400 19px/1.4 var(--display);margin-bottom:6px}
+.cnote b{display:block;font:600 19px/1.4 var(--display);margin-bottom:6px}
 .cnote p{font-size:15px;color:var(--ink2)}
 
 /* bento */
 .bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
 .tile{position:relative;border-radius:28px;padding:28px;overflow:hidden;transition:transform .45s var(--ease),box-shadow .45s}
 .tile:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:0 26px 40px -24px rgba(42,15,31,.35)}
-.tile .big{font:400 clamp(40px,4.6vw,62px)/1 var(--display);margin-bottom:12px}
+.tile .big{font:600 clamp(40px,4.6vw,62px)/1 var(--display);margin-bottom:12px}
 .tile h4{font:700 19px/1.45 var(--sans);margin-bottom:6px}
 .tile p{font-size:15.5px;color:rgba(42,15,31,.78)}
 .t1{grid-column:span 3;background:var(--butter)}
 .t2{grid-column:span 3;background:var(--lilac)}
 .t3{grid-column:span 3;background:var(--mint)}
 .t4{grid-column:span 3;background:var(--peach)}
-.tile .doodle{position:absolute;right:22px;top:20px;font:400 18px/1.2 var(--hand);color:var(--cherry);rotate:6deg;text-align:right}
+.tile .doodle{position:absolute;right:22px;top:20px;font:700 18px/1.2 var(--hand);color:var(--cherry);rotate:6deg;text-align:right}
 .urgent{margin-top:50px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;padding:30px 34px;border-radius:30px;background:var(--ink);color:#fff}
-.urgent .ic{width:64px;height:64px;border-radius:20px;background:var(--pink);display:grid;place-items:center;font:400 34px/1 var(--display)}
-.urgent b{display:block;font:400 24px/1.4 var(--display);margin-bottom:6px}
+.urgent .ic{width:64px;height:64px;border-radius:20px;background:var(--pink);display:grid;place-items:center;font:600 34px/1 var(--display)}
+.urgent b{display:block;font:600 24px/1.4 var(--display);margin-bottom:6px}
 .urgent p{color:rgba(255,255,255,.82);font-size:16px}
 
 /* plan */
 .hz{position:relative;overflow:hidden}
 .hz-track{display:flex;gap:26px;padding:10px 28px 34px;width:max-content}
 .panel{width:min(840px,84vw);flex:none;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:36px;align-items:center;border-radius:34px;padding:38px;background:var(--bgc,#fff)}
-.panel .no{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;font:400 24px/1 var(--display);margin-bottom:14px}
-.panel .when{font:400 30px/1.3 var(--display);margin-bottom:10px}
+.panel .no{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;font:600 24px/1 var(--display);margin-bottom:14px}
+.panel .when{font:600 30px/1.3 var(--display);margin-bottom:10px}
 .panel .what{color:var(--ink2);font-size:17px;margin-bottom:16px}
-.why{font:400 18px/1.4 var(--hand);color:var(--cherry)}
+.why{font:700 18px/1.4 var(--hand);color:var(--cherry)}
 .phone{aspect-ratio:9/16;border-radius:32px;padding:10px;background:var(--ink);box-shadow:0 34px 50px -26px rgba(42,15,31,.6);rotate:3deg;transition:rotate .5s var(--ease)}
 .panel:hover .phone{rotate:0deg}
 .clip{position:relative;height:100%;border-radius:23px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px 16px;color:#fff;background:var(--g)}
@@ -212,7 +220,7 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .clip .tg{position:absolute;top:14px;left:14px;font-size:12px;font-weight:700;background:rgba(255,255,255,.28);padding:4px 10px;border-radius:999px}
 .clip .side{position:absolute;right:10px;top:36%;display:grid;gap:13px}
 .clip .side i{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.35)}
-.clip .hook{font:400 18px/1.45 var(--display);text-shadow:0 2px 14px rgba(0,0,0,.25);margin-bottom:12px;padding-right:32px}
+.clip .hook{font:600 18px/1.45 var(--display);text-shadow:0 2px 14px rgba(0,0,0,.25);margin-bottom:12px;padding-right:32px}
 .clip .acct{font-size:13px;font-weight:700}
 .clip .capt{font-size:12.5px;opacity:.92}
 .panel.intro{display:block;width:min(460px,80vw);background:none;padding:38px 8px}
@@ -220,9 +228,58 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .mob{display:none}
 .measure{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .measure li{background:#fff;border-radius:24px;padding:22px;box-shadow:0 18px 36px -28px rgba(217,19,74,.45)}
-.measure li em{display:inline-block;font:400 15px/1 var(--hand);font-style:normal;color:#fff;background:var(--teal);padding:6px 11px;border-radius:999px;margin-bottom:12px}
+.measure li em{display:inline-block;font:700 15px/1 var(--hand);font-style:normal;color:#fff;background:var(--teal);padding:6px 11px;border-radius:999px;margin-bottom:12px}
 .measure b{display:block;font-weight:700;font-size:17px;margin-bottom:4px}
 .measure span{font-size:15px;color:var(--ink2)}
+
+
+/* crm */
+.journey{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;position:relative;margin-bottom:20px}
+.journey::before{content:"";position:absolute;left:4%;right:4%;top:26px;height:3px;background:repeating-linear-gradient(90deg,var(--pink) 0 10px,transparent 10px 18px);opacity:.5}
+.journey li{position:relative;background:#fff;border-radius:26px;padding:70px 20px 22px;box-shadow:0 18px 36px -28px rgba(217,19,74,.45)}
+.journey .dot{position:absolute;top:6px;left:20px;width:42px;height:42px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font:700 19px/1 var(--display);box-shadow:0 0 0 6px var(--paper)}
+.journey h4{font:700 21px/1.35 var(--display);margin-bottom:8px}
+.journey q{display:block;font:700 19px/1.35 var(--hand);color:var(--cherry);margin-bottom:12px;quotes:"“" "”"}
+.journey p{font-size:14.5px;color:var(--ink2);margin-bottom:6px;line-height:1.6}
+.journey p b{display:block;color:var(--ink);font-size:13px}
+.crmgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:56px;align-items:center;margin-top:90px}
+.timeline{list-style:none;display:grid;gap:12px}
+.timeline li{display:grid;grid-template-columns:96px 1fr;gap:2px 16px;background:#fff;border-radius:20px;padding:16px 20px}
+.timeline em{grid-row:span 2;font:700 17px/1.3 var(--hand);font-style:normal;color:var(--cherry);align-self:center}
+.timeline b{font-weight:600}
+.timeline span{font-size:15px;color:var(--ink2)}
+.chatmock{margin:0;border-radius:34px;background:var(--ink);padding:10px;box-shadow:0 40px 60px -30px rgba(42,15,31,.6);rotate:2deg}
+.cm-top{display:flex;align-items:center;gap:10px;padding:12px 14px;color:#fff;font-size:15px}
+.cm-top .av{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font:700 11px/1 var(--sans)}
+.cm-body{background:#C9D6E3;border-radius:24px;padding:16px 12px;display:flex;flex-direction:column;gap:8px;min-height:380px}
+.bub{max-width:82%;background:#fff;border-radius:18px 18px 18px 6px;padding:9px 13px;font-size:14.5px;line-height:1.5}
+.bub.img{padding:4px;overflow:hidden;max-width:60%}
+.bub.img img{border-radius:14px;aspect-ratio:1;object-fit:cover;object-position:0 0}
+.bub.mine{align-self:flex-end;background:#06C755;color:#fff;border-radius:18px 18px 6px 18px}
+.chatmock figcaption{color:rgba(255,255,255,.7);text-align:center;font-size:13px;padding:10px 0 4px}
+.member{margin-top:40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:center;background:var(--ink);color:#fff;border-radius:30px;padding:34px 38px}
+.member b{font:700 23px/1.4 var(--display)}
+.member p{color:rgba(255,255,255,.8);font-size:16px;margin-top:6px}
+.kpis3{display:grid;gap:8px}
+.kpis3 span{display:flex;flex-direction:column;background:rgba(255,255,255,.08);border-radius:16px;padding:10px 16px;font-size:13px;color:rgba(255,255,255,.7)}
+.kpis3 b{font:600 16px/1.4 var(--sans);color:#fff}
+@media (max-width:1100px){
+  .journey{grid-template-columns:1fr;gap:12px}
+  .journey::before{left:41px;right:auto;top:20px;bottom:20px;width:3px;height:auto;background:repeating-linear-gradient(180deg,var(--pink) 0 10px,transparent 10px 18px)}
+  .journey li{padding:20px 20px 18px 84px}
+  .journey .dot{top:20px;left:20px}
+}
+@media (min-width:681px) and (max-width:1100px){
+  .journey li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:4px 20px;align-items:start}
+  .journey h4{grid-area:1/1}.journey q{grid-area:2/1}
+  .journey li p:nth-of-type(1){grid-area:1/2/3/3}.journey li p:nth-of-type(2){grid-area:1/3/3/4}
+}
+@media (max-width:960px){
+  .crmgrid{grid-template-columns:1fr;gap:36px;margin-top:64px}
+  .chatmock{max-width:340px;width:100%;justify-self:center}
+  .member{grid-template-columns:1fr;padding:28px 24px}
+}
+@media (max-width:680px){.timeline li{grid-template-columns:1fr}.timeline em{grid-row:auto}}
 
 /* tool */
 .toolwrap{border-radius:44px;background:linear-gradient(135deg,var(--pink),#FF7AA8 55%,var(--peach));padding:64px;color:#fff;position:relative;overflow:hidden}
@@ -235,20 +292,20 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .checks li::before{content:"";position:absolute;left:0;top:5px;width:20px;height:20px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%23FF3D7F' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
 .device{background:var(--ink);border-radius:36px;padding:10px;box-shadow:0 40px 70px -30px rgba(42,15,31,.65);will-change:transform}
 .device iframe{width:100%;height:740px;border:0;border-radius:27px;background:#fff}
-.devcap{margin-top:14px;font:400 18px/1.3 var(--hand);text-align:center}
+.devcap{margin-top:14px;font:700 18px/1.3 var(--hand);text-align:center}
 
 /* about */
 .about{display:grid;grid-template-columns:220px repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
 .me{border-radius:30px;overflow:hidden;background:var(--s1);rotate:-3deg;box-shadow:0 24px 44px -24px rgba(42,15,31,.5);border:8px solid #fff;min-height:260px}
 .me img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
 .about .card{padding:26px;border-radius:28px;background:#fff;box-shadow:0 18px 36px -28px rgba(217,19,74,.45)}
-.about h4{font:400 20px/1.4 var(--display);margin-bottom:8px}
+.about h4{font:600 20px/1.4 var(--display);margin-bottom:8px}
 .about p{font-size:15.5px;color:var(--ink2)}
 .learn{margin-top:34px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .learn b{font-weight:700;margin-right:8px}
 .learn span{font-size:14.5px;font-weight:500;padding:8px 14px;border-radius:999px;background:#fff}
 .end{padding:120px 0 70px;text-align:center}
-.end p{margin:0 auto;font:400 clamp(30px,4.2vw,52px)/1.45 var(--display);max-width:20ch}
+.end p{margin:0 auto;font:600 clamp(30px,4.2vw,52px)/1.45 var(--display);max-width:20ch}
 .end .actions{justify-content:center;margin-top:34px}
 footer{padding:30px 0 50px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink3)}
 footer p{max-width:92ch}
@@ -325,6 +382,7 @@ footer p{max-width:92ch}
     <div class="shades">
       <a href="#analysis"><i style="background:var(--s1)"></i>ผลการวิเคราะห์</a>
       <a href="#plan"><i style="background:var(--s2)"></i>แผนตอนสินค้าเข้า</a>
+      <a href="#crm"><i style="background:var(--pink)"></i>ซื้อซ้ำ</a>
       <a href="#tool"><i style="background:var(--s3)"></i>เครื่องมือ</a>
       <a href="#about"><i style="background:var(--s4)"></i>เกี่ยวกับ</a>
     </div>
@@ -343,41 +401,8 @@ footer p{max-width:92ch}
       </div>
     </div>
     <div class="art" id="art" aria-hidden="true">
-      <div class="disc"></div>
-      <svg class="cushion" viewBox="0 0 300 300" data-depth="18">
-        <defs>
-          <linearGradient id="case" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF7FA"/><stop offset="1" stop-color="#F3C9D6"/></linearGradient>
-          <linearGradient id="lid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE6EE"/><stop offset="1" stop-color="#F7B9CB"/></linearGradient>
-          <radialGradient id="foundation" cx=".4" cy=".35"><stop offset="0" stop-color="#F6D9C8"/><stop offset=".7" stop-color="#E8BC98"/><stop offset="1" stop-color="#D9A27E"/></radialGradient>
-          <linearGradient id="mirror" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F4E8F7"/><stop offset="1" stop-color="#DCCBEA"/></linearGradient>
-        </defs>
-        <ellipse cx="150" cy="80" rx="118" ry="62" fill="url(#lid)"/>
-        <ellipse cx="150" cy="80" rx="96" ry="48" fill="url(#mirror)"/>
-        <path d="M72 64 Q 110 44 150 46" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".9"/>
-        <rect x="140" y="128" width="20" height="18" rx="5" fill="#F0B4C6"/>
-        <ellipse cx="150" cy="212" rx="128" ry="66" fill="#E8A8BC"/>
-        <ellipse cx="150" cy="196" rx="128" ry="66" fill="url(#case)"/>
-        <ellipse cx="150" cy="194" rx="102" ry="50" fill="url(#foundation)"/>
-        <ellipse cx="120" cy="180" rx="40" ry="14" fill="#fff" opacity=".35"/>
-      </svg>
-      <svg class="lipstick" viewBox="0 0 100 260" data-depth="30">
-        <defs>
-          <linearGradient id="gold" x1="0" x2="1"><stop offset="0" stop-color="#C99A5B"/><stop offset=".45" stop-color="#FFE3A6"/><stop offset="1" stop-color="#B9844A"/></linearGradient>
-          <linearGradient id="bullet" x1="0" x2="1"><stop offset="0" stop-color="#C20F45"/><stop offset=".5" stop-color="#FF4F8A"/><stop offset="1" stop-color="#B00D3E"/></linearGradient>
-          <linearGradient id="body" x1="0" x2="1"><stop offset="0" stop-color="#2A0F1F"/><stop offset=".5" stop-color="#5A2A43"/><stop offset="1" stop-color="#2A0F1F"/></linearGradient>
-        </defs>
-        <path d="M30 70 L30 18 Q 30 6 50 2 L70 30 L70 70 Z" fill="url(#bullet)"/>
-        <path d="M36 66 L36 22" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".5"/>
-        <rect x="24" y="68" width="52" height="40" rx="4" fill="url(#gold)"/>
-        <rect x="18" y="106" width="64" height="150" rx="10" fill="url(#body)"/>
-        <rect x="18" y="122" width="64" height="6" fill="url(#gold)"/>
-      </svg>
-      <svg class="puff" viewBox="0 0 200 140" data-depth="10">
-        <defs><radialGradient id="pf" cx=".4" cy=".35"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F2D4DD"/></radialGradient></defs>
-        <ellipse cx="100" cy="86" rx="92" ry="44" fill="#E7B6C5"/>
-        <ellipse cx="100" cy="74" rx="92" ry="44" fill="url(#pf)"/>
-        <path d="M60 46 Q 100 20 140 46" stroke="#FF3D7F" stroke-width="10" fill="none" stroke-linecap="round"/>
-      </svg>
+      <figure class="ph main" data-depth="12"><img src="chy-gloss.webp" alt="" width="960" height="1200" fetchpriority="high"></figure>
+      <figure class="ph side" data-depth="28"><img src="chy-cushion.webp" alt="" width="474" height="631"></figure>
       <div class="sticker s2" data-depth="40"><b class="num">732</b>คลิปที่เก็บสถิติ</div>
       <div class="sticker s1" data-depth="34"><b class="num">12</b>แบรนด์คู่แข่ง</div>
       <div class="sticker s3" data-depth="26"><b class="num">1</b>เครื่องมือใช้ได้จริง</div>
@@ -476,15 +501,15 @@ footer p{max-width:92ch}
       </div>
       <article class="panel" style="--bgc:#FFF0C2">
         <div><span class="no">1</span><div class="when">ก่อนของเข้า 7 วัน</div><p class="what">บอกใบ้ว่าของกำลังกลับมา ตอบคนที่เคยถามหาในคอมเมนต์ ชวนกดติดตาม ยังไม่ต้องใช้เงินโฆษณา</p><p class="why">ต่อยอดจากคลิป "คุชชั่นหายไปไหนกัน" ที่ทีมลงไว้</p></div>
-        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#E8BC98,#CF9370 55%,#94603F)"><span class="tg">ตอบคนที่รอ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ใครถามว่าคุชชั่นหายไปไหน อีก 7 วันเจอกันค่ะ เม้นเบอร์ที่รอไว้เลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">กดติดตามไว้ วันของเข้ามีไลฟ์ใหญ่</span></div></div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(180deg,rgba(30,15,10,.15),rgba(30,15,10,.15) 40%,rgba(30,15,10,.78)),url(chy-cushion.webp) 0 0/cover"><span class="tg">ตอบคนที่รอ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ใครถามว่าคุชชั่นหายไปไหน อีก 7 วันเจอกันค่ะ เม้นเบอร์ที่รอไว้เลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">กดติดตามไว้ วันของเข้ามีไลฟ์ใหญ่</span></div></div>
       </article>
       <article class="panel" style="--bgc:#FFD6E3">
-        <div><span class="no">2</span><div class="when">วันของเข้า</div><p class="what">ประกาศว่ากลับมาแล้ว พร้อมโปรต้อนรับ เปิดขายในไลฟ์ช่วงที่คนดูเยอะ เริ่มใช้เงินโฆษณาเมื่อเช็กแล้วว่าสต็อกพอ</p><p class="why">อิงคลิปโปร 99 บาทที่ได้ 2.1 ล้านวิว</p></div>
-        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#FF7AA8,#FF3D7F 50%,#C20F45)"><span class="tg">ราคาชัด</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"กลับมาแล้ว! คุชชั่นราคาพิเศษ เฉพาะในไลฟ์คืนนี้"</p><span class="acct">@chy.cosmetic</span><span class="capt">สินค้า ราคา เวลาไลฟ์ ตัวใหญ่ ๆ</span></div></div>
+        <div><span class="no">2</span><div class="when">วันของเข้า</div><p class="what">ประกาศว่ากลับมาแล้ว พร้อมโปรต้อนรับ เปิดขายในไลฟ์ช่วงที่คนดูเยอะ เริ่มใช้เงินโฆษณาเมื่อเช็กแล้วว่าสต็อกพอ</p><p class="why">อิงคลิปโปร 99 บาทที่ได้ 2.1 ล้านวิว และโปรซื้อ 1 แถม 2 ที่ร้านเคยใช้</p></div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(180deg,rgba(30,15,10,0) 30%,rgba(30,15,10,.82)),url(chy-promo.webp) center 35%/cover"><span class="tg">ราคาชัด</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"กลับมาแล้ว! คุชชั่นราคาพิเศษ เฉพาะในไลฟ์คืนนี้"</p><span class="acct">@chy.cosmetic</span><span class="capt">สินค้า ราคา เวลาไลฟ์ ตัวใหญ่ ๆ</span></div></div>
       </article>
       <article class="panel" style="--bgc:#E6DCFF">
         <div><span class="no">3</span><div class="when">2 สัปดาห์หลังจากนั้น</div><p class="what">รวมรีวิวจากลูกค้าที่ได้ของ เปิดให้นายหน้าช่วยทำคลิป แล้วเลือกคลิปที่คนชอบที่สุดไปลงโฆษณาต่อ</p><p class="why">อิงคลิป "ชอบสีอะไร" และสโลแกน "ผิวไหนก็เนียน"</p></div>
-        <div class="phone"><div class="clip" style="--g:linear-gradient(160deg,#F6D9C8,#E8BC98 40%,#CF9370 75%,#94603F)"><span class="tg">ชวนตอบ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ผิวสองสี ผิวคล้ำ ผิวขาวเหลือง ใช้เบอร์ไหนดี เม้นมาเลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">ตอบทุกเม้นในไลฟ์คืนนี้</span></div></div>
+        <div class="phone"><div class="clip" style="--g:linear-gradient(180deg,rgba(30,15,10,0) 35%,rgba(30,15,10,.8)),url(chy-gloss.webp) center/cover"><span class="tg">ชวนตอบ</span><div class="side" aria-hidden="true"><i></i><i></i><i></i></div><p class="hook">"ผิวสองสี ผิวคล้ำ ผิวขาวเหลือง ใช้เบอร์ไหนดี เม้นมาเลย"</p><span class="acct">@chy.cosmetic</span><span class="capt">ตอบทุกเม้นในไลฟ์คืนนี้</span></div></div>
       </article>
     </div>
   </div>
@@ -499,12 +524,55 @@ footer p{max-width:92ch}
   </div>
 </section>
 
+<section class="sec" id="crm">
+  <div class="wrap">
+    <span class="kicker rv"><i style="background:var(--pink)"></i>ผลงาน 3 · CRM และ Customer Journey</span>
+    <h2 class="rv">ซื้อครั้งแรกแล้ว ทำยังไงให้กลับมาซื้อซ้ำ</h2>
+    <p class="sub rv">คุชชั่นใช้หมดในราว 1–2 เดือน ถ้าแบรนด์ทักไปถูกจังหวะ ลูกค้าไม่ต้องไปหาแบรนด์ใหม่ ด้านล่างคือเส้นทางของลูกค้า 5 ช่วง และสิ่งที่ CHY ทำได้ในแต่ละช่วง</p>
+    <ol class="journey">
+      <li class="rv" style="--i:0"><span class="dot">1</span><h4>เห็นคลิป</h4><q>ผิวเนียนจริงไหมเนี่ย</q><p><b>CHY ทำ</b> คลิปเห็นผลบนหน้าชัด ๆ บอกราคาในวินาทีแรก</p><p><b>วัดด้วย</b> คนดูจนจบ และคนกดเข้าโปรไฟล์</p></li>
+      <li class="rv" style="--i:1"><span class="dot">2</span><h4>เข้าไลฟ์</h4><q>ผิวเราใช้เบอร์ไหนดี</q><p><b>CHY ทำ</b> ไลฟ์ตอบเรื่องเบอร์สีทันที ทดสอบบนผิวหลายโทน</p><p><b>วัดด้วย</b> เวลาที่อยู่ในไลฟ์ และคำถามในแชต</p></li>
+      <li class="rv" style="--i:2"><span class="dot">3</span><h4>ซื้อครั้งแรก</h4><q>โปรนี้คุ้มกว่าที่อื่นไหม</q><p><b>CHY ทำ</b> โปรชุดเริ่มต้น และชวนเพิ่มเพื่อนใน LINE ตอนซื้อ</p><p><b>วัดด้วย</b> ยอดสั่งซื้อ และจำนวนคนที่เพิ่มเพื่อน</p></li>
+      <li class="rv" style="--i:3"><span class="dot">4</span><h4>ได้ของ ใช้จริง</h4><q>ทาแล้วไม่เหมือนในไลฟ์</q><p><b>CHY ทำ</b> ส่งวิธีลงคุชชั่นให้ติดทน และวิธีเปลี่ยนเบอร์ถ้าสีไม่ตรง</p><p><b>วัดด้วย</b> รีวิว และคำขอคืนหรือเปลี่ยนสินค้า</p></li>
+      <li class="rv" style="--i:4"><span class="dot">5</span><h4>ซื้อซ้ำ บอกต่อ</h4><q>ใกล้หมดแล้ว ซื้อที่ไหนดี</q><p><b>CHY ทำ</b> เตือนก่อนของหมด พร้อมโค้ดสมาชิก และชวนรีวิวแลกแต้ม</p><p><b>วัดด้วย</b> อัตราซื้อซ้ำใน 60 วัน</p></li>
+    </ol>
+
+    <div class="crmgrid">
+      <div class="rv">
+        <h3 style="margin-top:0">ข้อความหลังซื้อ ส่งตามวัน</h3>
+        <p class="sub" style="margin-bottom:22px">ส่งผ่าน LINE ทางการของร้าน ไม่ส่งถี่เกิน แต่ละข้อความมีเหตุผลให้เปิดอ่าน</p>
+        <ul class="timeline">
+          <li><em>วันที่ 3</em><b>ได้ของแล้วใช่ไหมคะ</b><span>คลิปสั้นวิธีลงคุชชั่นให้ติดทนทั้งวัน</span></li>
+          <li><em>วันที่ 14</em><b>สีตรงกับผิวไหม</b><span>ถามความเห็น ชวนรีวิวพร้อมรูปเพื่อรับแต้ม</span></li>
+          <li><em>วันที่ 40</em><b>ใกล้หมดหรือยัง</b><span>เตือนก่อนหมด พร้อมโค้ดสมาชิกใช้ในไลฟ์</span></li>
+          <li><em>วันที่ 60</em><b>ยังไม่กลับมา</b><span>ชวนลองสินค้าคู่กัน เช่น ลิปหรือสเปรย์ล็อกเมคอัพ</span></li>
+        </ul>
+      </div>
+      <figure class="chatmock rv" style="--i:1" aria-label="ตัวอย่างข้อความเตือนก่อนของหมดใน LINE">
+        <div class="cm-top"><span class="av">CHY</span><b>CHY Cosmetic</b></div>
+        <div class="cm-body">
+          <div class="bub">สวัสดีค่ะ คุชชั่นที่สั่งไปเมื่อเดือนก่อน น่าจะใกล้หมดแล้ว</div>
+          <div class="bub img"><img src="chy-cushion.webp" alt="" loading="lazy"></div>
+          <div class="bub">ลูกค้าเก่าใช้โค้ด <b>CHYBACK</b> ลดเพิ่ม 50 บาท ในไลฟ์คืนนี้ 2 ทุ่มค่ะ</div>
+          <div class="bub mine">เบอร์เดิมเลยค่ะ</div>
+        </div>
+        <figcaption>ตัวอย่างข้อความ วันที่ 40</figcaption>
+      </figure>
+    </div>
+
+    <div class="member rv">
+      <div><b>ต่อยอดเป็นระบบสมาชิก</b><p>เก็บแต้มจากการซื้อและการรีวิว ใช้แลกของแถมในไลฟ์ แบรนด์จะรู้ว่าใครซื้ออะไร ซื้อห่างกันกี่วัน และควรทักเมื่อไร ทำได้ทั้งบน LINE หรือแอปของแบรนด์ในอนาคต</p></div>
+      <div class="kpis3"><span><b>ซื้อซ้ำใน 60 วัน</b>ตัววัดหลัก</span><span><b>เปิดอ่านข้อความ</b>ทักถูกจังหวะไหม</span><span><b>ยอดจากโค้ดสมาชิก</b>ข้อความทำให้ซื้อจริงไหม</span></div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="tool">
   <div class="wrap">
     <div class="toolwrap">
       <div class="toolbox">
         <div>
-          <span class="kicker rv"><i style="background:var(--s3)"></i>ผลงาน 3 · เครื่องมือที่ใช้ได้จริง</span>
+          <span class="kicker rv"><i style="background:var(--s3)"></i>ผลงาน 4 · เครื่องมือที่ใช้ได้จริง</span>
           <h2 class="rv">สรุปผลโฆษณารายวัน ในสองนาที</h2>
           <p class="rv">CHY ไลฟ์ต่อเนื่อง 18 ชั่วโมงพร้อมกันสองช่อง เครื่องมือนี้บอกได้ว่าโฆษณาช่วงไหนคุ้ม ช่วงไหนเปลือง แล้วสร้างข้อความสรุปพร้อมส่ง LINE ลองกดเล่นได้เลยในจอข้าง ๆ</p>
           <ul class="checks">
@@ -548,7 +616,7 @@ footer p{max-width:92ch}
 
 <footer>
   <div class="wrap">
-    <p>วิธีเก็บข้อมูล: สถิติจากหน้าช่อง TikTok สาธารณะของ chy.cosmetic และ story.chy และของคู่แข่ง 12 แบรนด์ (4U2, Srichand, Cathy Doll, Chat Cosmetics, LA GLACE, KAGE, Meilinda, เจ้านาง, Dr.PONG, MizuMi, Merrezca และ Love Potion) ถึง 24 พ.ย. 2569 ไม่มีข้อมูลหลังบ้าน เช่น งบโฆษณาจริงหรือยอดขาย ตัวเลขในเครื่องมือเป็นข้อมูลตัวอย่าง ภาพสินค้าเป็นภาพวาดประกอบ</p>
+    <p>วิธีเก็บข้อมูล: สถิติจากหน้าช่อง TikTok สาธารณะของ chy.cosmetic และ story.chy และของคู่แข่ง 12 แบรนด์ (4U2, Srichand, Cathy Doll, Chat Cosmetics, LA GLACE, KAGE, Meilinda, เจ้านาง, Dr.PONG, MizuMi, Merrezca และ Love Potion) ถึง 24 พ.ย. 2569 ไม่มีข้อมูลหลังบ้าน เช่น งบโฆษณาจริงหรือยอดขาย ตัวเลขในเครื่องมือและโค้ดในข้อความ LINE เป็นตัวอย่าง ภาพสินค้าเป็นภาพของ CHY ใช้ประกอบการสมัครงานเท่านั้น</p>
   </div>
 </footer>
 
