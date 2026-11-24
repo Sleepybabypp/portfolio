@@ -164,6 +164,45 @@ th:first-child,td:first-child{text-align:left}
 th{color:var(--ink-3);font-weight:600;font-size:12px}
 .tw{overflow-x:auto}
 
+
+/* quick calc */
+.qc-t{font-family:var(--display);font-size:21px;font-weight:700;margin:6px 0 0}
+.qc-s{font-size:13.5px;color:var(--hero-mute);margin:-8px 0 0}
+.qin{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qin label{margin:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 12px;color:var(--hero-mute);font-size:13px;cursor:text;transition:border-color .2s,background .2s}
+.qin label:focus-within{border-color:var(--hero-accent);background:rgba(255,255,255,.11)}
+.qin input{display:block;width:100%;background:none;border:0;outline:0;color:var(--hero-ink);font-family:var(--mono);font-size:clamp(24px,7vw,32px);font-weight:600;padding:2px 0 0}
+.qin em{font-style:normal;font-size:12px}
+.qv{border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.06)}
+.qv .face{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:700;flex:none;background:rgba(255,255,255,.12);color:var(--hero)}
+.qv b{display:block;font-family:var(--display);font-size:22px;line-height:1.25}
+.qv p{margin:2px 0 0;font-size:14px;color:var(--hero-mute)}
+.qv.good .face{background:#7ee2ad} .qv.good b{color:#7ee2ad}
+.qv.thin .face{background:#f5c96b} .qv.thin b{color:#f5c96b}
+.qv.loss .face{background:#ff9b90} .qv.loss b{color:#ff9b90}
+.gauge{position:relative;height:12px;border-radius:99px;background:linear-gradient(90deg,var(--loss) 0 var(--be),var(--thin) var(--be) var(--tg),var(--good) var(--tg));margin:34px 6px 30px}
+.gauge .mk{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.gauge .mk span{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.gauge .you{position:absolute;top:50%;width:22px;height:22px;border-radius:50%;background:var(--surface);border:4px solid var(--ink);transform:translate(-50%,-50%);transition:left .45s cubic-bezier(.2,.8,.2,1)}
+.gauge .you span{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font:600 12px var(--body);background:var(--ink);color:var(--bg);padding:2px 8px;border-radius:99px;white-space:nowrap}
+.qleg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink-2);margin-top:-6px}
+.qleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.qrows{display:flex;flex-direction:column}
+.qrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.qrow:last-child{border-bottom:0} .qrow[hidden]{display:none}
+.qrow span{color:var(--ink-2);font-size:14.5px}
+.qrow b{font-family:var(--mono);font-size:17px;font-weight:600;white-space:nowrap}
+.qrow b.pos{color:var(--good)} .qrow b.neg{color:var(--loss)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;cursor:pointer;font-weight:500}
+.chips button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.mrow{display:flex;align-items:center;gap:12px}
+.mrow input[type=range]{flex:1;accent-color:var(--accent)}
+.mrow b{font-family:var(--mono);font-size:20px;min-width:56px;text-align:right}
+details.card summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:16px;list-style:none}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:" +";color:var(--accent)} details.card[open] summary::after{content:" −"}
+
 /* nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
   padding:4px max(8px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
@@ -207,8 +246,48 @@ nav.tabs button.on{color:var(--accent);font-weight:600}
 </div></header>
 
 <main>
+  <!-- ================= คิดเลขแอด ================= -->
+  <section class="tab on" id="tab-calc">
+    <div class="hero"><div class="in">
+      <p class="qc-t">แอดคุ้มไหม? กรอกแค่ 2 ช่อง</p>
+      <p class="qc-s">ใส่ตัวเลขของทั้งวัน ช่วงไลฟ์ หรือแคมเปญก็ได้</p>
+      <div class="qin">
+        <label>ค่าแอดที่จ่ายไป<input id="qSpend" inputmode="decimal" value="1000" aria-label="ค่าแอดที่จ่ายไป (บาท)"><em>บาท</em></label>
+        <label>ยอดขายที่ได้<input id="qGmv" inputmode="decimal" value="3000" aria-label="ยอดขายที่ได้ (บาท)"><em>บาท</em></label>
+      </div>
+      <div class="qv" id="qVerdict" aria-live="polite"><div class="face" id="qFace">·</div><div><b id="qWord">–</b><p id="qLine"></p></div></div>
+    </div></div>
+
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-chart"/></svg>ผลลัพธ์</h2>
+      <div class="gauge" id="qGauge"><div class="mk" id="qMkBe"><span>ไม่ขาดทุน</span></div><div class="mk" id="qMkTg"><span>กำไรดี</span></div><div class="you" id="qYou"><span id="qYouT">–</span></div></div>
+      <div class="qleg" id="qLeg"></div>
+      <div class="qrows">
+        <div class="qrow"><span>จ่ายแอด 1 บาท ได้ยอดขายกลับมา (ROI)</span><b id="qRoi">–</b></div>
+        <div class="qrow"><span>กำไรหลังหักค่าแอด</span><b id="qProfit">–</b></div>
+        <div class="qrow"><span>ยอดขายขั้นต่ำที่ไม่ขาดทุน</span><b id="qMin">–</b></div>
+        <div class="qrow"><span>ยอดขายที่ถือว่ากำไรดี</span><b id="qGood">–</b></div>
+        <div class="qrow" id="qCpoRow" hidden><span>ค่าแอดต่อ 1 ออเดอร์</span><b id="qCpo">–</b></div>
+      </div>
+      <div><label for="qOrders">จำนวนออเดอร์ (ไม่ใส่ก็ได้)</label><input class="f" id="qOrders" inputmode="numeric" placeholder="เช่น 12"></div>
+    </div>
+
+    <div class="card">
+      <h2><svg class="ico"><use href="#i-bag"/></svg>ขาย 100 บาท เหลือกำไรกี่บาท</h2>
+      <p class="muted" style="margin:0">หักต้นทุนสินค้า ค่าส่ง และค่าธรรมเนียมแล้ว แต่ยังไม่หักค่าแอด ถ้ายังไม่รู้ตัวเลขจริง ใช้ 40 บาทไปก่อน</p>
+      <div class="chips" id="qChips"><button data-m="30">30 บาท</button><button data-m="40" class="on">40 บาท</button><button data-m="50">50 บาท</button></div>
+      <div class="mrow"><input type="range" id="qMargin" min="10" max="80" step="1" value="40" aria-label="กำไรต่อยอดขาย 100 บาท"><b id="qMarginT">40</b></div>
+    </div>
+
+    <details class="card">
+      <summary>ROI คืออะไร</summary>
+      <p class="muted" style="margin:0">ROI = ยอดขาย ÷ ค่าแอด เช่น จ่ายแอด 1,000 ได้ยอดขาย 3,000 ROI คือ 3 ถ้าขาย 100 บาทเหลือกำไร 40 บาท ROI ต้องได้อย่างน้อย 2.5 (100 ÷ 40) ถึงจะไม่ขาดทุน ส่วน "กำไรดี" ตั้งไว้ที่ 1.2 เท่าของจุดนั้น</p>
+      <p class="muted" style="margin:0">อยากสรุปผลทั้งวัน แยกตามช่วงไลฟ์และช่อง ไปที่แท็บ "สรุปวันนี้"</p>
+    </details>
+  </section>
+
   <!-- ================= วันนี้ ================= -->
-  <section class="tab on" id="tab-today">
+  <section class="tab" id="tab-today">
     <div class="hero"><div class="in">
       <div class="seg" id="modeSeg" role="tablist">
         <button data-v="live" class="on"><svg class="ico"><use href="#i-live"/></svg>ไลฟ์</button>
@@ -303,7 +382,8 @@ nav.tabs button.on{color:var(--accent);font-weight:600}
 </main>
 
 <nav class="tabs"><div class="in">
-  <button data-t="today" class="on"><svg class="ico"><use href="#i-home"/></svg>วันนี้</button>
+  <button data-t="calc" class="on"><svg class="ico"><use href="#i-bolt"/></svg>คิดเลขแอด</button>
+  <button data-t="today"><svg class="ico"><use href="#i-home"/></svg>สรุปวันนี้</button>
   <button data-t="msg"><svg class="ico"><use href="#i-chat"/></svg>ข้อความ</button>
   <button data-t="hist"><svg class="ico"><use href="#i-cal"/></svg>ประวัติ</button>
   <button data-t="set"><svg class="ico"><use href="#i-gear"/></svg>ตั้งค่า</button>
@@ -846,6 +926,44 @@ function restoreBackup() {
   catch (e) { toast('ข้อความไม่ใช่ข้อมูลสำรองที่ถูกต้อง'); }
 }
 function clearSample() { if (!ask('ลบสินค้าและประวัติทั้งหมด (การตั้งค่ายังอยู่)?')) return; state.days = {}; state.products = []; state.sample = false; save(); renderSettings(); renderToday(); toast('ลบแล้ว เริ่มใช้จริงได้เลย'); }
+
+
+/* ---------- quick calc ---------- */
+function calcQuick() {
+  const rd = id => num($(id).value.replace(/[,\s]/g, ''));
+  const sp = rd('qSpend'), g = rd('qGmv'), o = rd('qOrders');
+  const mv = +$('qMargin').value, m = mv / 100, be = 1 / m, tg = be * 1.2;
+  $('qMarginT').textContent = mv;
+  document.querySelectorAll('#qChips button').forEach(b => b.classList.toggle('on', +b.dataset.m === mv));
+  const V = $('qVerdict'), max = tg * 1.6, pos = v => Math.max(3, Math.min(97, v / max * 100)) + '%';
+  $('qGauge').style.setProperty('--be', pos(be)); $('qGauge').style.setProperty('--tg', pos(tg));
+  $('qMkBe').style.left = pos(be); $('qMkTg').style.left = pos(tg);
+  $('qMkBe').querySelector('span').textContent = be.toFixed(2);
+  $('qMkTg').querySelector('span').textContent = tg.toFixed(2);
+  $('qLeg').innerHTML = '<span><i style="background:var(--loss)"></i>ขาดทุน ต่ำกว่า ' + be.toFixed(2) + '</span><span><i style="background:var(--thin)"></i>พอคุ้ม</span><span><i style="background:var(--good)"></i>กำไรดี ' + tg.toFixed(2) + ' ขึ้นไป</span>';
+  if (!(sp > 0) || g == null || g < 0) {
+    V.className = 'qv'; $('qFace').textContent = '·'; $('qWord').textContent = 'ใส่ค่าแอดและยอดขาย'; $('qLine').textContent = 'ใส่เป็นตัวเลข เช่น 1000';
+    ['qRoi', 'qProfit', 'qMin', 'qGood', 'qCpo'].forEach(id => $(id).textContent = '–'); $('qProfit').className = '';
+    $('qYou').style.left = '3%'; $('qYouT').textContent = '–'; return;
+  }
+  const roi = g / sp, profit = g * m - sp, st = roi < be ? 'loss' : roi < tg ? 'thin' : 'good';
+  V.className = 'qv ' + st;
+  $('qFace').textContent = st === 'loss' ? '✕' : st === 'thin' ? '~' : '✓';
+  $('qWord').textContent = st === 'loss' ? 'ขาดทุน ' + fmt(-profit) + ' บาท' : st === 'thin' ? 'พอคุ้ม กำไร ' + fmt(profit) + ' บาท' : 'คุ้ม กำไร ' + fmt(profit) + ' บาท';
+  $('qLine').textContent = st === 'loss' ? 'ต้องขายเพิ่มอีก ' + fmt(sp * be - g) + ' บาทถึงจะไม่ขาดทุน หรือลดงบแอดลง'
+    : st === 'thin' ? 'ไม่ขาดทุน แต่ยังไม่ควรเพิ่มงบ ขายเพิ่มอีก ' + fmt(sp * tg - g) + ' บาทจะถือว่ากำไรดี'
+    : 'ยิงแอดต่อได้ ถ้าดีแบบนี้ 2–3 วันติดกัน ลองเพิ่มงบราว 20%';
+  $('qRoi').textContent = roi.toFixed(2);
+  $('qProfit').textContent = signed(profit); $('qProfit').className = profit >= 0 ? 'pos' : 'neg';
+  $('qMin').textContent = fmt(sp * be); $('qGood').textContent = fmt(sp * tg);
+  $('qCpoRow').hidden = !(o > 0); if (o > 0) $('qCpo').textContent = fmt(sp / o);
+  $('qYou').style.left = pos(roi); $('qYouT').textContent = 'ของคุณ ' + roi.toFixed(2);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  ['qSpend', 'qGmv', 'qOrders', 'qMargin'].forEach(id => $(id).addEventListener('input', calcQuick));
+  document.querySelectorAll('#qChips button').forEach(b => b.onclick = () => { $('qMargin').value = b.dataset.m; calcQuick(); });
+  calcQuick();
+});
 
 /* ---------- nav & events ---------- */
 function showTab(t) {
