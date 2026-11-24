@@ -854,6 +854,20 @@ h2{font-size:clamp(38px,4.8vw,66px)}
 .clipc:hover .open{background:#fff;color:#2B1420}
 .clipc:hover .pl{background:#FE2C55}
 .clipc:focus-visible{outline:3px solid var(--pink);outline-offset:4px}
+
+/* mobile fixes v9 */
+:root{color-scheme:light}
+@media(max-width:900px){
+  .st-prod{min-height:340px;margin-top:22px}
+  .st-prod .p-cush{top:2%;width:50%}
+  .st-prod .p-puff{width:32%;left:4%;bottom:2%}
+  .st-prod .p-lip{width:10%;left:80%;top:10%}
+  .prods{grid-template-rows:none!important;grid-auto-columns:80%!important;align-items:stretch}
+  .prod:first-child{grid-row:auto!important}
+  .prod:first-child .pic,.prod:not(:first-child) .pic{height:190px!important;min-height:0}
+  .prod:not(:first-child){display:flex!important;flex-direction:column}
+  .prod .pic img{max-height:100%!important;max-width:70%!important}
+}
 </style>
 </head>
 <body>
@@ -881,7 +895,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
     <div class="st-top">
       <div>
         <span class="chip"><img src="me.webp" alt="">แพรพลอย · Content &amp; Ads Analyst</span>
-        <h1><span class="ln">วิวหาย 15 เท่า</span><span class="ln">ลูกค้ายังรอ</span></h1>
+        <h1><span class="ln">วิวหาย 14 เท่า</span><span class="ln">ลูกค้ายังรอ</span></h1>
       </div>
       <div class="st-side">
         <p class="lead">ช่วงที่สินค้าหลักขาด วิวคลิป CHY ลดลงมาก แต่คอมเมนต์ยังถามหาทุกวัน พอร์ตนี้เล่า 3 เรื่อง: วิวหายเพราะอะไร จะพาลูกค้ากลับมายังไง และเครื่องมือที่ใช้ได้จริง</p>
@@ -918,7 +932,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
 
 <section class="statement">
   <div class="wrap">
-    <p id="statement">ช่วงที่สินค้าหลักขาด วิวคลิปของ CHY ลดลงกว่า 15 เท่าในเดือนเดียว แต่ในคอมเมนต์ยังมีคน<span class="hl">ถามหาคุชชั่นทุกวัน</span> คนกลุ่มนี้คือลูกค้าที่พร้อมซื้อที่สุด</p>
+    <p id="statement">ช่วงที่สินค้าหลักขาด วิวคลิปของ CHY ลดลงราว 14 เท่าในเดือนเดียว แต่ในคอมเมนต์ยังมีคน<span class="hl">ถามหาคุชชั่นทุกวัน</span> คนกลุ่มนี้คือลูกค้าที่พร้อมซื้อที่สุด</p>
   </div>
 </section>
 
@@ -931,7 +945,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
     </div>
     <ul class="prods">
       <li class="prod rv" style="--bg:#FFE3EA;--i:0"><span class="badge hot">สินค้าหลัก · รอของเข้า</span><div class="pic"><img src="cut-cush.webp" alt="คุชชั่น CHY" width="399" height="502" loading="lazy"></div><h3>คุชชั่น CHY</h3><p class="sub2">Satin Matte และ Crystal Glow</p><div class="cmt"><span class="av" aria-hidden="true"></span><div><b>ลูกค้า</b><span>คุชชั่นจะเข้าเมื่อไหร่คะ รอซื้ออยู่</span></div></div></li>
-      <li class="prod rv" style="--bg:#FFEEDB;--i:1"><span class="badge">แป้งพัฟ</span><div class="pic"><img src="cut-puff.webp" alt="แป้ง Double Beauty Puff" width="523" height="514" loading="lazy" style="max-width:60%"></div><h3>Double Beauty Puff</h3><div class="sw" aria-label="มี 4 เบอร์"><i style="background:#F3D6C6"></i><i style="background:#EBC8A2"></i><i style="background:#DDB084"></i><i style="background:#C9946B"></i><span>4 เบอร์ (0–3)</span></div><div class="cmt"><span class="av" aria-hidden="true"></span><div><b>ลูกค้า</b><span>ผิวสองสีใช้เบอร์ไหนดีคะ</span></div></div></li>
+      <li class="prod rv" style="--bg:#FFEEDB;--i:1"><span class="badge">แป้งพัฟ</span><div class="pic"><img src="cut-puff.webp" alt="แป้ง Double Beauty Puff" width="523" height="514" loading="lazy" style="max-width:60%"></div><h3>Double Beauty Puff</h3><p class="sub2">แป้งพัฟพกง่าย ขายคู่กับคุชชั่นได้</p><div class="cmt"><span class="av" aria-hidden="true"></span><div><b>ลูกค้า</b><span>ผิวสองสีใช้เบอร์ไหนดีคะ</span></div></div></li>
       <li class="prod rv" style="--bg:#EEE6FF;--i:2"><span class="badge">ลิปกลอส</span><div class="pic"><img src="cut-lip.webp" alt="ลิป Glasting Gloss" width="113" height="356" loading="lazy" style="max-width:30%;rotate:12deg"></div><h3>Glasting Gloss</h3><p class="sub2">ขายคู่กับคุชชั่นในไลฟ์ได้</p><div class="cmt"><span class="av" aria-hidden="true"></span><div><b>ลูกค้า</b><span>สีนี้ยังมีไหมคะ</span></div></div></li>
     </ul>
     <p class="foot rv">ข้อความในกล่องเป็นตัวอย่างคำถามแบบที่พบในคอมเมนต์ ไม่ได้ยกมาตรงตัว</p>
@@ -945,7 +959,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
     <h2 class="rv">สรุปสั้น ๆ ก่อน</h2>
     <p class="sub rv">เก็บสถิติจากคลิปสาธารณะ 732 คลิปของ chy.cosmetic และ story.chy เทียบกับคู่แข่ง 12 แบรนด์ ข้อมูล ณ 24 พ.ย. 2569</p>
     <div class="verdict rv">
-      <div class="vd-col"><span class="vd-n">1</span><span class="vd-q">เกิดอะไรขึ้น</span><p class="vd-a">ก.ย. 2569 วิวคลิปของ CHY ลดลงกว่า <b>15 เท่า</b></p></div>
+      <div class="vd-col"><span class="vd-n">1</span><span class="vd-q">เกิดอะไรขึ้น</span><p class="vd-a">ก.ย. 2569 วิวคลิปของ CHY ลดลงราว <b>14 เท่า</b></p></div>
       <div class="vd-col"><span class="vd-n">2</span><span class="vd-q">เพราะอะไร</span><p class="vd-a">สินค้าหลักขาด จึงหยุดดันคลิปด้วยโฆษณา</p></div>
       <div class="vd-col"><span class="vd-n">3</span><span class="vd-q">ควรทำอะไรต่อ</span><p class="vd-a">เตรียมพาลูกค้ากลับมาทันทีที่ของเข้า</p></div>
     </div>
@@ -954,7 +968,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
     <p class="sub rv">ตัวเลขคือ "วิวกลาง" หมายถึงคลิปที่อยู่ตรงกลางของเดือน ไม่ใช่คลิปที่ดังสุดหรือแย่สุด กราฟเล่าเป็น 3 ช่วงด้านล่าง</p>
     <div class="story">
       <div class="steps">
-        <div class="step" data-step="0"><span class="tag">ก.พ. – ส.ค. 2569</span><h4>วิวโตขึ้นเรื่อย ๆ จากการดันคลิปด้วยโฆษณา</h4><p>เกือบทุกคลิปติดป้ายโฆษณา (chy.cosmetic 132 จาก 143 คลิป) ช่วงพีกคลิปกลาง ๆ ได้วิว 1–2 แสน</p></div>
+        <div class="step" data-step="0"><span class="tag">ก.พ. – ส.ค. 2569</span><h4>วิวโตขึ้นเรื่อย ๆ จากการดันคลิปด้วยโฆษณา</h4><p>เกือบทุกคลิปติดป้ายโฆษณา (chy.cosmetic 132 จาก 143 คลิป) ช่วงพีก (ก.ค.–ส.ค.) คลิปกลาง ๆ ของทั้งสองช่องได้วิว 1.4–2.8 แสน</p></div>
         <div class="step" data-step="1"><span class="tag">ก.ย. 2569</span><h4>สินค้าหลักขาด วิวตกพร้อมกันทั้งสองช่อง</h4><p>chy.cosmetic จาก 141,700 เหลือ 9,908 ส่วน story.chy จาก 251,200 เหลือ 21,400 การหยุดโฆษณาตอนไม่มีของขายเป็นการตัดสินใจที่ถูก</p></div>
         <div class="step" data-step="2"><span class="tag">สรุป</span><h4>วิวรวมต่อสัปดาห์เหลือราว 1 ใน 45</h4><p>คนที่หายไปคือคนที่เคยเห็นคลิปจากโฆษณา ส่วนแฟนจริงยังอยู่และยังถามหาสินค้า</p></div>
       </div>
@@ -981,7 +995,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
       <div id="crows"></div>
     </div>
     <div class="cnote">
-      <div class="rv" style="--i:0"><b>CHY ตกหนักที่สุด</b><p>ลดลงราว 17 เท่า ขณะที่แบรนด์ที่ลดลงมากรองลงมาอย่าง MizuMi ลดราว 4 เท่า ส่วนอีกครึ่งหนึ่งเท่าเดิมหรือเพิ่มขึ้น</p></div>
+      <div class="rv" style="--i:0"><b>CHY ตกหนักที่สุด</b><p>ลดลงราว 17–18 เท่า ขณะที่แบรนด์ที่ลดลงมากรองลงมาอย่าง MizuMi ลดราว 4 เท่า ส่วนอีกครึ่งหนึ่งเท่าเดิมหรือเพิ่มขึ้น</p></div>
       <div class="rv" style="--i:1"><b>ตลาดยังคึก</b><p>Dr.PONG, Chat, 4U2 และเจ้านางวิวเท่าเดิมหรือเพิ่มขึ้น แปลว่าลูกค้ายังดูคลิปเครื่องสำอางอยู่ แค่ไม่ได้ดูของ CHY</p></div>
       <div class="rv" style="--i:2"><b>ต้องจับตา Merrezca</b><p>ก.ย. ยังดีอยู่ แต่ ต.ค. วิวกลางเหลือ 6,716 จาก 3 แสน อาจเจอปัญหาคล้าย CHY ควรดูต่อว่าเกิดอะไรขึ้น</p></div>
     </div>
@@ -1130,7 +1144,7 @@ h2{font-size:clamp(38px,4.8vw,66px)}
           <div class="actions rv"><a class="btn light magnet" href="tool/" target="_blank" rel="noopener"><span>เปิดเครื่องมือเต็มหน้าจอ</span></a></div>
         </div>
         <div>
-          <div class="device" id="device"><iframe src="tool/?v=7" title="เครื่องมือสรุปผลโฆษณารายวัน"></iframe></div>
+          <div class="device" id="device"><iframe src="tool/?v=8" title="เครื่องมือสรุปผลโฆษณารายวัน"></iframe></div>
           <p class="devcap">ตัวเลขในนี้เป็นข้อมูลตัวอย่าง ลองแก้ดูได้</p>
         </div>
       </div>
