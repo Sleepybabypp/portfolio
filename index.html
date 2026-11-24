@@ -256,6 +256,20 @@ h3+.sub{font-size:17px;margin-bottom:28px}
 .bub.img img{border-radius:14px;aspect-ratio:1;object-fit:cover;object-position:0 0}
 .bub.mine{align-self:flex-end;background:#06C755;color:#fff;border-radius:18px 18px 6px 18px}
 .chatmock figcaption{color:rgba(255,255,255,.7);text-align:center;font-size:13px;padding:10px 0 4px}
+.duo{margin-top:80px}
+.duo .brands{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 14px}
+.duo .bp{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:#fff;border:2px solid var(--line);font-weight:600;font-size:15px}
+.duo .bp i{width:12px;height:12px;border-radius:50%;background:var(--pink)} .duo .bp.h i{background:var(--teal)}
+.duo .bp small{font-weight:400;color:var(--ink3);font-size:13px}
+.duo .plus{font:700 22px var(--display);color:var(--ink3)}
+.duocards{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.duocards li{background:#fff;border-radius:22px;padding:22px 22px 18px;border:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.duocards .when{align-self:flex-start;font-size:13px;font-weight:600;padding:3px 12px;border-radius:999px;background:#E3F5F4;color:#0F6E72}
+.duocards h4{font:700 19px/1.45 var(--display);margin:2px 0 0}
+.duocards p{margin:0;font-size:15px;color:var(--ink2);line-height:1.7}
+.duocards p b{color:var(--ink);font-weight:600}
+.duo .hand-note{margin-top:16px;font-size:14.5px;color:var(--ink3)}
+@media(max-width:900px){.duocards{grid-template-columns:1fr}.duo{margin-top:64px}}
 .member{margin-top:40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:center;background:var(--ink);color:#fff;border-radius:30px;padding:34px 38px}
 .member b{font:700 23px/1.4 var(--display)}
 .member p{color:rgba(255,255,255,.8);font-size:16px;margin-top:6px}
@@ -572,6 +586,18 @@ footer p{max-width:92ch}
       </figure>
     </div>
 
+    <div class="duo">
+      <h3 class="rv" style="margin-top:0">ใช้ลูกค้าของสองแบรนด์ช่วยกัน</h3>
+      <div class="brands rv"><span class="bp"><i></i>CHY <small>เครื่องสำอาง</small></span><span class="plus">+</span><span class="bp h"><i></i>Hoyon <small>สกินแคร์</small></span></div>
+      <p class="sub rv">บริษัทมีแบรนด์สกินแคร์ Hoyon ด้วย ช่อง hoyon.brand มีผู้ติดตามราว 1.5 ล้าน (พ.ย. 2569) มากกว่า chy.cosmetic ลูกค้าทั้งสองแบรนด์คือคนที่ดูแลผิวและแต่งหน้าเหมือนกัน จึงช่วยกันได้ 3 ทาง</p>
+      <ol class="duocards">
+        <li class="rv" style="--i:0"><span class="when">ช่วง CHY ของขาด</span><h4>ให้ช่อง Hoyon ช่วยบอกข่าว</h4><p>แจ้งแฟน Hoyon ว่าคุชชั่น CHY กำลังกลับมา และชวนกดติดตาม chy.cosmetic ไว้ก่อน</p><p><b>วัดด้วย</b> ผู้ติดตามใหม่ของ CHY ในช่วงนั้น</p></li>
+        <li class="rv" style="--i:1"><span class="when">วันของเข้า</span><h4>ขายเป็นเซ็ตคู่กัน</h4><p>เซ็ต "เตรียมผิวก่อนลงคุชชั่น" คู่เซรั่มหน้าของ Hoyon กับคุชชั่น CHY เพิ่มมูลค่าโดยไม่ต้องลดราคา</p><p><b>วัดด้วย</b> สัดส่วนออเดอร์ที่ซื้อทั้งสองแบรนด์</p></li>
+        <li class="rv" style="--i:2"><span class="when">หลังซื้อ 60 วัน</span><h4>ทักข้ามแบรนด์</h4><p>ลูกค้า CHY ที่ยังไม่กลับมา ชวนลองสินค้า Hoyon ที่เข้ากับเขา แทนการส่งโค้ดลดราคาซ้ำ</p><p><b>วัดด้วย</b> ลูกค้า CHY ที่ซื้อ Hoyon เป็นครั้งแรก</p></li>
+      </ol>
+      <p class="hand-note rv">ต้องเช็กกับทีมก่อนว่าลูกค้าสองแบรนด์ซ้อนกันแค่ไหน และแต่ละแบรนด์อยากวางภาพลักษณ์ร่วมกันหรือแยกกัน</p>
+    </div>
+
     <div class="member rv">
       <div><b>ต่อยอดเป็นระบบสมาชิก</b><p>เก็บแต้มจากการซื้อและการรีวิว ใช้แลกของแถมในไลฟ์ แบรนด์จะรู้ว่าใครซื้ออะไร ซื้อห่างกันกี่วัน และควรทักเมื่อไร ทำได้ทั้งบน LINE หรือแอปของแบรนด์ในอนาคต</p></div>
       <div class="kpis3"><span><b>ซื้อซ้ำใน 60 วัน</b>ตัววัดหลัก</span><span><b>เปิดอ่านข้อความ</b>ทักถูกจังหวะไหม</span><span><b>ยอดจากโค้ดสมาชิก</b>ข้อความทำให้ซื้อจริงไหม</span></div>
@@ -593,6 +619,7 @@ footer p{max-width:92ch}
             <li class="rv" style="--i:2">บอกว่าคุ้มไหม และกำไรเท่าไรหลังหักค่าโฆษณา</li>
             <li class="rv" style="--i:3">แนะนำให้เพิ่ม ลด หรือย้ายงบ</li>
             <li class="rv" style="--i:4">ตัวเลขทุกตัวคิดด้วยสูตร ไม่ให้ AI คิดเลข</li>
+            <li class="rv" style="--i:5">เปลี่ยนชื่อช่องและสินค้าได้ ใช้กับ Hoyon หรือแบรนด์อื่นของบริษัทได้เหมือนกัน</li>
           </ul>
           <div class="actions rv"><a class="btn light magnet" href="tool/" target="_blank" rel="noopener"><span>เปิดเครื่องมือเต็มหน้าจอ</span></a></div>
         </div>
